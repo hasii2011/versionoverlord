@@ -1,0 +1,12 @@
+.idea/
+__pycache__/
+.DS_Store
+.mypy_cache/
+/html/
+build/
+dist/
+versionoverlord.egg-info
+/pyenv-3.11.0/
+
+.envrc
+.python-version
