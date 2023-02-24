@@ -14,7 +14,7 @@ changeToProjectRoot
 echo "current: $(pwd)"
 
 OPTS="--pretty --no-color-output  --show-error-context --check-untyped-defs --show-error-codes"
-mypy --config-file .mypi.ini ${OPTS} bumpversion
+mypy --config-file .mypi.ini ${OPTS} versionoverlord
 
 status=$?
 

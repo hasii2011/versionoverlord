@@ -11,11 +11,9 @@
 
 ___
 
-Written by Humberto A. Sanchez II <mailto@humberto.a.sanchez.ii@gmail.com>, (C) 2023
+Written by [Humberto A. Sanchez II](mailto@humberto.a.sanchez.ii@gmail.com) (C) 2023
 
- 
 
- 
 ## Note
 For all kind of problems, requests, enhancements, bug reports, etc.,
 please drop me an e-mail.

@@ -15,6 +15,7 @@ from click import command
 from click import option
 from click import version_option
 from github import Github
+from github import UnknownObjectException
 
 from github.GitRelease import GitRelease
 from github.PaginatedList import PaginatedList
@@ -25,10 +26,14 @@ from pkg_resources import resource_filename
 from versionoverlord.DisplayVersions import DisplayVersions
 from versionoverlord.DisplayVersions import SlugVersion
 from versionoverlord.DisplayVersions import SlugVersions
+from versionoverlord.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 from versionoverlord.SemanticVersion import SemanticVersion
 
 
 __version__ = "0.1.0"
+
+from versionoverlord.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
+
 
 RESOURCES_PACKAGE_NAME: str = 'versionoverlord.resources'
 JSON_LOGGING_CONFIG_FILENAME: str = "loggingConfig.json"
@@ -51,13 +56,20 @@ class VersionOverlord:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        gitHubToken: str = osEnvironment['GITHUB_ACCESS_TOKEN']
+        try:
+            gitHubToken: str = osEnvironment['GITHUB_ACCESS_TOKEN']
+        except KeyError:
+            raise NoGitHubAccessTokenException
+
         self._github: Github = Github(gitHubToken)
 
     def getLatestVersionNumber(self, repositorySlug: str) -> SemanticVersion:
 
-        repo: Repository = self._github.get_repo(repositorySlug)
-        self.logger.debug(f'{repo.full_name=}')
+        try:
+            repo: Repository = self._github.get_repo(repositorySlug)
+            self.logger.debug(f'{repo.full_name=}')
+        except UnknownObjectException:
+            raise UnknownGitHubRepositoryException(repositorySlug=repositorySlug)
 
         releases: PaginatedList = repo.get_releases()
 
@@ -88,16 +100,23 @@ class VersionOverlord:
 @option('--slugs', '-s', multiple=True, help='GitHub slugs to query')
 def commandHandler(slugs):
 
-    bumpversion: VersionOverlord = VersionOverlord()
+    try:
+        versionOverlord: VersionOverlord = VersionOverlord()
 
-    slugVersions: SlugVersions = SlugVersions([])
-    for slug in slugs:
-        version: SemanticVersion = bumpversion.getLatestVersionNumber(slug)
-        slugVersion: SlugVersion = SlugVersion(slug=slug, version=version.__str__())
-        slugVersions.append(slugVersion)
+        slugVersions: SlugVersions = SlugVersions([])
+        for slug in slugs:
+            version: SemanticVersion = versionOverlord.getLatestVersionNumber(slug)
+            slugVersion: SlugVersion = SlugVersion(slug=slug, version=version.__str__())
+            slugVersions.append(slugVersion)
 
-    displayVersions: DisplayVersions = DisplayVersions()
-    displayVersions.displaySlugs(slugVersions=slugVersions)
+        displayVersions: DisplayVersions = DisplayVersions()
+        displayVersions.displaySlugs(slugVersions=slugVersions)
+    except NoGitHubAccessTokenException:
+        print(f'Your must provide a GitHub access token via the environment variable `GITHUB_ACCESS_TOKEN`')
+    except UnknownGitHubRepositoryException as e:
+        print(f'Unknown GitHub Repository: `{e.repositorySlug}`')
+    except (ValueError, Exception) as e:
+        print(f'{e}')
 
 
 if __name__ == "__main__":
