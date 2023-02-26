@@ -2,3 +2,6 @@
 ENV_PROJECTS_BASE:    str = 'PROJECTS_BASE'
 ENV_PROJECT:          str = 'PROJECT'
 ENV_APPLICATION_NAME: str = 'APPLICATION_NAME'
+
+
+SETUP_PY: str = 'setup.py'

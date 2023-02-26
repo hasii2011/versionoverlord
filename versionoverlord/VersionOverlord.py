@@ -26,13 +26,13 @@ from pkg_resources import resource_filename
 from versionoverlord.DisplayVersions import DisplayVersions
 from versionoverlord.DisplayVersions import SlugVersion
 from versionoverlord.DisplayVersions import SlugVersions
-from versionoverlord.NoGitHubAccessTokenException import NoGitHubAccessTokenException
+from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 from versionoverlord.SemanticVersion import SemanticVersion
 
 
 __version__ = "0.1.0"
 
-from versionoverlord.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
+from versionoverlord.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
 
 
 RESOURCES_PACKAGE_NAME: str = 'versionoverlord.resources'
