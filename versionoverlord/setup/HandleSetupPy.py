@@ -23,10 +23,12 @@ class HandleSetupPy:
         try:
             self._projectsBase: str = osEnvironment[ENV_PROJECTS_BASE]
         except KeyError:
+            self.logger.error(f'Project Base not set')
             raise ProjectsBaseNotSetException
         try:
             self._projectDirectory: str = osEnvironment[ENV_PROJECT]
         except KeyError:
+            self.logger.error(f'Project Directory not set')
             raise ProjectNotSetException
 
     def exists(self) -> bool:

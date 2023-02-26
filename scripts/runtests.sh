@@ -12,6 +12,6 @@ function changeToProjectRoot {
 changeToProjectRoot
 
 # python3 -m tests.RunTests
-# python3 -m tests.TestAll $*
+python3 -m tests.TestAll $*
 
 echo "Soon we will have some unit tests"

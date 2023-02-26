@@ -6,6 +6,7 @@ build==0.10.0
 types-setuptools==67.4.0.1
 
 mypy==1.0.1
+html-testRunner~=1.2.1
 
 PyGithub==1.58.0
 
