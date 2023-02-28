@@ -1,12 +1,14 @@
 from pathlib import Path
 
+from versionoverlord.exceptions.NoFileException import NoFileException
 
-class NoSetupPyFileException(Exception):
 
-    def __init__(self, fullProjectPath: Path):
+class NoSetupPyFileException(NoFileException):
 
-        self._fullProjectPath: Path = fullProjectPath
+    def __init__(self, fullPath: Path):
+
+        super().__init__(missingFilePath=fullPath)
 
     @property
-    def _ullProjectPath(self) -> Path:
-        return self._fullProjectPath
+    def fullSetupPyPath(self) -> Path:
+        return self._missingFilePath

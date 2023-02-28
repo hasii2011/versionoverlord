@@ -13,29 +13,28 @@ from pkg_resources import resource_filename
 
 from versionoverlord.Common import ENV_PROJECT
 from versionoverlord.Common import ENV_PROJECTS_BASE
-from versionoverlord.SemanticVersion import SemanticVersion
-from versionoverlord.exceptions.NoSetupPyFileException import NoSetupPyFileException
+from versionoverlord.Common import PackageName
+from versionoverlord.Common import Packages
+from versionoverlord.Common import SETUP_PY
+from versionoverlord.Common import UpdatePackage
 
+from versionoverlord.SemanticVersion import SemanticVersion
+
+from versionoverlord.exceptions.NoSetupPyFileException import NoSetupPyFileException
 from versionoverlord.exceptions.ProjectNotSetException import ProjectNotSetException
 from versionoverlord.exceptions.ProjectsBaseNotSetException import ProjectsBaseNotSetException
-
-from versionoverlord.setup.HandleSetupPy import HandleSetupPy
-from versionoverlord.setup.HandleSetupPy import PackageName
-from versionoverlord.setup.HandleSetupPy import Packages
-from versionoverlord.setup.HandleSetupPy import UpdatePackage
 
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
 from tests.TestBase import TestBase
+from versionoverlord.setup.HandleSetupPy import HandleSetupPy
 
 
 class TestHandleSetupPy(TestBase):
     UNIT_TESTS_PROJECTS_BASE:      str = '/Users/humberto.a.sanchez.ii/PycharmProjects/'
-    UNIT_TEST_PROJECT:             str = 'OverLordUnitTest'
     UNIT_TEST_PROJECT_NO_SETUP_PY: str = 'OverLordUnitTestNoSetupPy'
 
-    TEST_PROJECTS_BASE: str = 'unitTestProjectsBase'
     clsLogger: Logger = cast(Logger, None)
 
     @classmethod
@@ -46,20 +45,17 @@ class TestHandleSetupPy(TestBase):
     def setUp(self):
         self.logger: Logger = TestHandleSetupPy.clsLogger
 
-        tmpProjectsBase:       str = mkdtemp(prefix=TestHandleSetupPy.TEST_PROJECTS_BASE)
-        tmpProjectDir:         str = mkdtemp(dir=tmpProjectsBase, prefix=TestHandleSetupPy.UNIT_TEST_PROJECT)
-        tmpNoSetupProjectDir:  str = mkdtemp(dir=tmpProjectsBase, prefix=TestHandleSetupPy.UNIT_TEST_PROJECT_NO_SETUP_PY)
+        super().setUp()
+        tmpNoSetupProjectDir:  str = mkdtemp(dir=self._tmpProjectsBase, prefix=TestHandleSetupPy.UNIT_TEST_PROJECT_NO_SETUP_PY)
 
-        self._tmpProjectsBase:       Path = Path(tmpProjectsBase)
-        self._tmpProjectDir:         Path = Path(tmpProjectDir)
         self._tmpNoSetupProjectDir:  Path = Path(tmpNoSetupProjectDir)
 
-        fqFileName: str = resource_filename(TestBase.GOLDEN_PACKAGE_NAME, 'setup.py')
+        fqFileName: str = resource_filename(TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, 'setup.py')
 
-        goldenSetupPyPath:      Path = Path(fqFileName)
+        testSetupPyPath:      Path = Path(fqFileName)
         destinationSetupPyPath: Path = self._tmpProjectDir / Path('setup.py')
 
-        shutil.copy(goldenSetupPyPath, destinationSetupPyPath)
+        shutil.copy(testSetupPyPath, destinationSetupPyPath)
 
         self.logger.info(f'Projects Base: {self._tmpProjectsBase}')
         self.logger.info(f'Project  Dir:  {self._tmpProjectDir}')
@@ -78,8 +74,7 @@ class TestHandleSetupPy(TestBase):
         self.assertRaises(NoSetupPyFileException, lambda: self._failsOnNoSetupPy())
 
     def testUpdate(self):
-        # osEnviron[ENV_PROJECTS_BASE] = TestHandleSetupPy.UNIT_TESTS_PROJECTS_BASE
-        # osEnviron[ENV_PROJECT]       = TestHandleSetupPy.UNIT_TEST_PROJECT
+
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
         osEnviron[ENV_PROJECT]       = self._tmpProjectDir.name
 
@@ -92,6 +87,13 @@ class TestHandleSetupPy(TestBase):
             ]
         )
         hsp.update(packages=packages)
+
+        generatedFileName: Path = self._tmpProjectDir / Path(SETUP_PY)
+        status: int = TestBase.runDiff(goldenFilename=SETUP_PY,
+                                       generatedFileName=generatedFileName
+                                       )
+
+        self.assertEquals(0, status, 'setup.py not correctly updated')
 
     def _failsOnProjectsBaseNotSet(self):
         try:
