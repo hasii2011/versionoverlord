@@ -1,22 +1,32 @@
-from abc import ABC
-from abc import abstractmethod
+
+from typing import List
+
 from logging import Logger
 from logging import getLogger
 
+from abc import ABC
+from abc import abstractmethod
+
 from os import environ as osEnvironment
+
+from pathlib import Path
+
+from tempfile import gettempdir
 
 from versionoverlord.Common import ENV_PROJECT
 from versionoverlord.Common import ENV_PROJECTS_BASE
 from versionoverlord.Common import Packages
+from versionoverlord.Common import UpdateDependencyCallback
 
 from versionoverlord.exceptions.ProjectNotSetException import ProjectNotSetException
 from versionoverlord.exceptions.ProjectsBaseNotSetException import ProjectsBaseNotSetException
 
 
 class BaseHandler(ABC):
-    def __init__(self):
+    def __init__(self, packages: Packages):
 
-        self.baseLogger: Logger = getLogger(__name__)
+        self._packages:  Packages = packages
+        self.baseLogger: Logger   = getLogger(__name__)
 
         try:
             self._projectsBase: str = osEnvironment[ENV_PROJECTS_BASE]
@@ -30,10 +40,34 @@ class BaseHandler(ABC):
             raise ProjectNotSetException
 
     @abstractmethod
-    def update(self, packages: Packages):
+    def update(self):
         """
-        Updates a project's setup.py file.  Updates the "requires"
-        Args:
-            packages:    A list of UpdatePackage descriptions
+        Updates a project's file.
         """
         pass
+
+    def _fixDependencies(self, searchFile: Path, tempFile: str, searchItems: List[str], callback: UpdateDependencyCallback):
+        """
+
+        Args:
+            searchFile:     The file we will iterate through
+            tempFile:       The temporary file to write the changed file
+            searchItems:    A list of strings to find
+            callback:       The method to call when we find a match;
+        """
+        self.baseLogger.info(f'{searchItems=}')
+        self.baseLogger.info(f'{tempFile=}')
+        with open(searchFile, 'r') as inputFd:
+            with open(tempFile, 'w') as tempFileFd:
+                self.baseLogger.debug(f'tempDir: {gettempdir()}')
+                while True:
+                    contentLine: str = inputFd.readline()
+                    if not contentLine:
+                        break
+
+                    # Check to see if we need to modify this line
+                    for searchText in searchItems:
+                        if searchText in contentLine:
+                            contentLine = callback(contentLine)
+                            self.baseLogger.info(f'{contentLine=}')
+                    tempFileFd.write(contentLine)

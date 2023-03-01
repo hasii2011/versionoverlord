@@ -1,10 +1,14 @@
-import shutil
-from pathlib import Path
-from tempfile import mkdtemp
+
 from typing import cast
 
 from logging import Logger
 from logging import getLogger
+
+from pathlib import Path
+
+from tempfile import mkdtemp
+
+from shutil import copy as shellCopy
 
 from os import environ as osEnviron
 
@@ -12,8 +16,11 @@ from pkg_resources import resource_filename
 
 from versionoverlord.Common import ENV_PROJECT
 from versionoverlord.Common import ENV_PROJECTS_BASE
+from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
 from versionoverlord.Common import REQUIREMENTS_TXT
+from versionoverlord.Common import UpdatePackage
+from versionoverlord.SemanticVersion import SemanticVersion
 from versionoverlord.exceptions.NoRequirementsTxtsException import NoRequirementsTxtException
 
 from unittest import TestSuite
@@ -48,7 +55,7 @@ class TestHandleRequirementsTxt(TestBase):
         destinationRequirementsTxtPath: Path = self._tmpProjectDir / Path(REQUIREMENTS_TXT)
 
         self.logger.info(f'Copy to: {destinationRequirementsTxtPath}')
-        shutil.copy(testRequirementsTxtPath, destinationRequirementsTxtPath)
+        shellCopy(testRequirementsTxtPath, destinationRequirementsTxtPath)
 
     def tearDown(self):
         pass
@@ -61,13 +68,31 @@ class TestHandleRequirementsTxt(TestBase):
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
         osEnviron[ENV_PROJECT]       = self._tmpProjectDir.name
 
+        packages: Packages = Packages(
+            [
+                UpdatePackage(packageName=PackageName('ogl'),      oldVersion=SemanticVersion('0.70.20'), newVersion=SemanticVersion('0.80.0')),
+                UpdatePackage(packageName=PackageName('untangle'), oldVersion=SemanticVersion('1.2.1'),   newVersion=SemanticVersion('1.3.0'))
+            ]
+        )
+        hrt: HandleRequirementsTxt = HandleRequirementsTxt(packages=packages)
+
+        hrt.update()
+
+        generatedFileName: Path = self._tmpProjectDir / Path(REQUIREMENTS_TXT)
+
+        status: int = TestBase.runDiff(goldenFilename=REQUIREMENTS_TXT,
+                                       generatedFileName=generatedFileName
+                                       )
+
+        self.assertEqual(0, status, 'setup.py not correctly updated')
+
     def _failsOnNoRequirementsTxt(self):
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
         osEnviron[ENV_PROJECT]       = self._tmpNoRequirementsTxtDir.name
 
-        hrt: HandleRequirementsTxt = HandleRequirementsTxt()
+        hrt: HandleRequirementsTxt = HandleRequirementsTxt(Packages([]))
 
-        hrt.update(Packages([]))        # empty won't be used
+        hrt.update()        # empty won't be used
 
 
 def suite() -> TestSuite:

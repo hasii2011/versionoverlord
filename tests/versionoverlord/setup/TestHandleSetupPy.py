@@ -1,13 +1,16 @@
-import shutil
-from pathlib import Path
+
 from typing import cast
 
 from logging import Logger
 from logging import getLogger
 
+from shutil import copy as shellCopy
+
 from os import environ as osEnviron
 
 from tempfile import mkdtemp
+
+from pathlib import Path
 
 from pkg_resources import resource_filename
 
@@ -55,7 +58,7 @@ class TestHandleSetupPy(TestBase):
         testSetupPyPath:      Path = Path(fqFileName)
         destinationSetupPyPath: Path = self._tmpProjectDir / Path('setup.py')
 
-        shutil.copy(testSetupPyPath, destinationSetupPyPath)
+        shellCopy(testSetupPyPath, destinationSetupPyPath)
 
         self.logger.info(f'Projects Base: {self._tmpProjectsBase}')
         self.logger.info(f'Project  Dir:  {self._tmpProjectDir}')
@@ -78,15 +81,15 @@ class TestHandleSetupPy(TestBase):
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
         osEnviron[ENV_PROJECT]       = self._tmpProjectDir.name
 
-        hsp: HandleSetupPy = HandleSetupPy()
-
         packages: Packages = Packages(
             [
                 UpdatePackage(packageName=PackageName('ogl'),      oldVersion=SemanticVersion('0.70.20'), newVersion=SemanticVersion('0.80.0')),
                 UpdatePackage(packageName=PackageName('untangle'), oldVersion=SemanticVersion('1.2.1'),   newVersion=SemanticVersion('1.3.0'))
             ]
         )
-        hsp.update(packages=packages)
+        hsp: HandleSetupPy = HandleSetupPy(packages=packages)
+
+        hsp.update()
 
         generatedFileName: Path = self._tmpProjectDir / Path(SETUP_PY)
         status: int = TestBase.runDiff(goldenFilename=SETUP_PY,
@@ -102,7 +105,7 @@ class TestHandleSetupPy(TestBase):
             pass    # May or may not exist;  don't care
 
         # noinspection PyUnusedLocal
-        hsp: HandleSetupPy = HandleSetupPy()
+        hsp: HandleSetupPy = HandleSetupPy(Packages([]))
 
     def _failsOnProjectNotSet(self):
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
@@ -112,14 +115,14 @@ class TestHandleSetupPy(TestBase):
             pass    # May or may not exist;  don't care
 
         # noinspection PyUnusedLocal
-        hsp: HandleSetupPy = HandleSetupPy()
+        hsp: HandleSetupPy = HandleSetupPy(Packages([]))
 
     def _failsOnNoSetupPy(self):
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
         osEnviron[ENV_PROJECT]       = self._tmpNoSetupProjectDir.name
-        hsp: HandleSetupPy = HandleSetupPy()
+        hsp: HandleSetupPy = HandleSetupPy(Packages([]))
 
-        hsp.update(Packages([]))        # empty won't be used
+        hsp.update()
 
 
 def suite() -> TestSuite:

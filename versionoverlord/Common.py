@@ -1,4 +1,5 @@
 from typing import Callable
+from typing import Dict
 from typing import List
 from typing import NewType
 
@@ -15,6 +16,7 @@ ENV_APPLICATION_NAME: str = 'APPLICATION_NAME'
 
 SETUP_PY:         str = 'setup.py'
 REQUIREMENTS_TXT: str = 'requirements.txt'
+INSTALL_REQUIRES: str = 'install_requires'
 
 
 def versionFactory() -> SemanticVersion:
@@ -36,5 +38,6 @@ class UpdatePackage:
 
 Packages = NewType('Packages', List[UpdatePackage])
 
-# ActiveProjectInformationCallback  = Callable[[ActiveProjectInformation], None]
-UpdateDependencyCallback = NewType('UpdateDependencyCallback', Callable[[str, Packages], str])    # type: ignore
+PackageLookupType = NewType('PackageLookupType', Dict[PackageName, UpdatePackage])
+
+UpdateDependencyCallback = NewType('UpdateDependencyCallback', Callable[[str], str])    # type: ignore

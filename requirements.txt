@@ -3,7 +3,7 @@ twine~=4.0.0
 wheel==0.38.4
 build==0.10.0
 
-types-setuptools==67.4.0.2
+types-setuptools==67.4.0.3
 
 mypy==1.0.1
 html-testRunner~=1.2.1
