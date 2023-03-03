@@ -1,42 +1,34 @@
+from typing import List
+from typing import Tuple
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
 import logging.config
 
 from json import load as jsonLoad
 
-from collections import Counter
+from pathlib import Path
 
-from os import environ as osEnvironment
+from os import linesep as osLineSep
+from typing import cast
 
 from click import command
 from click import option
 from click import version_option
-from github import Github
-from github import UnknownObjectException
-
-from github.GitRelease import GitRelease
-from github.PaginatedList import PaginatedList
-from github.Repository import Repository
 
 from pkg_resources import resource_filename
 
-from versionoverlord.DisplayVersions import DisplayVersions
 from versionoverlord.DisplayVersions import SlugVersion
 from versionoverlord.DisplayVersions import SlugVersions
-from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
+from versionoverlord.GitHubAdapter import GitHubAdapter
+from versionoverlord.SlugHandler import SlugHandler
+from versionoverlord.SlugHandler import Slugs
 from versionoverlord.SemanticVersion import SemanticVersion
 
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
-from versionoverlord.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
-
-
-RESOURCES_PACKAGE_NAME: str = 'versionoverlord.resources'
+RESOURCES_PACKAGE_NAME:       str = 'versionoverlord.resources'
 JSON_LOGGING_CONFIG_FILENAME: str = "loggingConfig.json"
+TEMPLATE_FILE:                str = 'versionUpdate.csv'
 
 
 def setUpLogging():
@@ -52,71 +44,42 @@ def setUpLogging():
     logging.logThreads = False
 
 
-class VersionOverlord:
-    def __init__(self):
-        self.logger: Logger = getLogger(__name__)
+def handleCreateTemplate(slugs: Tuple[str]):
+    print(f'Creating a template')
+    versionOverlord: GitHubAdapter = GitHubAdapter()
 
-        try:
-            gitHubToken: str = osEnvironment['GITHUB_ACCESS_TOKEN']
-        except KeyError:
-            raise NoGitHubAccessTokenException
+    slugVersions: SlugVersions = SlugVersions([])
+    for slug in slugs:
+        version: SemanticVersion = versionOverlord.getLatestVersionNumber(slug)
+        slugVersion: SlugVersion = SlugVersion(slug=slug, version=version.__str__())
+        slugVersions.append(slugVersion)
 
-        self._github: Github = Github(gitHubToken)
+    versionUpdateTemplate: Path = Path(TEMPLATE_FILE)
+    with versionUpdateTemplate.open(mode='w') as fd:
+        for slugVersion in slugVersions:
+            pkgName: str = extractPackageName(slug=slugVersion.slug)
+            print(f'{pkgName},{slugVersion.version},NewVersionGoesHere')
+            fd.write(f'{pkgName},{slugVersion.version},NewVersionGoesHere{osLineSep}')
 
-    def getLatestVersionNumber(self, repositorySlug: str) -> SemanticVersion:
 
-        try:
-            repo: Repository = self._github.get_repo(repositorySlug)
-            self.logger.debug(f'{repo.full_name=}')
-        except UnknownObjectException:
-            raise UnknownGitHubRepositoryException(repositorySlug=repositorySlug)
+def extractPackageName(slug: str) -> str:
+    splitSlug: List[str] = slug.split(sep='/')
 
-        releases: PaginatedList = repo.get_releases()
-
-        latestReleaseVersion: SemanticVersion = SemanticVersion('0.0.0')
-        for release in releases:
-            gitRelease: GitRelease = cast(GitRelease, release)
-
-            releaseNumber: str = gitRelease.tag_name
-            numPeriods: int = self._countPeriods(releaseNumber)
-            if numPeriods < 2:
-                releaseNumber = f'{releaseNumber}.0'
-
-            releaseVersion: SemanticVersion = SemanticVersion(releaseNumber)
-            self.logger.debug(f'{releaseVersion=}')
-            if latestReleaseVersion < releaseVersion:
-                latestReleaseVersion = releaseVersion
-
-        return latestReleaseVersion
-
-    def _countPeriods(self, releaseNumber: str) -> int:
-
-        cnt = Counter(list(releaseNumber))
-        return cnt['.']
+    pkgName: str = splitSlug[1]
+    return pkgName
 
 
 @command()
 @version_option(version=f'{__version__}', message='%(version)s')
-@option('--slugs', '-s', multiple=True, help='GitHub slugs to query')
-def commandHandler(slugs):
+@option('--slugs', '-s',  multiple=True, required=False, help='GitHub slugs to query')
+@option('--create', '-c', multiple=True, required=False, help='Create template package versions')
+def commandHandler(slugs: Tuple[str], create: Tuple[str]):
 
-    try:
-        versionOverlord: VersionOverlord = VersionOverlord()
-
-        slugVersions: SlugVersions = SlugVersions([])
-        for slug in slugs:
-            version: SemanticVersion = versionOverlord.getLatestVersionNumber(slug)
-            slugVersion: SlugVersion = SlugVersion(slug=slug, version=version.__str__())
-            slugVersions.append(slugVersion)
-
-        displayVersions: DisplayVersions = DisplayVersions()
-        displayVersions.displaySlugs(slugVersions=slugVersions)
-    except NoGitHubAccessTokenException:
-        print(f'Your must provide a GitHub access token via the environment variable `GITHUB_ACCESS_TOKEN`')
-    except UnknownGitHubRepositoryException as e:
-        print(f'Unknown GitHub Repository: `{e.repositorySlug}`')
-    except (ValueError, Exception) as e:
-        print(f'{e}')
+    if len(slugs) != 0:
+        slugHandler: SlugHandler = SlugHandler(slugs=cast(Slugs, slugs))
+        slugHandler.handleSlugs()
+    if len(create) != 0:
+        handleCreateTemplate(create)
 
 
 if __name__ == "__main__":

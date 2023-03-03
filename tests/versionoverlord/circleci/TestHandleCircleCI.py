@@ -97,7 +97,7 @@ class TestHandleCircleCI(TestBase):
         testYamlFile:     str  = resource_filename(TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, CIRCLE_CI_YAML)
         testYamlFilePath: Path = Path(testYamlFile)
 
-        self.logger.info(f'Copy to: {self._destinationYamFilePath}')
+        self.logger.debug(f'Copy to: {self._destinationYamFilePath}')
         shellCopy(testYamlFilePath, self._destinationYamFilePath)
 
 

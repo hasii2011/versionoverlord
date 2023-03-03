@@ -55,9 +55,9 @@ class TestHandleSetupPy(TestBase):
 
         shellCopy(testSetupPyPath, destinationSetupPyPath)
 
-        self.logger.info(f'Projects Base: {self._tmpProjectsBase}')
-        self.logger.info(f'Project  Dir:  {self._tmpProjectDir}')
-        self.logger.info(f'No setup Dir:  {self._tmpNoSetupProjectDir}')
+        self.logger.debug(f'Projects Base: {self._tmpProjectsBase}')
+        self.logger.debug(f'Project  Dir:  {self._tmpProjectDir}')
+        self.logger.debug(f'No setup Dir:  {self._tmpNoSetupProjectDir}')
 
         self._destinationSetupPyPath: Path = destinationSetupPyPath
 

@@ -62,8 +62,8 @@ class BaseHandler(ABC):
             searchItems:    A list of strings to find
             callback:       The method to call when we find a match;
         """
-        self.baseLogger.info(f'{searchItems=}')
-        self.baseLogger.info(f'{tempFile=}')
+        self.baseLogger.debug(f'{searchItems=}')
+        self.baseLogger.debug(f'{tempFile=}')
         with open(searchFile, 'r') as inputFd:
             with open(tempFile, 'w') as tempFileFd:
                 self.baseLogger.debug(f'tempDir: {gettempdir()}')
@@ -76,7 +76,7 @@ class BaseHandler(ABC):
                     for searchText in searchItems:
                         if searchText in contentLine:
                             contentLine = callback(contentLine)
-                            self.baseLogger.info(f'{contentLine=}')
+                            self.baseLogger.debug(f'{contentLine=}')
                     tempFileFd.write(contentLine)
 
     def _buildPackageLookup(self) -> PackageLookupType:

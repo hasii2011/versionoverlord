@@ -27,11 +27,11 @@
             "propagate": "False"
         },
         "versionoverlord": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         },
         "tests": {
-            "level":     "INFO",
+            "level":     "WARNING",
             "propagate": "False"
         }
     }
