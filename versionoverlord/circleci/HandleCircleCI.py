@@ -97,4 +97,3 @@ class HandleCircleCI(BaseHandler):
 
     def _pkgNameOnly(self, s: str):
         return s.partition('install ')[2]
-    
