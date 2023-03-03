@@ -6,8 +6,6 @@ from logging import getLogger
 
 from pathlib import Path
 
-from tempfile import mkdtemp
-
 from shutil import copy as shellCopy
 
 from os import environ as osEnviron
@@ -16,11 +14,10 @@ from pkg_resources import resource_filename
 
 from versionoverlord.Common import ENV_PROJECT
 from versionoverlord.Common import ENV_PROJECTS_BASE
-from versionoverlord.Common import PackageName
+
 from versionoverlord.Common import Packages
 from versionoverlord.Common import REQUIREMENTS_TXT
-from versionoverlord.Common import UpdatePackage
-from versionoverlord.SemanticVersion import SemanticVersion
+
 from versionoverlord.exceptions.NoRequirementsTxtsException import NoRequirementsTxtException
 
 from unittest import TestSuite
@@ -45,20 +42,22 @@ class TestHandleRequirementsTxt(TestBase):
     def setUp(self):
         super().setUp()
         self.logger:             Logger = TestHandleRequirementsTxt.clsLogger
-        tmpNoRequirementsTxtDir: str    = mkdtemp(dir=self._tmpProjectsBase, prefix=TestHandleRequirementsTxt.UNIT_TEST_PROJECT_NO_REQUIREMENTS_TXT)
-
-        self._tmpNoRequirementsTxtDir: Path = Path(tmpNoRequirementsTxtDir)
+        self._tmpNoRequirementsTxtDir: Path = self._tmpProjectsBase / Path(TestHandleRequirementsTxt.UNIT_TEST_PROJECT_NO_REQUIREMENTS_TXT)
+        self._tmpNoRequirementsTxtDir.mkdir()
 
         fqFileName: str = resource_filename(TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, REQUIREMENTS_TXT)
 
-        testRequirementsTxtPath:      Path = Path(fqFileName)
+        testRequirementsTxtPath:       Path = Path(fqFileName)
         destinationRequirementsTxtPath: Path = self._tmpProjectDir / Path(REQUIREMENTS_TXT)
 
         self.logger.info(f'Copy to: {destinationRequirementsTxtPath}')
         shellCopy(testRequirementsTxtPath, destinationRequirementsTxtPath)
 
+        self._destinationRequirementsTxtPath: Path = destinationRequirementsTxtPath
+
     def tearDown(self):
-        pass
+        self._destinationRequirementsTxtPath.unlink(missing_ok=True)
+        self._tmpNoRequirementsTxtDir.rmdir()
 
     def testUpdateNoRequirementsTxt(self):
         self.assertRaises(NoRequirementsTxtException, lambda: self._failsOnNoRequirementsTxt())
@@ -68,13 +67,7 @@ class TestHandleRequirementsTxt(TestBase):
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
         osEnviron[ENV_PROJECT]       = self._tmpProjectDir.name
 
-        packages: Packages = Packages(
-            [
-                UpdatePackage(packageName=PackageName('ogl'),      oldVersion=SemanticVersion('0.70.20'), newVersion=SemanticVersion('0.80.0')),
-                UpdatePackage(packageName=PackageName('untangle'), oldVersion=SemanticVersion('1.2.1'),   newVersion=SemanticVersion('1.3.0'))
-            ]
-        )
-        hrt: HandleRequirementsTxt = HandleRequirementsTxt(packages=packages)
+        hrt: HandleRequirementsTxt = HandleRequirementsTxt(packages=TestBase.TEST_PACKAGES)
 
         hrt.update()
 
@@ -84,7 +77,7 @@ class TestHandleRequirementsTxt(TestBase):
                                        generatedFileName=generatedFileName
                                        )
 
-        self.assertEqual(0, status, 'setup.py not correctly updated')
+        self.assertEqual(0, status, 'requirements.txt not correctly updated')
 
     def _failsOnNoRequirementsTxt(self):
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()

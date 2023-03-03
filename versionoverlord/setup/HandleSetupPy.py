@@ -50,7 +50,6 @@ class HandleSetupPy(BaseHandler):
         tempFilePath: Path = Path(tempFile)
         tempFilePath.rename(setupPyPath)
 
-
     def _updateRequires(self, contentLine: str) -> str:
         """
         Updates the "requires" string

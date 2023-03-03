@@ -5,12 +5,20 @@ import logging
 import logging.config
 
 from os import system as osSystem
+
 from pathlib import Path
-from tempfile import mkdtemp
+
+from tempfile import gettempdir
 
 from pkg_resources import resource_filename
 
 from unittest import TestCase
+
+from versionoverlord.Common import PackageName
+from versionoverlord.Common import Packages
+from versionoverlord.Common import UpdatePackage
+from versionoverlord.SemanticVersion import SemanticVersion
+
 
 JSON_LOGGING_CONFIG_FILENAME: str = "testLoggingConfig.json"
 TEST_DIRECTORY:               str = 'tests'
@@ -28,15 +36,26 @@ class TestBase(TestCase):
     TEST_PROJECTS_BASE: str = 'unitTestProjectsBase'
     UNIT_TEST_PROJECT:  str = 'OverLordUnitTest'
 
+    TEST_PACKAGES: Packages = Packages(
+        [
+            UpdatePackage(packageName=PackageName('ogl'),      oldVersion=SemanticVersion('0.70.20'), newVersion=SemanticVersion('0.80.0')),
+            UpdatePackage(packageName=PackageName('untangle'), oldVersion=SemanticVersion('1.2.1'),   newVersion=SemanticVersion('1.3.0'))
+        ]
+    )
+
     def setUp(self):
         """
         Hook method for setting up the test fixture before exercising it.
         """
-        tmpProjectsBase: str = mkdtemp(prefix=TestBase.TEST_PROJECTS_BASE)
-        tmpProjectDir:   str = mkdtemp(dir=tmpProjectsBase, prefix=TestBase.UNIT_TEST_PROJECT)
+        tmpDir = gettempdir()
+        tmpProjectsBase: Path = Path(tmpDir) / Path(TestBase.TEST_PROJECTS_BASE)
+        tmpProjectsBase.mkdir(exist_ok=True)
 
-        self._tmpProjectsBase: Path = Path(tmpProjectsBase)
-        self._tmpProjectDir:   Path = Path(tmpProjectDir)
+        tmpProjectDir:   Path = tmpProjectsBase / Path(TestBase.UNIT_TEST_PROJECT)
+        tmpProjectDir.mkdir(exist_ok=True)
+
+        self._tmpProjectsBase: Path = tmpProjectsBase
+        self._tmpProjectDir:   Path = tmpProjectDir
 
     def tearDown(self):
         """

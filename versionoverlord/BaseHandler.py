@@ -1,5 +1,6 @@
 
 from typing import List
+from typing import cast
 
 from logging import Logger
 from logging import getLogger
@@ -15,8 +16,10 @@ from tempfile import gettempdir
 
 from versionoverlord.Common import ENV_PROJECT
 from versionoverlord.Common import ENV_PROJECTS_BASE
+from versionoverlord.Common import PackageLookupType
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdateDependencyCallback
+from versionoverlord.Common import UpdatePackage
 
 from versionoverlord.exceptions.ProjectNotSetException import ProjectNotSetException
 from versionoverlord.exceptions.ProjectsBaseNotSetException import ProjectsBaseNotSetException
@@ -38,6 +41,10 @@ class BaseHandler(ABC):
         except KeyError:
             self.baseLogger.error(f'Project Directory not set')
             raise ProjectNotSetException
+        except (ValueError, Exception) as e:
+            self.baseLogger.error(f'{e}')
+
+        self._packageDict: PackageLookupType = self._buildPackageLookup()
 
     @abstractmethod
     def update(self):
@@ -71,3 +78,13 @@ class BaseHandler(ABC):
                             contentLine = callback(contentLine)
                             self.baseLogger.info(f'{contentLine=}')
                     tempFileFd.write(contentLine)
+
+    def _buildPackageLookup(self) -> PackageLookupType:
+
+        lookupDict: PackageLookupType = PackageLookupType({})
+
+        for pkg in self._packages:
+            updatePackage: UpdatePackage = cast(UpdatePackage, pkg)
+            lookupDict[updatePackage.packageName] = updatePackage
+
+        return lookupDict

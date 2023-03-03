@@ -8,7 +8,6 @@ from shutil import copy as shellCopy
 
 from os import environ as osEnviron
 
-from tempfile import mkdtemp
 
 from pathlib import Path
 
@@ -16,12 +15,8 @@ from pkg_resources import resource_filename
 
 from versionoverlord.Common import ENV_PROJECT
 from versionoverlord.Common import ENV_PROJECTS_BASE
-from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
 from versionoverlord.Common import SETUP_PY
-from versionoverlord.Common import UpdatePackage
-
-from versionoverlord.SemanticVersion import SemanticVersion
 
 from versionoverlord.exceptions.NoSetupPyFileException import NoSetupPyFileException
 from versionoverlord.exceptions.ProjectNotSetException import ProjectNotSetException
@@ -49,14 +44,14 @@ class TestHandleSetupPy(TestBase):
         self.logger: Logger = TestHandleSetupPy.clsLogger
 
         super().setUp()
-        tmpNoSetupProjectDir:  str = mkdtemp(dir=self._tmpProjectsBase, prefix=TestHandleSetupPy.UNIT_TEST_PROJECT_NO_SETUP_PY)
 
-        self._tmpNoSetupProjectDir:  Path = Path(tmpNoSetupProjectDir)
+        self._tmpNoSetupProjectDir:  Path = self._tmpProjectsBase / Path(TestHandleSetupPy.UNIT_TEST_PROJECT_NO_SETUP_PY)
+        self._tmpNoSetupProjectDir.mkdir()
 
-        fqFileName: str = resource_filename(TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, 'setup.py')
+        fqFileName: str = resource_filename(TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, SETUP_PY)
 
         testSetupPyPath:      Path = Path(fqFileName)
-        destinationSetupPyPath: Path = self._tmpProjectDir / Path('setup.py')
+        destinationSetupPyPath: Path = self._tmpProjectDir / Path(SETUP_PY)
 
         shellCopy(testSetupPyPath, destinationSetupPyPath)
 
@@ -64,8 +59,12 @@ class TestHandleSetupPy(TestBase):
         self.logger.info(f'Project  Dir:  {self._tmpProjectDir}')
         self.logger.info(f'No setup Dir:  {self._tmpNoSetupProjectDir}')
 
+        self._destinationSetupPyPath: Path = destinationSetupPyPath
+
     def tearDown(self):
-        pass
+        self._destinationSetupPyPath.unlink(missing_ok=True)
+        self._tmpNoSetupProjectDir.rmdir()
+        self._tmpProjectDir.rmdir()
 
     def testProjectBaseNoteSet(self):
         self.assertRaises(ProjectsBaseNotSetException, lambda: self._failsOnProjectsBaseNotSet())
@@ -81,13 +80,7 @@ class TestHandleSetupPy(TestBase):
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
         osEnviron[ENV_PROJECT]       = self._tmpProjectDir.name
 
-        packages: Packages = Packages(
-            [
-                UpdatePackage(packageName=PackageName('ogl'),      oldVersion=SemanticVersion('0.70.20'), newVersion=SemanticVersion('0.80.0')),
-                UpdatePackage(packageName=PackageName('untangle'), oldVersion=SemanticVersion('1.2.1'),   newVersion=SemanticVersion('1.3.0'))
-            ]
-        )
-        hsp: HandleSetupPy = HandleSetupPy(packages=packages)
+        hsp: HandleSetupPy = HandleSetupPy(packages=TestBase.TEST_PACKAGES)
 
         hsp.update()
 

@@ -12,9 +12,10 @@ from pathlib import Path
 from tempfile import mkstemp
 
 from re import match as regExMatch
+from re import Match
 
 from versionoverlord.Common import REQUIREMENTS_TXT
-from versionoverlord.Common import PackageLookupType
+
 from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdateDependencyCallback
@@ -32,8 +33,6 @@ class HandleRequirementsTxt(BaseHandler):
         self.logger: Logger = getLogger(__name__)
 
         super().__init__(packages)
-
-        self._packageDict: PackageLookupType = self._buildPackageLookup()
 
     def update(self):
 
@@ -60,10 +59,14 @@ class HandleRequirementsTxt(BaseHandler):
         Args:
             contentLine:
 
-        Returns:  The update requirement line
+        Returns:  The updates requirement line
         """
-        regex: str = ".+?(?===)"
-        match = regExMatch(regex, contentLine)
+        regex: str          = ".+?(?===)"        # match everything to the left of the '==' sign
+        match: Match | None = regExMatch(regex, contentLine)
+        if match is None:
+            regex = ".+?(?=~=)"         # match everything to the left of the '~=' sign
+            match = regExMatch(regex, contentLine)
+
         assert match, 'We should only come here on valid packages'
 
         pkgNameStr: str = match.group(0)
@@ -86,13 +89,3 @@ class HandleRequirementsTxt(BaseHandler):
             searchItems.append(almostSearchItem)
 
         return searchItems
-
-    def _buildPackageLookup(self) -> PackageLookupType:
-
-        lookupDict: PackageLookupType = PackageLookupType({})
-
-        for pkg in self._packages:
-            updatePackage: UpdatePackage = cast(UpdatePackage, pkg)
-            lookupDict[updatePackage.packageName] = updatePackage
-
-        return lookupDict

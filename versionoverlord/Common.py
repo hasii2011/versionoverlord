@@ -18,6 +18,9 @@ SETUP_PY:         str = 'setup.py'
 REQUIREMENTS_TXT: str = 'requirements.txt'
 INSTALL_REQUIRES: str = 'install_requires'
 
+CIRCLE_CI_DIRECTORY: str = '.circleci'
+CIRCLE_CI_YAML:      str = 'config.yml'
+
 
 def versionFactory() -> SemanticVersion:
     return SemanticVersion('0.0.0')
