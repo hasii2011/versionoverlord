@@ -1,9 +1,8 @@
 
-from typing import NewType
-from typing import Tuple
-
 from logging import Logger
 from logging import getLogger
+
+from versionoverlord.Common import Slugs
 
 from versionoverlord.DisplayVersions import DisplayVersions
 from versionoverlord.DisplayVersions import SlugVersion
@@ -12,9 +11,6 @@ from versionoverlord.GitHubAdapter import GitHubAdapter
 from versionoverlord.SemanticVersion import SemanticVersion
 from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 from versionoverlord.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
-
-
-Slugs = NewType('Slugs', Tuple[str])
 
 
 class SlugHandler:
