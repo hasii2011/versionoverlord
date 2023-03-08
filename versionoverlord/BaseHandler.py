@@ -8,41 +8,25 @@ from logging import getLogger
 from abc import ABC
 from abc import abstractmethod
 
-from os import environ as osEnvironment
-
 from pathlib import Path
 
 from tempfile import gettempdir
 
-from versionoverlord.Common import ENV_PROJECT
-from versionoverlord.Common import ENV_PROJECTS_BASE
 from versionoverlord.Common import PackageLookupType
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdateDependencyCallback
 from versionoverlord.Common import UpdatePackage
 
-from versionoverlord.exceptions.ProjectNotSetException import ProjectNotSetException
-from versionoverlord.exceptions.ProjectsBaseNotSetException import ProjectsBaseNotSetException
+from versionoverlord.EnvironmentBase import EnvironmentBase
 
 
-class BaseHandler(ABC):
+class BaseHandler(ABC, EnvironmentBase):
     def __init__(self, packages: Packages):
 
         self._packages:  Packages = packages
         self.baseLogger: Logger   = getLogger(__name__)
 
-        try:
-            self._projectsBase: str = osEnvironment[ENV_PROJECTS_BASE]
-        except KeyError:
-            self.baseLogger.error(f'Project Base not set')
-            raise ProjectsBaseNotSetException
-        try:
-            self._projectDirectory: str = osEnvironment[ENV_PROJECT]
-        except KeyError:
-            self.baseLogger.error(f'Project Directory not set')
-            raise ProjectNotSetException
-        except (ValueError, Exception) as e:
-            self.baseLogger.error(f'{e}')
+        super().__init__()
 
         self._packageDict: PackageLookupType = self._buildPackageLookup()
 

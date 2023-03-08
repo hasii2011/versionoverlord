@@ -24,6 +24,7 @@ CIRCLE_CI_YAML:      str = 'config.yml'
 
 TEMPLATE_FILE:                str = 'versionUpdate.csv'
 
+
 def versionFactory() -> SemanticVersion:
     return SemanticVersion('0.0.0')
 
