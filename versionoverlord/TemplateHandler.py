@@ -8,6 +8,8 @@ from pathlib import Path
 
 from os import linesep as osLineSep
 
+from hasiicommon.SemanticVersion import SemanticVersion
+
 from versionoverlord.Common import REQUIREMENTS_TXT
 from versionoverlord.Common import TEMPLATE_FILE
 from versionoverlord.Common import Slugs
@@ -16,8 +18,6 @@ from versionoverlord.DisplayVersions import SlugVersion
 from versionoverlord.DisplayVersions import SlugVersions
 from versionoverlord.EnvironmentBase import EnvironmentBase
 from versionoverlord.GitHubAdapter import GitHubAdapter
-
-from versionoverlord.SemanticVersion import SemanticVersion
 
 
 class TemplateHandler(EnvironmentBase):

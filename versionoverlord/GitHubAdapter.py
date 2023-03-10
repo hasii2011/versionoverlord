@@ -15,7 +15,8 @@ from github.GitRelease import GitRelease
 from github.PaginatedList import PaginatedList
 from github.Repository import Repository
 
-from versionoverlord.SemanticVersion import SemanticVersion
+from hasiicommon.SemanticVersion import SemanticVersion
+
 from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 from versionoverlord.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
 

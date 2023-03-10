@@ -23,7 +23,10 @@ setup(
     packages=[
         'versionoverlord'
     ],
-    install_requires=['click'],
+    install_requires=[
+        'click~=8.1.3',
+        'hasiicommon~=0.1.0',
+    ],
     entry_points='''
         [console_scripts]
         versionoverlord=versionoverlord.VersionOverlord:commandHandler

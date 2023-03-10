@@ -2,13 +2,15 @@
 from logging import Logger
 from logging import getLogger
 
+from hasiicommon.SemanticVersion import SemanticVersion
+
 from versionoverlord.Common import Slugs
 
 from versionoverlord.DisplayVersions import DisplayVersions
 from versionoverlord.DisplayVersions import SlugVersion
 from versionoverlord.DisplayVersions import SlugVersions
 from versionoverlord.GitHubAdapter import GitHubAdapter
-from versionoverlord.SemanticVersion import SemanticVersion
+
 from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 from versionoverlord.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
 

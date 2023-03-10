@@ -14,10 +14,11 @@ from pkg_resources import resource_filename
 
 from unittest import TestCase
 
+from hasiicommon.SemanticVersion import SemanticVersion
+
 from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdatePackage
-from versionoverlord.SemanticVersion import SemanticVersion
 
 
 JSON_LOGGING_CONFIG_FILENAME: str = "testLoggingConfig.json"

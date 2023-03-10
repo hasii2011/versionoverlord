@@ -7,5 +7,6 @@ build/
 dist/
 versionoverlord.egg-info
 pyenv-3.11.0/
+pyenv-3.10.6/
 .envrc
 .python-version

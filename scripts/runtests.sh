@@ -11,7 +11,8 @@ function changeToProjectRoot {
 
 changeToProjectRoot
 
-# python3 -m tests.RunTests
-python3 -m tests.TestAll $*
+python3 -Wdefault -m tests.TestAll
+status=$?
 
-echo "Soon we will have some unit tests"
+echo "Exit with status: ${status}"
+exit "${status}"

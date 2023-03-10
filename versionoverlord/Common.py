@@ -1,14 +1,14 @@
+
 from typing import Callable
 from typing import Dict
 from typing import List
 from typing import NewType
+from typing import Tuple
 
 from dataclasses import dataclass
 from dataclasses import field
-from typing import Tuple
 
-from versionoverlord.SemanticVersion import SemanticVersion
-
+from hasiicommon.SemanticVersion import SemanticVersion
 
 ENV_PROJECTS_BASE:    str = 'PROJECTS_BASE'
 ENV_PROJECT:          str = 'PROJECT'

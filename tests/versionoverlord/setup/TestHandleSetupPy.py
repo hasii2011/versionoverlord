@@ -89,7 +89,7 @@ class TestHandleSetupPy(TestBase):
                                        generatedFileName=generatedFileName
                                        )
 
-        self.assertEquals(0, status, 'setup.py not correctly updated')
+        self.assertEqual(0, status, 'setup.py not correctly updated')
 
     def _failsOnProjectsBaseNotSet(self):
         try:
