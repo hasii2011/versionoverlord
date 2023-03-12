@@ -26,8 +26,8 @@
             "level": "INFO",
             "propagate": "False"
         },
-        "bumpversoin": {
-            "level":     "INFO",
+        "versionoverlord": {
+            "level":     "WARNING",
             "propagate": "False"
         }
     }

@@ -11,7 +11,7 @@ from os import linesep as osLineSep
 from hasiicommon.SemanticVersion import SemanticVersion
 
 from versionoverlord.Common import REQUIREMENTS_TXT
-from versionoverlord.Common import TEMPLATE_FILE
+from versionoverlord.Common import SPECIFICATION_FILE
 from versionoverlord.Common import Slugs
 
 from versionoverlord.DisplayVersions import SlugVersion
@@ -32,8 +32,8 @@ class TemplateHandler(EnvironmentBase):
         requirementsPath:      Path      = Path(self._projectsBase) / self._projectDirectory / REQUIREMENTS_TXT
         self._requirementsTxt: List[str] = requirementsPath.read_text().split(osLineSep)
 
-    def createTemplate(self):
-        print(f'Creating a template')
+    def createSpecification(self):
+        print(f'Creating a specification')
         versionOverlord: GitHubAdapter = GitHubAdapter()
 
         slugVersions: SlugVersions = SlugVersions([])
@@ -42,8 +42,8 @@ class TemplateHandler(EnvironmentBase):
             slugVersion: SlugVersion = SlugVersion(slug=slug, version=str(version))
             slugVersions.append(slugVersion)
 
-        versionUpdateTemplate: Path = Path(TEMPLATE_FILE)
-        with versionUpdateTemplate.open(mode='w') as fd:
+        versionUpdateSpecification: Path = Path(SPECIFICATION_FILE)
+        with versionUpdateSpecification.open(mode='w') as fd:
             fd.write(f'PackageName,OldVersion,NewVersion{osLineSep}')
             for slugVersion in slugVersions:
                 oldVersion: str = self._findRequirementVersion(self._extractPackageName(slugVersion.slug))
