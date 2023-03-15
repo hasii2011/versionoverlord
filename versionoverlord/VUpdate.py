@@ -5,9 +5,12 @@ from logging import getLogger
 from pathlib import Path as PyPath
 
 from click import Path
+from click import argument
+from click import clear
 from click import command
 from click import echo
 from click import option
+from click import secho
 from click import version_option
 from hasiicommon.SemanticVersion import SemanticVersion
 
@@ -48,7 +51,7 @@ class VUpdate:
             packages: Packages = Packages([])
 
             for row in csvreader:
-                echo((row['PackageName'], row['OldVersion'], row['NewVersion']))
+                self.logger.debug(row['PackageName'], row['OldVersion'], row['NewVersion'])
                 packageName: PackageName = PackageName(row['PackageName'])
                 updatePackage: UpdatePackage = UpdatePackage()
                 updatePackage.packageName = packageName
@@ -65,37 +68,27 @@ class VUpdate:
         type=Path(exists=True, path_type=PyPath),
         required=False,
         help='Update the project using a specification file')
-def commandHandler(specification: PyPath):
+@argument('projectsBase', envvar='PROJECTS_BASE')
+@argument('project', envvar='PROJECT')
+def commandHandler(projectsbase: str, project: str, specification: PyPath):
     """
+    \b
     This command uses the .csv file created by createSpec
+
+    It uses the following environment variables:
+
+    \b
+        GITHUB_ACCESS_TOKEN - A personal GitHub access token necessary to read repository release information
+        PROJECTS_BASE -  The directory where the python projects are located
+        PROJECT       -  The name of the project;  It should be a directory name
     """
+    clear()
+    secho(f'The project`s base directory {projectsbase}', color=True, reverse=True)
+    secho(f'Project to update: {project}', color=True, reverse=True)
+    secho('')
     setUpLogging()
     vUpdate: VUpdate = VUpdate(specification=specification)
     vUpdate.update()
-    # with open(specification) as csvfile:
-    #     csvreader = csv.DictReader(csvfile, delimiter=',', quotechar='|')
-    #     packages: Packages = Packages([])
-    #
-    #     for row in csvreader:
-    #         echo((row['PackageName'], row['OldVersion'], row['NewVersion']))
-    #         packageName:   PackageName = PackageName(row['PackageName'])
-    #         updatePackage: UpdatePackage = UpdatePackage()
-    #         updatePackage.packageName = packageName
-    #         updatePackage.oldVersion = SemanticVersion(row['OldVersion'])
-    #         updatePackage.newVersion = SemanticVersion(row['NewVersion'])
-    #         packages.append(updatePackage)
-    #
-    #     echo('Update setup.py', color=True)
-    #     hsp: HandleSetupPy = HandleSetupPy(packages=packages)
-    #     hsp.update()
-    #
-    #     echo('Update config.yml', color=True)
-    #     handleCircleCI: HandleCircleCI = HandleCircleCI(packages=packages)
-    #     handleCircleCI.update()
-    #
-    #     echo('Update requirements.txt', color=True)
-    #     hrt: HandleRequirementsTxt = HandleRequirementsTxt(packages=packages)
-    #     hrt.update()
 
 
 if __name__ == "__main__":
