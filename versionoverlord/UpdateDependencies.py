@@ -24,7 +24,7 @@ from versionoverlord.requirements.HandleRequirementsTxt import HandleRequirement
 from versionoverlord.setup.HandleSetupPy import HandleSetupPy
 
 
-class VUpdate:
+class UpdateDependencies:
     def __init__(self, specification: PyPath):
         self.logger: Logger = getLogger(__name__)
 
@@ -87,7 +87,7 @@ def commandHandler(projectsbase: str, project: str, specification: PyPath):
     secho(f'Project to update: {project}', color=True, reverse=True)
     secho('')
     setUpLogging()
-    vUpdate: VUpdate = VUpdate(specification=specification)
+    vUpdate: UpdateDependencies = UpdateDependencies(specification=specification)
     vUpdate.update()
 
 

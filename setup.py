@@ -10,7 +10,7 @@ LICENSE = (HERE / 'LICENSE').read_text()
 
 setup(
     name="versionoverlord",
-    version="0.3.0",
+    version="0.4.0",
     author='Humberto A. Sanchez II',
     author_email='humberto.a.sanchez.ii@gmail.com',
     maintainer='Humberto A. Sanchez II',
@@ -29,9 +29,9 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "querySlugs=versionoverlord.VersionOverlord:commandHandler",
+            "querySlugs=versionoverlord.QuerySlugs:commandHandler",
             "createSpec=versionoverlord.CreateSpecification:commandHandler",
-            "updateDeps=versionoverlord.VUpdate:commandHandler",
+            "updateDeps=versionoverlord.UpdateDependencies:commandHandler",
         ]
     },
 )
