@@ -29,9 +29,9 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "querySlugs=versionoverlord.QuerySlugs:commandHandler",
-            "createSpec=versionoverlord.CreateSpecification:commandHandler",
-            "updateDeps=versionoverlord.UpdateDependencies:commandHandler",
+            "querySlugs=versionoverlord.commands.QuerySlugs:commandHandler",
+            "createSpec=versionoverlord.commands.CreateSpecification:commandHandler",
+            "updateDeps=versionoverlord.commands.UpdateDependencies:commandHandler",
         ]
     },
 )
