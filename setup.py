@@ -8,9 +8,13 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 LICENSE = (HERE / 'LICENSE').read_text()
 
+DATA_FILES = [
+    ('versionoverlord/resources', ['versionoverlord/resources/loggingConfiguration.json']),
+]
+
 setup(
     name="versionoverlord",
-    version="0.5.0",
+    version="0.5.4",
     author='Humberto A. Sanchez II',
     author_email='humberto.a.sanchez.ii@gmail.com',
     maintainer='Humberto A. Sanchez II',
@@ -20,10 +24,19 @@ setup(
     long_description_content_type="text/markdown",
     license=LICENSE,
     url="https://github.com/versionoverlord",
+    data_files=DATA_FILES,
     packages=[
-        'versionoverlord'
+        'versionoverlord',
+        'versionoverlord.circleci',
+        'versionoverlord.commands',
+        'versionoverlord.exceptions',
+        'versionoverlord.requirements',
+        'versionoverlord.resources',
+        'versionoverlord.setup'
     ],
+    include_package_data=True,
     install_requires=[
+        'PyGithub==1.58.0',
         'click~=8.1.3',
         'hasiicommon~=0.1.0',
     ],

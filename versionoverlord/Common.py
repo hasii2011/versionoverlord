@@ -34,7 +34,7 @@ CIRCLE_CI_YAML:      str = 'config.yml'
 
 SPECIFICATION_FILE:           str = 'versionSpecification.csv'
 RESOURCES_PACKAGE_NAME:       str = 'versionoverlord.resources'
-JSON_LOGGING_CONFIG_FILENAME: str = "loggingConfig.json"
+JSON_LOGGING_CONFIG_FILENAME: str = "loggingConfiguration.json"
 
 
 def versionFactory() -> SemanticVersion:
