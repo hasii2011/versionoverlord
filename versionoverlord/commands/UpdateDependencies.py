@@ -79,7 +79,7 @@ def commandHandler(projectsbase: str, project: str, specification: PyPath):
 
     \b
         GITHUB_ACCESS_TOKEN - A personal GitHub access token necessary to read repository release information
-        PROJECTS_BASE -  The directory where the python projects are located
+        PROJECTS_BASE -  The local directory where the python projects are based
         PROJECT       -  The name of the project;  It should be a directory name
     """
     clear()
