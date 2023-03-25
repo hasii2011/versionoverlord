@@ -46,6 +46,9 @@ class GitHubAdapter:
         for release in releases:
             gitRelease: GitRelease = cast(GitRelease, release)
 
+            if gitRelease.draft is True:
+                self.logger.warning(f'{repo.full_name} Ignore pre-release {gitRelease.tag_name}')
+                continue
             releaseNumber: str = gitRelease.tag_name
             numPeriods: int = self._countPeriods(releaseNumber)
             if numPeriods < 2:

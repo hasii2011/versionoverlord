@@ -23,11 +23,11 @@ class SlugHandler:
 
     def handleSlugs(self):
         try:
-            versionOverlord: GitHubAdapter = GitHubAdapter()
+            gitHubAdapter: GitHubAdapter = GitHubAdapter()
 
             slugVersions: SlugVersions = SlugVersions([])
             for slug in self._slugs:
-                version: SemanticVersion = versionOverlord.getLatestVersionNumber(slug)
+                version: SemanticVersion = gitHubAdapter.getLatestVersionNumber(slug)
                 slugVersion: SlugVersion = SlugVersion(slug=slug, version=str(version))
                 slugVersions.append(slugVersion)
 
