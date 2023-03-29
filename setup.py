@@ -14,7 +14,7 @@ DATA_FILES = [
 
 setup(
     name="versionoverlord",
-    version="0.5.6",
+    version="0.5.7",
     author='Humberto A. Sanchez II',
     author_email='humberto.a.sanchez.ii@gmail.com',
     maintainer='Humberto A. Sanchez II',

@@ -20,7 +20,7 @@ from dataclasses import field
 from hasiihelper.SemanticVersion import SemanticVersion
 
 
-__version__ = "0.5.6"
+__version__ = "0.5.7"
 
 
 ENV_PROJECTS_BASE:    str = 'PROJECTS_BASE'

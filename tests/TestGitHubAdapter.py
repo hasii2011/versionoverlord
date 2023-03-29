@@ -20,7 +20,7 @@ class TestGitHubAdapter(TestBase):
             ResourceWarning: unclosed <ssl.SSLSocket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, 
             laddr=('192.168.0.24', 51944), raddr=('140.82.112.5', 443)>
     """
-    
+
     import warnings
     warnings.filterwarnings(action="ignore", message="unclosed", category=ResourceWarning)
 
