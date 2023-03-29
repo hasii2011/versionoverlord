@@ -12,7 +12,8 @@ from click import echo
 from click import option
 from click import secho
 from click import version_option
-from hasiicommon.SemanticVersion import SemanticVersion
+
+from hasiihelper.SemanticVersion import SemanticVersion
 
 from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages

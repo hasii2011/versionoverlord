@@ -1,17 +1,9 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from shutil import copy as shellCopy
 
 from os import environ as osEnviron
 
-
 from pathlib import Path
-
-from pkg_resources import resource_filename
 
 from versionoverlord.Common import ENV_PROJECT
 from versionoverlord.Common import ENV_PROJECTS_BASE
@@ -33,23 +25,14 @@ class TestHandleSetupPy(TestBase):
     UNIT_TESTS_PROJECTS_BASE:      str = '/Users/humberto.a.sanchez.ii/PycharmProjects/'
     UNIT_TEST_PROJECT_NO_SETUP_PY: str = 'OverLordUnitTestNoSetupPy'
 
-    clsLogger: Logger = cast(Logger, None)
-
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestHandleSetupPy.clsLogger = getLogger(__name__)
-
     def setUp(self):
-        self.logger: Logger = TestHandleSetupPy.clsLogger
 
         super().setUp()
 
         self._tmpNoSetupProjectDir:  Path = self._tmpProjectsBase / Path(TestHandleSetupPy.UNIT_TEST_PROJECT_NO_SETUP_PY)
         self._tmpNoSetupProjectDir.mkdir()
 
-        fqFileName: str = resource_filename(TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, SETUP_PY)
-
+        fqFileName: str = self.getFullyQualifiedResourceFileName(package=TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, fileName=SETUP_PY)
         testSetupPyPath:      Path = Path(fqFileName)
         destinationSetupPyPath: Path = self._tmpProjectDir / Path(SETUP_PY)
 

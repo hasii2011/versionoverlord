@@ -1,10 +1,10 @@
-wheel==0.38.4
+wheel==0.40.0
 setuptools==67.6.0
 twine~=4.0.0
 
 build==0.10.0
 
-types-setuptools==67.6.0.0
+types-setuptools==67.6.0.5
 mypy==1.1.1
 html-testRunner~=1.2.1
 
@@ -16,4 +16,4 @@ attrdict3~=2.0.2
 
 wxpython~=4.2.0
 
-hasiicommon~=0.1.0
+hasiihelper~=0.1.0

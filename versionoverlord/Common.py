@@ -1,3 +1,4 @@
+
 from typing import Callable
 from typing import Dict
 from typing import List
@@ -7,17 +8,19 @@ from typing import Tuple
 import logging
 import logging.config
 
+from importlib.abc import Traversable
+
+from importlib.resources import files
+
 from json import load as jsonLoad
 
 from dataclasses import dataclass
 from dataclasses import field
 
-from hasiicommon.SemanticVersion import SemanticVersion
-
-from pkg_resources import resource_filename
+from hasiihelper.SemanticVersion import SemanticVersion
 
 
-__version__ = "0.3.0"
+__version__ = "0.5.6"
 
 
 ENV_PROJECTS_BASE:    str = 'PROJECTS_BASE'
@@ -64,9 +67,12 @@ Slugs = NewType('Slugs', Tuple[str])
 
 
 def setUpLogging():
-    """"""
+    """
+    """
+    traversable: Traversable = files(RESOURCES_PACKAGE_NAME) / JSON_LOGGING_CONFIG_FILENAME
 
-    loggingConfigFilename: str = resource_filename(RESOURCES_PACKAGE_NAME, JSON_LOGGING_CONFIG_FILENAME)
+    # loggingConfigFilename: str = resource_filename(RESOURCES_PACKAGE_NAME, JSON_LOGGING_CONFIG_FILENAME)
+    loggingConfigFilename: str = str(traversable)
 
     with open(loggingConfigFilename, 'r') as loggingConfigurationFile:
         configurationDictionary = jsonLoad(loggingConfigurationFile)

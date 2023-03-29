@@ -29,8 +29,8 @@ flowchart
 
    pyut(Pyut 7.7.0) & oglio(oglio 0.5.80) & untanglepyut.0.6.40 --> ogl.0.70.20
    
-   pyut(Pyut 7.7.0) &  pyutplugins(pyutplugins 0.8.40) &  oglio(oglio 0.5.80) &  untanglepyut.0.6.40 &  ogl.0.70.20 -...-> pyutmodel.1.4.1
-   pyut(Pyut 7.7.0) & pyutplugins(pyutplugins 0.8.40) & ogl.0.70.20 ----> hasiicommon.0.1.1
+   pyut(Pyut 7.7.0) &  pyutplugins(pyutplugins 0.8.40) &  oglio(oglio 0.5.80) &  untanglepyut.0.6.40 &  ogl.0.70.20 -...-> pyutmodel.1.4.2
+   pyut(Pyut 7.7.0) & pyutplugins(pyutplugins 0.8.40) & ogl.0.70.20 ----> hasiicommon.0.2.0
 
     style pyut fill:#ee4,stroke:#333,stroke-width:
     %% linkStyle 1 stroke:#ff3,stroke-width:4px,color:red;

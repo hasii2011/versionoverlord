@@ -1,16 +1,9 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from pathlib import Path
 
 from shutil import copy as shellCopy
 
 from os import environ as osEnviron
-
-from pkg_resources import resource_filename
 
 from versionoverlord.Common import ENV_PROJECT
 from versionoverlord.Common import ENV_PROJECTS_BASE
@@ -30,24 +23,17 @@ from versionoverlord.requirements.HandleRequirementsTxt import HandleRequirement
 class TestHandleRequirementsTxt(TestBase):
     """
     """
-    clsLogger: Logger = cast(Logger, None)
-
     UNIT_TEST_PROJECT_NO_REQUIREMENTS_TXT: str = 'OverLordUnitTestNoRequirementsTxt'
-
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestHandleRequirementsTxt.clsLogger = getLogger(__name__)
 
     def setUp(self):
         super().setUp()
-        self.logger:             Logger = TestHandleRequirementsTxt.clsLogger
+
         self._tmpNoRequirementsTxtDir: Path = self._tmpProjectsBase / Path(TestHandleRequirementsTxt.UNIT_TEST_PROJECT_NO_REQUIREMENTS_TXT)
         self._tmpNoRequirementsTxtDir.mkdir()
 
-        fqFileName: str = resource_filename(TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, REQUIREMENTS_TXT)
+        fqFileName: str = self.getFullyQualifiedResourceFileName(package=TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, fileName=REQUIREMENTS_TXT)
 
-        testRequirementsTxtPath:       Path = Path(fqFileName)
+        testRequirementsTxtPath:        Path = Path(fqFileName)
         destinationRequirementsTxtPath: Path = self._tmpProjectDir / Path(REQUIREMENTS_TXT)
 
         self.logger.info(f'Copy to: {destinationRequirementsTxtPath}')

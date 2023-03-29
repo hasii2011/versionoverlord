@@ -1,13 +1,8 @@
 
-from typing import cast
-
-from logging import Logger
-from logging import getLogger
-
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from hasiicommon.SemanticVersion import SemanticVersion
+from hasiihelper.SemanticVersion import SemanticVersion
 
 from tests.TestBase import TestBase
 from versionoverlord.GitHubAdapter import GitHubAdapter
@@ -16,15 +11,18 @@ from versionoverlord.GitHubAdapter import GitHubAdapter
 class TestGitHubAdapter(TestBase):
     """
     """
-    clsLogger: Logger = cast(Logger, None)
-
-    @classmethod
-    def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestGitHubAdapter.clsLogger = getLogger(__name__)
-
     def setUp(self):
-        self.logger: Logger = TestGitHubAdapter.clsLogger
+        super().setUp()
+
+    # noinspection SpellCheckingInspection
+    """
+        I don't care about:
+            ResourceWarning: unclosed <ssl.SSLSocket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, 
+            laddr=('192.168.0.24', 51944), raddr=('140.82.112.5', 443)>
+    """
+    
+    import warnings
+    warnings.filterwarnings(action="ignore", message="unclosed", category=ResourceWarning)
 
     def tearDown(self):
         pass

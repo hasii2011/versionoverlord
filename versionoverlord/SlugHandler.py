@@ -2,7 +2,7 @@
 from logging import Logger
 from logging import getLogger
 
-from hasiicommon.SemanticVersion import SemanticVersion
+from hasiihelper.SemanticVersion import SemanticVersion
 
 from versionoverlord.Common import Slugs
 

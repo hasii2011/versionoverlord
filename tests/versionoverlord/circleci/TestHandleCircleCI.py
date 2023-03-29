@@ -1,8 +1,8 @@
-from pathlib import Path
-from typing import cast
 
-from logging import Logger
-from logging import getLogger
+from importlib.abc import Traversable
+from importlib.resources import files
+
+from pathlib import Path
 
 from os import environ as osEnviron
 
@@ -11,13 +11,12 @@ from shutil import copy as shellCopy
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from pkg_resources import resource_filename
-
 from versionoverlord.Common import CIRCLE_CI_DIRECTORY
 from versionoverlord.Common import CIRCLE_CI_YAML
 from versionoverlord.Common import ENV_PROJECT
 from versionoverlord.Common import ENV_PROJECTS_BASE
 from versionoverlord.Common import Packages
+
 from versionoverlord.circleci.HandleCircleCI import HandleCircleCI
 from versionoverlord.exceptions.NotACircleCIProjectException import NotACircleCIProjectException
 
@@ -27,14 +26,12 @@ from tests.TestBase import TestBase
 class TestHandleCircleCI(TestBase):
     """
     """
-    clsLogger: Logger = cast(Logger, None)
     keep:      bool   = False
 
     @classmethod
     def setUpClass(cls):
-        TestBase.setUpLogging()
-        TestHandleCircleCI.clsLogger = getLogger(__name__)
 
+        TestBase.setUpClass()
         if 'KEEP' in osEnviron:
             keep: str = osEnviron["KEEP"]
             if keep.lower().strip() == 'true':
@@ -42,12 +39,11 @@ class TestHandleCircleCI(TestBase):
             else:
                 cls.keep = False
         else:
-            cls.clsLogger.info(f'No need to keep data files')
+            print(f'No need to keep data files')
             cls.keep = False
 
     def setUp(self):
         super().setUp()
-        self.logger: Logger = TestHandleCircleCI.clsLogger
 
         self._circleCIPath: Path = self._tmpProjectDir / Path(CIRCLE_CI_DIRECTORY)
         self._circleCIPath.mkdir(exist_ok=True)
@@ -94,7 +90,10 @@ class TestHandleCircleCI(TestBase):
 
     def _copyTestConfigFileToUnitTestProject(self):
 
-        testYamlFile:     str  = resource_filename(TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, CIRCLE_CI_YAML)
+        traversable: Traversable = files(TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME) / CIRCLE_CI_YAML
+
+        # testYamlFile:     str  = resource_filename(TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, CIRCLE_CI_YAML)
+        testYamlFile:     str = str(traversable)
         testYamlFilePath: Path = Path(testYamlFile)
 
         self.logger.debug(f'Copy to: {self._destinationYamFilePath}')
