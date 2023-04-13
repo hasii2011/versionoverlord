@@ -11,4 +11,5 @@ html-testRunner~=1.2.1
 PyGithub==1.58.1
 click~=8.1.3
 
-hasiihelper==0.2.0
+buildlackey~=0.7.0
+hasiihelper~=0.2.0
