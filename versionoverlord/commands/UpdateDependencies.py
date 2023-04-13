@@ -64,7 +64,7 @@ class UpdateDependencies:
 
 
 @command()
-@version_option(version=f'{__version__}', message='%(version)s')
+@version_option(version=f'{__version__}', message='%(prog)s version %(version)s')
 @option('--specification', '-s', is_flag=False, flag_value='versionSpecification.csv', default='versionSpecification.csv',
         type=Path(exists=True, path_type=PyPath),
         required=False,

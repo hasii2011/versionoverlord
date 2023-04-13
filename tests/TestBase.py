@@ -13,7 +13,7 @@ from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdatePackage
 
 
-JSON_LOGGING_CONFIG_FILENAME: str = "testLoggingConfig.json"
+JSON_LOGGING_CONFIG_FILENAME: str = "testLoggingConfiguration.json"
 TEST_DIRECTORY:               str = 'tests'
 
 

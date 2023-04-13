@@ -8,7 +8,7 @@
 
 ## Rationale
 
-These utilities are meant to solve a problem with related respositories and their dependency relationships
+These utilities are meant to solve a problem with related repositories and their dependency relationships
 
 Projects may have hierarchical dependencies.  See the following [Pyut](https://github.com/hasii2011/PyUt) dependency diagram. 
 
@@ -100,7 +100,7 @@ The slugs are `hasii2011/pyutmode` and `hasii2011/hasiicommon,` respectively.
 
 From the above dependency diagram assume the following:
 
-Both the `pyutmodel` and `hasiicommon` respositories have been updated.  We need to update the `ogl` dependencies to match the lastest of both.  Assume both `GITHUB_ACCESS_TOKEN` and `PROJECTS_BASE` are correctly set and `PROJECT` is set to `'ogl'`.  Use the following CLI invocation to create the specification file.
+Both the `pyutmodel` and `hasiicommon` repositories have been updated.  We need to update the `ogl` dependencies to match the latest of both.  Assume both `GITHUB_ACCESS_TOKEN` and `PROJECTS_BASE` are correctly set and `PROJECT` is set to `'ogl'`.  Use the following CLI invocation to create the specification file.
 
 ```
 createSpec -s hasii2011/pyutmodel -s hasii2011/hasiicommon

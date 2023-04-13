@@ -19,7 +19,7 @@ from versionoverlord.SlugHandler import Slugs
 
 
 @command()
-@version_option(version=f'{__version__}', message='%(version)s')
+@version_option(version=f'{__version__}', message='%(prog)s version %(version)s')
 @option('--slugs', '-s', required=False, multiple=True, help='GitHub slugs to query')
 @option('--input-file', '-i', required=False,           help='Use input file for slug list')
 def commandHandler(slugs: Tuple[str], input_file):

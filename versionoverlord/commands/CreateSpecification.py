@@ -19,7 +19,7 @@ class CreateSpecification:
 
 
 @command()
-@version_option(version=f'{__version__}', message='%(version)s')
+@version_option(version=f'{__version__}', message='%(prog)s version %(version)s')
 @option('--slugs', '-s',  multiple=True, required=False, help='Create package update specification')
 def commandHandler(slugs: Tuple[str]):
     """

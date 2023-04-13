@@ -33,7 +33,7 @@ class TestHandleSetupPy(TestBase):
         self._tmpNoSetupProjectDir.mkdir()
 
         fqFileName: str = self.getFullyQualifiedResourceFileName(package=TestBase.RESOURCES_TEST_DATA_PACKAGE_NAME, fileName=SETUP_PY)
-        testSetupPyPath:      Path = Path(fqFileName)
+        testSetupPyPath:        Path = Path(fqFileName)
         destinationSetupPyPath: Path = self._tmpProjectDir / Path(SETUP_PY)
 
         shellCopy(testSetupPyPath, destinationSetupPyPath)
@@ -49,7 +49,7 @@ class TestHandleSetupPy(TestBase):
         self._tmpNoSetupProjectDir.rmdir()
         self._tmpProjectDir.rmdir()
 
-    def testProjectBaseNoteSet(self):
+    def testProjectBaseNotSet(self):
         self.assertRaises(ProjectsBaseNotSetException, lambda: self._failsOnProjectsBaseNotSet())
 
     def testProjectNotSet(self):
