@@ -16,16 +16,11 @@ from versionoverlord.FileNameToSlugs import FileNameToSlugs
 from versionoverlord.TemplateHandler import TemplateHandler
 
 
-class CreateSpecification:
-    def __init__(self):
-        self.logger: Logger = getLogger(__name__)
-
-
 @command()
 @version_option(version=f'{__version__}', message='%(prog)s version %(version)s')
 @option('--slugs',     '-s',  multiple=True, required=False, help='Create package update specification')
 @option('--input-file', '-i', required=False,                help='Use input file for slug list')
-def commandHandler(slugs: Tuple[str], input_file: str):
+def createSpecification(slugs: Tuple[str], input_file: str):
     """
     \b
     This command creates .csv specification file
@@ -55,4 +50,4 @@ def commandHandler(slugs: Tuple[str], input_file: str):
 
 if __name__ == "__main__":
     setUpLogging()
-    commandHandler(['-i', 'tests/resources/testdata/query.slg'])
+    createSpecification(['-i', 'tests/resources/testdata/query.slg'])

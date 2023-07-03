@@ -71,7 +71,7 @@ class UpdateDependencies:
         help='Update the project using a specification file')
 @argument('projectsBase', envvar='PROJECTS_BASE')
 @argument('project', envvar='PROJECT')
-def commandHandler(projectsbase: str, project: str, specification: PyPath):
+def updateDependencies(projectsbase: str, project: str, specification: PyPath):
     """
     \b
     This command uses the .csv file created by createSpec
@@ -93,4 +93,4 @@ def commandHandler(projectsbase: str, project: str, specification: PyPath):
 
 
 if __name__ == "__main__":
-    commandHandler()
+    updateDependencies()

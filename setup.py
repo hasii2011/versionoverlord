@@ -42,9 +42,9 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "querySlugs=versionoverlord.commands.QuerySlugs:commandHandler",
-            "createSpec=versionoverlord.commands.CreateSpecification:commandHandler",
-            "updateDeps=versionoverlord.commands.UpdateDependencies:commandHandler",
+            "querySlugs=versionoverlord.commands.QuerySlugs:querySlugs",
+            "createSpecification=versionoverlord.commands.CreateSpecification:createSpecification",
+            "updateDependencies=versionoverlord.commands.UpdateDependencies:updateDependencies",
         ]
     },
 )
