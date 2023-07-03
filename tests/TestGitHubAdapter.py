@@ -31,8 +31,8 @@ class TestGitHubAdapter(TestBase):
         gitHubAdapter: GitHubAdapter = GitHubAdapter()
 
         version: SemanticVersion = gitHubAdapter.getLatestVersionNumber('hasii2011/hasiicommon')
-        self.assertNotEquals(None, version, 'Something wrong should not be None')
-        self.assertNotEquals('', version,   'Something wrong should not be Empty')
+        self.assertNotEqual(None, version, 'Something wrong should not be None')
+        self.assertNotEqual('', version,   'Something wrong should not be Empty')
         self.logger.info(f'{version}')
 
 

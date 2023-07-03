@@ -47,8 +47,11 @@ class TemplateHandler(EnvironmentBase):
             fd.write(f'PackageName,OldVersion,NewVersion{osLineSep}')
             for slugVersion in slugVersions:
                 oldVersion: str = self._findRequirementVersion(self._extractPackageName(slugVersion.slug))
-                pkgName: str = self._extractPackageName(slug=slugVersion.slug)
-                fd.write(f'{pkgName},{oldVersion},{slugVersion.version}{osLineSep}')
+                if oldVersion == '':
+                    print(f'{slugVersion.slug} Did not find requirement')
+                else:
+                    pkgName:    str = self._extractPackageName(slug=slugVersion.slug)
+                    fd.write(f'{pkgName},{oldVersion},{slugVersion.version}{osLineSep}')
 
     def _extractPackageName(self, slug: str) -> str:
         splitSlug: List[str] = slug.split(sep='/')
@@ -57,14 +60,27 @@ class TemplateHandler(EnvironmentBase):
         return pkgName
 
     def _findRequirementVersion(self, packageName: str) -> str:
+        """
+        Can handle requirements specifications like:
+        pkgName==versionNumber
+        pkgName~=versionNumber
 
+        Args:
+            packageName:   The package name to search for
+
+        Returns:  A version number from the requirement file that matches the package name
+                 If the requirement is not listed returns an empty string
+        """
         lookupRequirement: str = f'{packageName}=='
 
         req: List[str] = self._searchRequirements(lookupRequirement)
         if len(req) == 0:
-            lookupRequirement = f'{packageName}~='
+            lookupRequirement = f'{packageName}~='      # did not find '=='  how about '~='
             req = self._searchRequirements(lookupRequirement)
-            splitRequirement: List[str] = req[0].split('~=')
+            if len(req) == 0:
+                splitRequirement: List[str]  = ['', '']
+            else:
+                splitRequirement = req[0].split('~=')
         else:
             splitRequirement = req[0].split('==')
 
