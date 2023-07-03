@@ -2,6 +2,8 @@
 from logging import Logger
 from logging import getLogger
 
+from click import ClickException
+from click import secho
 from hasiihelper.SemanticVersion import SemanticVersion
 
 from versionoverlord.Common import Slugs
@@ -31,11 +33,14 @@ class SlugHandler:
                 slugVersion: SlugVersion = SlugVersion(slug=slug, version=str(version))
                 slugVersions.append(slugVersion)
 
-            displayVersions: DisplayVersions = DisplayVersions()
-            displayVersions.displaySlugs(slugVersions=slugVersions)
+            if len(slugVersions) == 0:
+                secho('Nothing to see here')
+            else:
+                displayVersions: DisplayVersions = DisplayVersions()
+                displayVersions.displaySlugs(slugVersions=slugVersions)
         except NoGitHubAccessTokenException:
-            print(f'Your must provide a GitHub access token via the environment variable `GITHUB_ACCESS_TOKEN`')
+            raise ClickException(f'Your must provide a GitHub access token via the environment variable `GITHUB_ACCESS_TOKEN`')
         except UnknownGitHubRepositoryException as e:
-            print(f'Unknown GitHub Repository: `{e.repositorySlug}`')
+            raise ClickException(f'Unknown GitHub Repository: `{e.repositorySlug}`')
         except (ValueError, Exception) as e:
             print(f'{e}')
