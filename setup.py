@@ -45,6 +45,7 @@ setup(
             "querySlugs=versionoverlord.commands.QuerySlugs:querySlugs",
             "createSpecification=versionoverlord.commands.CreateSpecification:createSpecification",
             "updateDependencies=versionoverlord.commands.UpdateDependencies:updateDependencies",
+            "versionOverlord=versionoverlord.commands.VersionOverlord:versionOverlord",
         ]
     },
 )
