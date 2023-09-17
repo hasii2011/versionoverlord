@@ -56,6 +56,7 @@ class DisplayVersions:
             lineNumber += 1
 
         self._stdScreen.addstr(lineNumber + 1, columnNumber, 'Press any key to continue...')
+        # noinspection PyUnusedLocal
         s = self._stdScreen.getch()
 
         self._done()

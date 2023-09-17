@@ -8,7 +8,7 @@ from pathlib import Path
 
 from os import linesep as osLineSep
 
-from hasiihelper.SemanticVersion import SemanticVersion
+from codeallybasic.SemanticVersion import SemanticVersion
 
 from versionoverlord.Common import REQUIREMENTS_TXT
 from versionoverlord.Common import SPECIFICATION_FILE

@@ -5,8 +5,8 @@ from pathlib import Path
 
 from tempfile import gettempdir
 
-from hasiihelper.SemanticVersion import SemanticVersion
-from hasiihelper.UnitTestBase import UnitTestBase
+from codeallybasic.SemanticVersion import SemanticVersion
+from codeallybasic.UnitTestBase import UnitTestBase
 
 from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages

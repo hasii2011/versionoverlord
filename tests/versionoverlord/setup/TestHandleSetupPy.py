@@ -74,6 +74,9 @@ class TestHandleSetupPy(TestBase):
 
         self.assertEqual(0, status, 'setup.py not correctly updated')
 
+    def testUpdateMultiLine(self):
+        pass
+
     def _failsOnProjectsBaseNotSet(self):
         try:
             del osEnviron[ENV_PROJECTS_BASE]
@@ -107,9 +110,7 @@ def suite() -> TestSuite:
     import unittest
 
     testSuite: TestSuite = TestSuite()
-    # noinspection PyUnresolvedReferences
 
-    # testSuite.addTest(unittest.makeSuite(TestTemplate))
     testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestHandleSetupPy))
 
     return testSuite

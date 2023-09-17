@@ -1,5 +1,4 @@
-from logging import Logger
-from logging import getLogger
+
 from pathlib import Path
 from typing import Tuple
 from typing import cast

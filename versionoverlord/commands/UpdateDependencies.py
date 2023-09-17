@@ -13,7 +13,7 @@ from click import option
 from click import secho
 from click import version_option
 
-from hasiihelper.SemanticVersion import SemanticVersion
+from codeallybasic.SemanticVersion import SemanticVersion
 
 from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages

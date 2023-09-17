@@ -2,9 +2,10 @@
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from hasiihelper.SemanticVersion import SemanticVersion
+from codeallybasic.SemanticVersion import SemanticVersion
 
 from tests.TestBase import TestBase
+
 from versionoverlord.GitHubAdapter import GitHubAdapter
 
 

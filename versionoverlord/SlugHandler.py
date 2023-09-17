@@ -4,7 +4,8 @@ from logging import getLogger
 
 from click import ClickException
 from click import secho
-from hasiihelper.SemanticVersion import SemanticVersion
+
+from codeallybasic.SemanticVersion import SemanticVersion
 
 from versionoverlord.Common import Slugs
 

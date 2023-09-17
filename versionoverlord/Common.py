@@ -17,7 +17,7 @@ from json import load as jsonLoad
 from dataclasses import dataclass
 from dataclasses import field
 
-from hasiihelper.SemanticVersion import SemanticVersion
+from codeallybasic.SemanticVersion import SemanticVersion
 
 
 __version__ = "0.5.7"

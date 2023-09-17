@@ -3,7 +3,6 @@ from click import command
 from click import secho
 
 from click import version_option
-from click import style
 
 
 from versionoverlord.Common import __version__
@@ -17,3 +16,4 @@ def versionOverlord():
     secho('\tquerySlugs')
     secho('\tcreateSpecification:')
     secho('\tupdateDependencies')
+    

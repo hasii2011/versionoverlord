@@ -14,7 +14,7 @@ DATA_FILES = [
 
 setup(
     name="versionoverlord",
-    version="0.6.0",
+    version="0.6.1",
     author='Humberto A. Sanchez II',
     author_email='humberto.a.sanchez.ii@gmail.com',
     maintainer='Humberto A. Sanchez II',
@@ -37,8 +37,8 @@ setup(
     include_package_data=True,
     install_requires=[
         'PyGithub==1.58.1',
-        'click~=8.1.3',
-        'hasiihelper~=0.2.0',
+        'click~=click==8.1.7',
+        'codeallybasic==0.5.2',
     ],
     entry_points={
         "console_scripts": [
