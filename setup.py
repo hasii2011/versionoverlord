@@ -1,5 +1,8 @@
+
 import pathlib
 from setuptools import setup
+
+from versionoverlord import __version__
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -14,7 +17,7 @@ DATA_FILES = [
 
 setup(
     name="versionoverlord",
-    version="0.6.1",
+    version=__version__,
     author='Humberto A. Sanchez II',
     author_email='humberto.a.sanchez.ii@gmail.com',
     maintainer='Humberto A. Sanchez II',
@@ -37,7 +40,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'PyGithub==1.58.1',
-        'click~=click==8.1.7',
+        'click~=8.1.7',
         'codeallybasic==0.5.2',
     ],
     entry_points={
