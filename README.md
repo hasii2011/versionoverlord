@@ -1,10 +1,6 @@
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/hasii2011/versionoverlord/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/hasii2011/versionoverlord/tree/master)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
-[![macOS](https://svgshare.com/i/ZjP.svg)](https://svgshare.com/i/ZjP.svg)
-
-[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
-
-
+[![PyPI version](https://badge.fury.io/py/versionoverlord.svg)](https://badge.fury.io/py/versionoverlord)
 
 ## Rationale
 
@@ -131,12 +127,6 @@ correctly updates the following
 ```
 pip install versionoverlord
 ```
-
-
-
-## 
-
-
 ___
 
 Written by <a href="mailto:email@humberto.a.sanchez.ii@gmail.com?subject=Hello Humberto">Humberto A. Sanchez II</a>  (C) 2023
@@ -147,11 +137,10 @@ For all kind of problems, requests, enhancements, bug reports, etc.,
 please drop me an e-mail.
 
 
-![Humberto's Modified Logo](https://raw.githubusercontent.com/wiki/hasii2011/gittodoistclone/images/SillyGitHub.png)
-
+---
 I am concerned about GitHub's Copilot project
 
-
+![](https://github.com/hasii2011/code-ally-basic/blob/master/developer/SillyGitHub.png)
 
 I urge you to read about the
 [Give up GitHub](https://GiveUpGitHub.org) campaign from
@@ -166,8 +155,3 @@ to monitor their terms of service.
 Any use of this project's code by GitHub Copilot, past or present, is done
 without my permission.  I do not consent to GitHub's use of this project's
 code in Copilot.
-
-A repository owner may opt out of Copilot by changing Settings --> GitHub Copilot.
-
-I have done so.
-
