@@ -15,10 +15,11 @@ from click import version_option
 
 from codeallybasic.SemanticVersion import SemanticVersion
 
+from versionoverlord import __version__
+
 from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdatePackage
-from versionoverlord.Common import __version__
 from versionoverlord.Common import setUpLogging
 from versionoverlord.circleci.HandleCircleCI import HandleCircleCI
 from versionoverlord.requirements.HandleRequirementsTxt import HandleRequirementsTxt

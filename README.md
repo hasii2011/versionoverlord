@@ -50,8 +50,8 @@ Additionally, projects may specify dependencies in different places.  Examples o
 VersionOverlord means to handle this problem by providing a set of Python command line scripts to automate updating the first three of the above dependency specification locations
 
 * querySlugs -- queries repositories for their latest release version
-* createSpec -- creates a dependency specification for a project 
-* updateDeps -- updates the supported dependency locations using the generated specification
+* createSpecification -- creates a dependency specification for a project 
+* updateDependencies -- updates the supported dependency locations using the generated specification
 
 
 

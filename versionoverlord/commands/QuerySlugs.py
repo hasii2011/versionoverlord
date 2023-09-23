@@ -10,8 +10,9 @@ from click import secho
 
 from click import version_option
 
+from versionoverlord import __version__
+
 from versionoverlord.Common import setUpLogging
-from versionoverlord.Common import __version__
 from versionoverlord.FileNameToSlugs import FileNameToSlugs
 
 from versionoverlord.SlugHandler import SlugHandler

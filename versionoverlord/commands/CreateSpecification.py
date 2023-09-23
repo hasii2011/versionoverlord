@@ -8,7 +8,8 @@ from click import option
 from click import secho
 from click import version_option
 
-from versionoverlord.Common import __version__
+from versionoverlord import __version__
+
 from versionoverlord.Common import Slugs
 from versionoverlord.Common import setUpLogging
 from versionoverlord.FileNameToSlugs import FileNameToSlugs

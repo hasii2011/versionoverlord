@@ -5,7 +5,7 @@ from click import secho
 from click import version_option
 
 
-from versionoverlord.Common import __version__
+from versionoverlord import __version__
 
 
 @command()

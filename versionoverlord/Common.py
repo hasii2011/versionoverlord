@@ -20,9 +20,6 @@ from dataclasses import field
 from codeallybasic.SemanticVersion import SemanticVersion
 
 
-__version__ = "0.5.7"
-
-
 ENV_PROJECTS_BASE:    str = 'PROJECTS_BASE'
 ENV_PROJECT:          str = 'PROJECT'
 ENV_APPLICATION_NAME: str = 'APPLICATION_NAME'
