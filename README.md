@@ -99,7 +99,7 @@ From the above dependency diagram assume the following:
 Both the `pyutmodel` and `hasiicommon` repositories have been updated.  We need to update the `ogl` dependencies to match the latest of both.  Assume both `GITHUB_ACCESS_TOKEN` and `PROJECTS_BASE` are correctly set and `PROJECT` is set to `'ogl'`.  Use the following CLI invocation to create the specification file.
 
 ```
-createSpec -s hasii2011/pyutmodel -s hasii2011/hasiicommon
+createSpecification -s hasii2011/pyutmodel -s hasii2011/hasiicommon
 ```
 
 The command creates the file `versionSpecification.csv` with the following contents.
@@ -113,7 +113,7 @@ hasiicommon,0.0.7,0.1.0
 Again assuming the previously mentioned environment variables are set the following CLI invocation;
 
 ```
-updateDeps
+updateDependencies
 ```
 
 correctly updates the following
