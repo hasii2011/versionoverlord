@@ -39,7 +39,7 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
-        'PyGithub==1.58.1',
+        'PyGithub==2.1.1',
         'click~=8.1.7',
         'codeallybasic==0.5.2',
     ],

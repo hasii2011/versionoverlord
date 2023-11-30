@@ -1,11 +1,7 @@
 
-from typing import NewType
-from typing import List
-
 from logging import Logger
 from logging import getLogger
 
-from dataclasses import dataclass
 
 from curses import initscr
 from curses import noecho
@@ -16,18 +12,10 @@ from curses import echo
 
 from _curses import A_UNDERLINE
 
+from versionoverlord.Common import SlugVersions
 
 PACKAGE_VERSION_GAP: int = 2
 TITLE_LINE_GAP:      int = 2
-
-
-@dataclass
-class SlugVersion:
-    slug:    str = ''
-    version: str = ''
-
-
-SlugVersions = NewType('SlugVersions', List[SlugVersion])
 
 
 class DisplayVersions:

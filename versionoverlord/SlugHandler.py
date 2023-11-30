@@ -7,11 +7,12 @@ from click import secho
 
 from codeallybasic.SemanticVersion import SemanticVersion
 
+from versionoverlord.Common import SlugVersion
+from versionoverlord.Common import SlugVersions
 from versionoverlord.Common import Slugs
 
 from versionoverlord.DisplayVersions import DisplayVersions
-from versionoverlord.DisplayVersions import SlugVersion
-from versionoverlord.DisplayVersions import SlugVersions
+
 from versionoverlord.GitHubAdapter import GitHubAdapter
 
 from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException

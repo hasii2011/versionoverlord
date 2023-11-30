@@ -63,6 +63,16 @@ UpdateDependencyCallback = NewType('UpdateDependencyCallback', Callable[[str], s
 Slugs = NewType('Slugs', Tuple[str])
 
 
+@dataclass
+class SlugVersion:
+    slug:        str = ''
+    packageName: str = ''
+    version:     str = ''
+
+
+SlugVersions = NewType('SlugVersions', List[SlugVersion])
+
+
 def setUpLogging():
     """
     """

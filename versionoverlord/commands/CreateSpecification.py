@@ -12,6 +12,7 @@ from versionoverlord import __version__
 
 from versionoverlord.Common import Slugs
 from versionoverlord.Common import setUpLogging
+
 from versionoverlord.FileNameToSlugs import FileNameToSlugs
 from versionoverlord.TemplateHandler import TemplateHandler
 
@@ -50,4 +51,6 @@ def createSpecification(slugs: Tuple[str], input_file: str):
 
 if __name__ == "__main__":
     setUpLogging()
-    createSpecification(['-i', 'tests/resources/testdata/query.slg'])
+    # createSpecification(['-i', 'tests/resources/testdata/query.slg'])
+    # createSpecification(['-s', 'hasii2011/code-ally-basic,codeallybasic'])
+    createSpecification(['-s', 'hasii2011/buildlackey'])
