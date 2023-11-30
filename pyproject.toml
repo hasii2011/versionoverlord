@@ -1,0 +1,39 @@
+[build-system]
+requires = ['setuptools', 'wheel']
+build-backend = "setuptools.build_meta"
+
+[project]
+name='versionoverlord'
+dynamic = ["version"]
+description = 'Dependency Manager'
+readme = "README.md"
+license = {text = 'GNU AFFERO GENERAL PUBLIC LICENSE'}
+authors = [{name = 'Humberto A. Sanchez II', email = 'Humbert.A.Sanchez.II@gmail.com'}]
+maintainers = [{name = 'Humberto A. Sanchez II', email = 'Humbert.A.Sanchez.II@gmail.com'}]
+keywords = ['version management', 'dependencies', 'python',]
+
+dependencies = [
+  'PyGithub==2.1.1',
+  'click~=8.1.7',
+  'codeallybasic==0.5.2',
+]
+
+[project.urls]
+Repository = 'https://github.com/hasii2011/versionoverlord'
+
+
+[tool.setuptools.packages.find]
+where = ['src']
+
+[tool.setuptools.package-data]
+pyutmodel = ['py.typed']
+
+[tool.setuptools.dynamic]
+version = {attr = 'versionoverlord.__version__'}
+
+[project.scripts]
+
+querySlugs = "versionoverlord.commands.QuerySlugs:querySlugs"
+createSpecification = "versionoverlord.commands.CreateSpecification:createSpecification"
+updateDependencies = "versionoverlord.commands.UpdateDependencies:updateDependencies"
+versionOverlord = "versionoverlord.commands.VersionOverlord:versionOverlord"
