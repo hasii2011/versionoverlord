@@ -7,9 +7,9 @@ from click import secho
 
 from codeallybasic.SemanticVersion import SemanticVersion
 
+from versionoverlord.Common import AdvancedSlugs
 from versionoverlord.Common import SlugVersion
 from versionoverlord.Common import SlugVersions
-from versionoverlord.Common import Slugs
 
 from versionoverlord.DisplayVersions import DisplayVersions
 
@@ -20,19 +20,20 @@ from versionoverlord.exceptions.UnknownGitHubRepositoryException import UnknownG
 
 
 class SlugHandler:
-    def __init__(self, slugs: Slugs):
+    def __init__(self, advancedSlugs: AdvancedSlugs):
 
-        self.logger: Logger = getLogger(__name__)
-        self._slugs: Slugs  = slugs
+        self.logger:         Logger        = getLogger(__name__)
+        self._advancedSlugs: AdvancedSlugs = advancedSlugs
 
     def handleSlugs(self):
         try:
             gitHubAdapter: GitHubAdapter = GitHubAdapter()
 
             slugVersions: SlugVersions = SlugVersions([])
-            for slug in self._slugs:
-                version: SemanticVersion = gitHubAdapter.getLatestVersionNumber(slug)
-                slugVersion: SlugVersion = SlugVersion(slug=slug, version=str(version))
+            for advancedSlug in self._advancedSlugs:
+
+                version:     SemanticVersion = gitHubAdapter.getLatestVersionNumber(advancedSlug.slug)
+                slugVersion: SlugVersion     = SlugVersion(slug=advancedSlug.slug, version=str(version))
                 slugVersions.append(slugVersion)
 
             if len(slugVersions) == 0:

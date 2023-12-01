@@ -1,5 +1,4 @@
 
-from typing import cast
 from typing import List
 
 from logging import Logger
@@ -9,7 +8,9 @@ from pathlib import Path
 
 from os import linesep as osLineSep
 
-from versionoverlord.Common import Slugs
+from versionoverlord.Common import AdvancedSlug
+from versionoverlord.Common import AdvancedSlugs
+from versionoverlord.Common import extractPackageName
 
 
 class FileNameToSlugs:
@@ -18,10 +19,23 @@ class FileNameToSlugs:
 
         self._fqFileName: Path = path
 
-    def getSlugs(self) -> Slugs:
+    def getSlugs(self) -> AdvancedSlugs:
 
         slugString: str        = self._fqFileName.read_text()
         slugList:   List[str] = slugString.split(sep=osLineSep)
 
         cleanList: List[str] = list(filter(None, slugList))
-        return cast(Slugs, tuple(cleanList))
+
+        advancedSlugs: AdvancedSlugs = AdvancedSlugs([])
+        for slug in cleanList:
+            splitSlug:    List[str]    = slug.split(',')
+            advancedSlug: AdvancedSlug = AdvancedSlug()
+            if len(splitSlug) > 1:
+                advancedSlug.slug        = splitSlug[0]
+                advancedSlug.packageName = splitSlug[1]
+            else:
+                advancedSlug.slug        = slug
+                advancedSlug.packageName = extractPackageName(slug=slug)
+            advancedSlugs.append(advancedSlug)
+
+        return advancedSlugs

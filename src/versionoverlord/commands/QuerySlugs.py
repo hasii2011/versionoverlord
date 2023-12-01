@@ -1,5 +1,5 @@
 
-from typing import cast
+from typing import List
 from typing import Tuple
 
 from pathlib import Path
@@ -11,12 +11,14 @@ from click import secho
 from click import version_option
 
 from versionoverlord import __version__
+from versionoverlord.Common import AdvancedSlug
+from versionoverlord.Common import AdvancedSlugs
+from versionoverlord.Common import extractPackageName
 
 from versionoverlord.Common import setUpLogging
 from versionoverlord.FileNameToSlugs import FileNameToSlugs
 
 from versionoverlord.SlugHandler import SlugHandler
-from versionoverlord.SlugHandler import Slugs
 
 
 @command()
@@ -38,7 +40,19 @@ def querySlugs(slugs: Tuple[str], input_file):
                               release information
     """
     if input_file is None:
-        slugHandler: SlugHandler = SlugHandler(slugs=cast(Slugs, slugs))
+        advancedSlugs: AdvancedSlugs = AdvancedSlugs([])
+        for slug in slugs:
+            advancedSlug: AdvancedSlug = AdvancedSlug()
+            slugPackage:  List[str] = slug.split(',')
+            if len(slugPackage) > 1:
+                advancedSlug.slug        = slugPackage[0]
+                advancedSlug.packageName = slugPackage[1]
+            else:
+                advancedSlug.slug        = slug
+                advancedSlug.packageName = extractPackageName(slug)
+            advancedSlugs.append(advancedSlug)
+
+        slugHandler: SlugHandler = SlugHandler(advancedSlugs=advancedSlugs)
         slugHandler.handleSlugs()
     else:
         fqFileName: Path = Path(input_file)
@@ -48,9 +62,9 @@ def querySlugs(slugs: Tuple[str], input_file):
             secho('                          ', fg='red', bg='black', bold=True)
         else:
             fileNameToSlugs: FileNameToSlugs = FileNameToSlugs(path=fqFileName)
-            inputSlugs:      Slugs           = fileNameToSlugs.getSlugs()
-            slugHandler = SlugHandler(slugs=inputSlugs)
-            slugHandler.handleSlugs()
+            inputSlugs:      AdvancedSlugs   = fileNameToSlugs.getSlugs()
+            handler:         SlugHandler     = SlugHandler(advancedSlugs=inputSlugs)
+            handler.handleSlugs()
 
 
 if __name__ == "__main__":

@@ -64,9 +64,16 @@ Slugs = NewType('Slugs', Tuple[str])
 
 
 @dataclass
-class SlugVersion:
+class AdvancedSlug:
     slug:        str = ''
     packageName: str = ''
+
+
+AdvancedSlugs = NewType('AdvancedSlugs', List[AdvancedSlug])
+
+
+@dataclass
+class SlugVersion(AdvancedSlug):
     version:     str = ''
 
 
@@ -87,3 +94,10 @@ def setUpLogging():
     logging.config.dictConfig(configurationDictionary)
     logging.logProcesses = False
     logging.logThreads = False
+
+
+def extractPackageName(slug: str) -> str:
+    splitSlug: List[str] = slug.split(sep='/')
+
+    pkgName: str = splitSlug[1]
+    return pkgName

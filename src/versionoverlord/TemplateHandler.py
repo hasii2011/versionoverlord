@@ -10,11 +10,11 @@ from os import linesep as osLineSep
 
 from codeallybasic.SemanticVersion import SemanticVersion
 
+from versionoverlord.Common import AdvancedSlugs
 from versionoverlord.Common import REQUIREMENTS_TXT
 from versionoverlord.Common import SPECIFICATION_FILE
 from versionoverlord.Common import SlugVersion
 from versionoverlord.Common import SlugVersions
-from versionoverlord.Common import Slugs
 
 from versionoverlord.EnvironmentBase import EnvironmentBase
 from versionoverlord.GitHubAdapter import GitHubAdapter
@@ -22,12 +22,12 @@ from versionoverlord.GitHubAdapter import GitHubAdapter
 
 class TemplateHandler(EnvironmentBase):
 
-    def __init__(self, slugs: Slugs):
+    def __init__(self, advancedSlugs: AdvancedSlugs):
 
         super().__init__()
 
-        self.logger: Logger = getLogger(__name__)
-        self._slugs: Slugs  = slugs
+        self.logger:         Logger        = getLogger(__name__)
+        self._advancedSlugs: AdvancedSlugs = advancedSlugs
 
         requirementsPath:      Path      = Path(self._projectsBase) / self._projectDirectory / REQUIREMENTS_TXT
         self._requirementsTxt: List[str] = requirementsPath.read_text().split(osLineSep)
@@ -37,17 +37,10 @@ class TemplateHandler(EnvironmentBase):
         gitHubAdapter: GitHubAdapter = GitHubAdapter()
 
         slugVersions: SlugVersions = SlugVersions([])
-        for slug in self._slugs:
-            slugPackage: List[str] = slug.split(',')
-            if len(slugPackage) > 1:
-                realSlug:         str = slugPackage[0]
-                packageName:      str = slugPackage[1]
-            else:
-                realSlug    = slug
-                packageName = self._extractPackageName(slug)
+        for advancedSlug in self._advancedSlugs:
 
-            semanticVersion: SemanticVersion = gitHubAdapter.getLatestVersionNumber(realSlug)
-            slugVersion:     SlugVersion     = SlugVersion(slug=realSlug, version=str(semanticVersion), packageName=packageName)
+            semanticVersion: SemanticVersion = gitHubAdapter.getLatestVersionNumber(advancedSlug.slug)
+            slugVersion:     SlugVersion     = SlugVersion(slug=advancedSlug.slug, version=str(semanticVersion), packageName=advancedSlug.packageName)
 
             slugVersions.append(slugVersion)
 
@@ -62,12 +55,6 @@ class TemplateHandler(EnvironmentBase):
                     print(f'{slugVersion.slug} Did not find requirement')
                 else:
                     fd.write(f'{slugVersion.packageName},{oldVersion},{slugVersion.version}{osLineSep}')
-
-    def _extractPackageName(self, slug: str) -> str:
-        splitSlug: List[str] = slug.split(sep='/')
-
-        pkgName: str = splitSlug[1]
-        return pkgName
 
     def _findRequirementVersion(self, packageName: str) -> str:
         """
