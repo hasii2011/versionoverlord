@@ -10,7 +10,7 @@ from click import version_option
 from versionoverlord import __version__
 
 from versionoverlord.Common import AdvancedSlugs
-from versionoverlord.Common import Slugs
+from versionoverlord.Common import CLISlugs
 from versionoverlord.Common import extractCLISlugs
 from versionoverlord.Common import setUpLogging
 
@@ -22,7 +22,7 @@ from versionoverlord.SlugHandler import SlugHandler
 @version_option(version=f'{__version__}')
 @option('--slugs',      '-s', required=False, multiple=True, help='GitHub slugs to query')
 @option('--input-file', '-i', required=False,                help='Use input file for slug list')
-def querySlugs(slugs: Slugs, input_file):
+def querySlugs(slugs: CLISlugs, input_file):
     """
         \b
         This command reads the repository for each input slug and displays

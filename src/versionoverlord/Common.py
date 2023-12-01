@@ -41,7 +41,7 @@ def versionFactory() -> SemanticVersion:
     return SemanticVersion('0.0.0')
 
 
-PackageName = NewType('PackageName',    str)
+PackageName = NewType('PackageName', str)
 
 
 @dataclass
@@ -54,13 +54,10 @@ class UpdatePackage:
     newVersion:  SemanticVersion = field(default_factory=versionFactory)
 
 
-Packages = NewType('Packages', List[UpdatePackage])
-
-PackageLookupType = NewType('PackageLookupType', Dict[PackageName, UpdatePackage])
-
+Packages                 = NewType('Packages', List[UpdatePackage])
+PackageLookupType        = NewType('PackageLookupType', Dict[PackageName, UpdatePackage])
 UpdateDependencyCallback = NewType('UpdateDependencyCallback', Callable[[str], str])    # type: ignore
-
-Slugs = NewType('Slugs', Tuple[str])
+CLISlugs                 = NewType('CLISlugs', Tuple[str])
 
 
 @dataclass
@@ -103,7 +100,7 @@ def extractPackageName(slug: str) -> str:
     return pkgName
 
 
-def extractCLISlugs(slugs: Slugs) -> AdvancedSlugs:
+def extractCLISlugs(slugs: CLISlugs) -> AdvancedSlugs:
 
     cliSlugs: AdvancedSlugs = AdvancedSlugs([])
 

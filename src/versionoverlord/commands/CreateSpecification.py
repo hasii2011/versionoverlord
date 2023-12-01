@@ -8,7 +8,7 @@ from click import version_option
 
 from versionoverlord import __version__
 from versionoverlord.Common import AdvancedSlugs
-from versionoverlord.Common import Slugs
+from versionoverlord.Common import CLISlugs
 from versionoverlord.Common import extractCLISlugs
 
 from versionoverlord.Common import setUpLogging
@@ -22,7 +22,7 @@ from versionoverlord.TemplateHandler import TemplateHandler
 @version_option(version=f'{__version__}', message='%(prog)s version %(version)s')
 @option('--slugs',     '-s',  multiple=True, required=False, help='Create package update specification')
 @option('--input-file', '-i', required=False,                help='Use input file for slug list')
-def createSpecification(slugs: Slugs, input_file: str):
+def createSpecification(slugs: CLISlugs, input_file: str):
     """
     \b
     This command creates .csv specification file
