@@ -101,3 +101,23 @@ def extractPackageName(slug: str) -> str:
 
     pkgName: str = splitSlug[1]
     return pkgName
+
+
+def extractCLISlugs(slugs: Slugs) -> AdvancedSlugs:
+
+    cliSlugs: AdvancedSlugs = AdvancedSlugs([])
+
+    for slug in slugs:
+
+        advancedSlug: AdvancedSlug = AdvancedSlug()
+        slugPackage: List[str] = slug.split(',')
+        if len(slugPackage) > 1:
+            advancedSlug.slug = slugPackage[0]
+            advancedSlug.packageName = slugPackage[1]
+        else:
+            advancedSlug.slug = slug
+            advancedSlug.packageName = extractPackageName(slug)
+
+        cliSlugs.append(advancedSlug)
+
+    return cliSlugs
