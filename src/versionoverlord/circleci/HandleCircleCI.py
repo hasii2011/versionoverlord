@@ -17,7 +17,7 @@ from re import Match
 from versionoverlord.Common import CIRCLE_CI_DIRECTORY
 from versionoverlord.Common import CIRCLE_CI_YAML
 
-from versionoverlord.BaseHandler import BaseHandler
+from versionoverlord.IHandler import IHandler
 from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdateDependencyCallback
@@ -27,7 +27,7 @@ from versionoverlord.exceptions.NotACircleCIProjectException import NotACircleCI
 PIP_COMMAND: str = 'pip install'
 
 
-class HandleCircleCI(BaseHandler):
+class HandleCircleCI(IHandler):
 
     def __init__(self, packages: Packages):
 

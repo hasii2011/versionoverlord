@@ -20,10 +20,10 @@ from versionoverlord.Common import UpdatePackage
 
 from versionoverlord.exceptions.NoSetupPyFileException import NoSetupPyFileException
 
-from versionoverlord.BaseHandler import BaseHandler
+from versionoverlord.IHandler import IHandler
 
 
-class HandleSetupPy(BaseHandler):
+class HandleSetupPy(IHandler):
     """
     Handles the setup.py file
     """

@@ -1,10 +1,13 @@
 
 from typing import Dict
+from typing import List
+from typing import NewType
 from typing import cast
 
 from logging import Logger
 from logging import getLogger
 
+from dataclasses import dataclass
 import csv
 
 from pathlib import Path as PyPath
@@ -26,6 +29,7 @@ from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdatePackage
 from versionoverlord.Common import setUpLogging
+from versionoverlord.IHandler import IHandler
 
 from versionoverlord.setup.HandleSetupPy import HandleSetupPy
 
@@ -36,42 +40,41 @@ from versionoverlord.pyprojecttoml.HandlePyProjectToml import HandlePyProjectTom
 from versionoverlord.requirements.HandleRequirementsTxt import HandleRequirementsTxt
 
 
+@dataclass
+class HandlerSpecification:
+    fileName: str      = ''
+    handler:  IHandler = cast(IHandler, None)
+
+
+HandlerSpecifications = NewType('HandlerSpecifications', List[HandlerSpecification])
+
+
 class UpdateDependencies:
     def __init__(self, specification: PyPath):
         self.logger: Logger = getLogger(__name__)
 
         self._packages: Packages = self._buildPackagesToUpdate(specification=specification)
 
+        self._handlers: HandlerSpecifications = HandlerSpecifications([
+            HandlerSpecification('setup.py',         HandleSetupPy(packages=self._packages)),
+            HandlerSpecification('config.yml',       HandleCircleCI(packages=self._packages)),
+            HandlerSpecification('requirements.txt', HandleRequirementsTxt(packages=self._packages)),
+            HandlerSpecification('pyproject.toml',   HandlePyProjectToml(packages=self._packages))
+        ])
+
     def update(self):
 
         assert len(self._packages) != 0,  'Developer error; package list not initialized'
-        hsp: HandleSetupPy = HandleSetupPy(packages=self._packages)
-        if hsp.configurationExists is True:
-            echo('Update setup.py', color=True)
-            hsp.update()
-        else:
-            echo('No setup.py')
 
-        handleCircleCI: HandleCircleCI = HandleCircleCI(packages=self._packages)
-        if handleCircleCI.configurationExists is True:
-            echo('Update config.yml', color=True)
-            handleCircleCI.update()
-        else:
-            echo("No config.yml")
-
-        hrt: HandleRequirementsTxt = HandleRequirementsTxt(packages=self._packages)
-        if hrt.configurationExists is True:
-            echo('Update requirements.txt', color=True)
-            hrt.update()
-        else:
-            echo('No requirements.txt')
-
-        tomlHandler: HandlePyProjectToml = HandlePyProjectToml(packages=self._packages)
-        if tomlHandler.configurationExists is True:
-            echo('Update pyproject.toml', color=True)
-            tomlHandler.update()
-        else:
-            echo('No pyproject.toml')
+        for spec in self._handlers:
+            handlerSpecification: HandlerSpecification = cast(HandlerSpecification, spec)
+            handler:              IHandler             = handlerSpecification.handler
+            name:                 str                  = handlerSpecification.fileName
+            if handler.configurationExists is True:
+                echo(f'Update {name}', color=True)
+                handler.update()
+            else:
+                echo(f'No {name}')
 
     def _buildPackagesToUpdate(self, specification: PyPath) -> Packages:
         with open(specification) as csvfile:

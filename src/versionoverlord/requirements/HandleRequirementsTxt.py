@@ -23,10 +23,10 @@ from versionoverlord.Common import UpdatePackage
 
 from versionoverlord.exceptions.NoRequirementsTxtsException import NoRequirementsTxtException
 
-from versionoverlord.BaseHandler import BaseHandler
+from versionoverlord.IHandler import IHandler
 
 
-class HandleRequirementsTxt(BaseHandler):
+class HandleRequirementsTxt(IHandler):
 
     def __init__(self, packages: Packages):
 

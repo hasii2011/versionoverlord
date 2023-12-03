@@ -20,7 +20,10 @@ from versionoverlord.Common import UpdatePackage
 from versionoverlord.EnvironmentBase import EnvironmentBase
 
 
-class BaseHandler(ABC, EnvironmentBase):
+class IHandler(ABC, EnvironmentBase):
+    """
+    Interface that configuration handlers must implement
+    """
     def __init__(self, packages: Packages):
 
         self._packages:  Packages = packages

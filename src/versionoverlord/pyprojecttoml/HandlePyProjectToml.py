@@ -12,14 +12,14 @@ from re import search as regExSearch
 from re import sub as regExSub
 from re import Match
 
-from versionoverlord.BaseHandler import BaseHandler
+from versionoverlord.IHandler import IHandler
 
 from versionoverlord.Common import PYPROJECT_TOML
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdatePackage
 
 
-class HandlePyProjectToml(BaseHandler):
+class HandlePyProjectToml(IHandler):
     """
     Handles the pyproject.toml file
     """
