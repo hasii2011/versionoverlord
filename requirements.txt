@@ -11,5 +11,5 @@ html-testRunner~=1.2.1
 PyGithub==2.1.1
 click==8.1.7
 
-buildlackey==1.6.0
+buildlackey==1.6.1
 codeallybasic==0.5.2

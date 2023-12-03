@@ -24,6 +24,8 @@ ENV_PROJECTS_BASE:    str = 'PROJECTS_BASE'
 ENV_PROJECT:          str = 'PROJECT'
 ENV_APPLICATION_NAME: str = 'APPLICATION_NAME'
 
+PYPROJECT_TOML:   str = 'pyproject.toml'
+DEPENDENCIES:     str = 'dependencies'
 
 SETUP_PY:         str = 'setup.py'
 REQUIREMENTS_TXT: str = 'requirements.txt'

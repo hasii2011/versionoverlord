@@ -1,6 +1,8 @@
-import csv
+
 from logging import Logger
 from logging import getLogger
+
+import csv
 
 from pathlib import Path as PyPath
 
