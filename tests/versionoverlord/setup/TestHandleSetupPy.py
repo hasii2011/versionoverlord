@@ -10,7 +10,6 @@ from versionoverlord.Common import ENV_PROJECTS_BASE
 from versionoverlord.Common import Packages
 from versionoverlord.Common import SETUP_PY
 
-from versionoverlord.exceptions.NoSetupPyFileException import NoSetupPyFileException
 from versionoverlord.exceptions.ProjectNotSetException import ProjectNotSetException
 from versionoverlord.exceptions.ProjectsBaseNotSetException import ProjectsBaseNotSetException
 
@@ -55,9 +54,6 @@ class TestHandleSetupPy(TestBase):
     def testProjectNotSet(self):
         self.assertRaises(ProjectNotSetException, lambda: self._failsOnProjectNotSet())
 
-    def testUpdateNoSetupPy(self):
-        self.assertRaises(NoSetupPyFileException, lambda: self._failsOnNoSetupPy())
-
     def testUpdate(self):
 
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
@@ -95,13 +91,6 @@ class TestHandleSetupPy(TestBase):
 
         # noinspection PyUnusedLocal
         hsp: HandleSetupPy = HandleSetupPy(Packages([]))
-
-    def _failsOnNoSetupPy(self):
-        osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
-        osEnviron[ENV_PROJECT]       = self._tmpNoSetupProjectDir.name
-        hsp: HandleSetupPy = HandleSetupPy(Packages([]))
-
-        hsp.update()
 
 
 def suite() -> TestSuite:

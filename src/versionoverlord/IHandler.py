@@ -12,6 +12,11 @@ from pathlib import Path
 
 from tempfile import gettempdir
 
+from re import search as regExSearch
+from re import sub as regExSub
+from re import Match
+
+
 from versionoverlord.Common import PackageLookupType
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdateDependencyCallback
@@ -83,3 +88,38 @@ class IHandler(ABC, EnvironmentBase):
             lookupDict[updatePackage.packageName] = updatePackage
 
         return lookupDict
+
+    def _updateDependencies(self, fileContent: str) -> str:
+        """
+        This works with style requirements.txt, setup.py & pyproject.toml
+
+        Rationale:  These files are typically not large;  So let's process everything in
+        memory
+
+        Args:
+            fileContent:  The entire file contents
+
+        Returns:  The updated file content
+        """
+
+        for pkg in self._packages:
+            package: UpdatePackage = cast(UpdatePackage, pkg)
+
+            oldDependency: str = f'{package.packageName}=={package.oldVersion}'
+            newDependency: str = f'{package.packageName}=={package.newVersion}'
+
+            match: Match | None = regExSearch(pattern=oldDependency, string=fileContent)
+            if match is None:
+                oldDependency = f'{package.packageName}~={package.oldVersion}'
+                newDependency = f'{package.packageName}~={package.newVersion}'
+
+                match = regExSearch(oldDependency, fileContent)
+                assert match, 'Secondary package string must match'
+                fileContent = regExSub(pattern=oldDependency, repl=newDependency, string=fileContent)
+
+            else:
+                fileContent = regExSub(pattern=oldDependency, repl=newDependency, string=fileContent)
+
+            assert match, 'We should only come here with valid package names'
+
+        return fileContent

@@ -23,5 +23,8 @@ setup(
         'overlordunitttest': ['py.typed'],
     },
 
-    install_requires=['ogl==0.80.0', 'untangle==1.3.0'],
+    install_requires=[
+        'ogl==0.80.0',
+        'untangle==1.3.0'
+    ],
 )

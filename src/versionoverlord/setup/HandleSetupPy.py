@@ -10,15 +10,10 @@ from re import sub as regexSubstitute
 
 from os import sep as osSep
 
-from tempfile import mkstemp
-
-from versionoverlord.Common import INSTALL_REQUIRES
 from versionoverlord.Common import SETUP_PY
 from versionoverlord.Common import Packages
-from versionoverlord.Common import UpdateDependencyCallback
 from versionoverlord.Common import UpdatePackage
 
-from versionoverlord.exceptions.NoSetupPyFileException import NoSetupPyFileException
 
 from versionoverlord.IHandler import IHandler
 
@@ -44,18 +39,19 @@ class HandleSetupPy(IHandler):
         """
         setupPyPath: Path = self._setupPyPath
 
-        if setupPyPath.exists() is False:
-            raise NoSetupPyFileException(fullPath=setupPyPath)
+        with open(setupPyPath, 'rt') as inputFd:
+            content: str = inputFd.read()
 
-        self.logger.info(f'Working on: `{setupPyPath}`')
+        assert inputFd.closed, 'Should be auto closed'
+        self.logger.info(f'{content=}')
 
-        osHandle, tempFile = mkstemp(text=True)
-        self._fixDependencies(searchFile=setupPyPath, tempFile=tempFile, searchItems=[INSTALL_REQUIRES],
-                              callback=UpdateDependencyCallback(self._updateRequires))
+        updatedContent: str = self._updateDependencies(content)
+        self.logger.info(f'{updatedContent=}')
 
-        # Replace with updated contents
-        tempFilePath: Path = Path(tempFile)
-        tempFilePath.rename(setupPyPath)
+        with open(setupPyPath, 'wt') as outputFd:
+            outputFd.write(updatedContent)
+
+        assert inputFd.closed, 'Should be auto closed'
 
     def _updateRequires(self, contentLine: str) -> str:
         """

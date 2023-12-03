@@ -15,10 +15,8 @@ from versionoverlord.Common import CIRCLE_CI_DIRECTORY
 from versionoverlord.Common import CIRCLE_CI_YAML
 from versionoverlord.Common import ENV_PROJECT
 from versionoverlord.Common import ENV_PROJECTS_BASE
-from versionoverlord.Common import Packages
 
 from versionoverlord.circleci.HandleCircleCI import HandleCircleCI
-from versionoverlord.exceptions.NotACircleCIProjectException import NotACircleCIProjectException
 
 from tests.TestBase import TestBase
 
@@ -55,9 +53,6 @@ class TestHandleCircleCI(TestBase):
             self._tmpProjectDir.rmdir()
             self._tmpProjectsBase.rmdir()
 
-    def testNotACircleCIProject(self):
-        self.assertRaises(NotACircleCIProjectException, lambda: self._failsNotACircleCIProject())
-
     def testUpdate(self):
 
         self._copyTestConfigFileToUnitTestProject()
@@ -78,15 +73,6 @@ class TestHandleCircleCI(TestBase):
         # cleanup
         if TestHandleCircleCI.keep is False:
             self._destinationYamFilePath.unlink()
-
-    def _failsNotACircleCIProject(self):
-        osEnviron[ENV_PROJECTS_BASE] = str(self._tmpProjectsBase)
-        osEnviron[ENV_PROJECT]       = self._tmpProjectDir.name
-
-        self.logger.debug(f'In: _failsNotACircleCIProject')
-        handleCircleCI: HandleCircleCI = HandleCircleCI(packages=Packages([]))
-
-        handleCircleCI.update()
 
     def _copyTestConfigFileToUnitTestProject(self):
 

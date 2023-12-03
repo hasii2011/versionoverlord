@@ -22,7 +22,6 @@ from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdateDependencyCallback
 from versionoverlord.Common import UpdatePackage
-from versionoverlord.exceptions.NotACircleCIProjectException import NotACircleCIProjectException
 
 PIP_COMMAND: str = 'pip install'
 
@@ -44,9 +43,6 @@ class HandleCircleCI(IHandler):
     def update(self):
 
         circleCIYAML: Path = self._circleCIYAML
-
-        if circleCIYAML.exists() is False:
-            raise NotACircleCIProjectException()
 
         osHandle, tempFile = mkstemp(text=True)
 
