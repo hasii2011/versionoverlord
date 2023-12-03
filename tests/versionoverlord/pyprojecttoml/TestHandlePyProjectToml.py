@@ -83,7 +83,7 @@ class TestHandlePyProjectToml(TestBase):
 
         tomlHandler: HandlePyProjectToml = HandlePyProjectToml(packages=self._packages)
 
-        self.assertFalse(tomlHandler.configurationExists(), 'The configuration files does not exist')
+        self.assertFalse(tomlHandler.configurationExists, 'The configuration files does not exist')
 
 
 def suite() -> TestSuite:

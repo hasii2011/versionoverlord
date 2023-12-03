@@ -28,14 +28,21 @@ class HandleSetupPy(BaseHandler):
     Handles the setup.py file
     """
     def __init__(self, packages: Packages):
+
         self.logger: Logger = getLogger(__name__)
         super().__init__(packages)
+
+        self._setupPyPath: Path = Path(f'{self._projectsBase}{osSep}{self._projectDirectory}{osSep}{SETUP_PY}')
+
+    @property
+    def configurationExists(self) -> bool:
+        return self._setupPyPath.exists()
 
     def update(self):
         """
         Updates a project's setup.py file.  Updates the "requires"
         """
-        setupPyPath: Path = Path(f'{self._projectsBase}{osSep}{self._projectDirectory}{osSep}{SETUP_PY}')
+        setupPyPath: Path = self._setupPyPath
 
         if setupPyPath.exists() is False:
             raise NoSetupPyFileException(fullPath=setupPyPath)

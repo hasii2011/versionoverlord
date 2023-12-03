@@ -26,7 +26,7 @@ Repository = 'https://github.com/hasii2011/versionoverlord'
 where = ['src']
 
 [tool.setuptools.package-data]
-pyutmodel = ['py.typed']
+'versionoverlord.resources' = ['loggingConfiguration.json']
 
 [tool.setuptools.dynamic]
 version = {attr = 'versionoverlord.__version__'}

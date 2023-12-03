@@ -34,9 +34,15 @@ class HandleRequirementsTxt(BaseHandler):
 
         super().__init__(packages)
 
+        self._requirementsTxtPath: Path = Path(f'{self._projectsBase}{osSep}{self._projectDirectory}{osSep}{REQUIREMENTS_TXT}')
+
+    @property
+    def configurationExists(self) -> bool:
+        return self._requirementsTxtPath.exists()
+
     def update(self):
 
-        requirementsTxtPath: Path = Path(f'{self._projectsBase}{osSep}{self._projectDirectory}{osSep}{REQUIREMENTS_TXT}')
+        requirementsTxtPath: Path = self._requirementsTxtPath
 
         if requirementsTxtPath.exists() is False:
             raise NoRequirementsTxtException(fullPath=requirementsTxtPath)

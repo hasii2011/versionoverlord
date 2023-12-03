@@ -37,6 +37,14 @@ class BaseHandler(ABC, EnvironmentBase):
         """
         pass
 
+    @property
+    @abstractmethod
+    def configurationExists(self) -> bool:
+        """
+        Returns:  'True' if the project has this type of configuration file, else 'False'
+        """
+        return True
+
     def _fixDependencies(self, searchFile: Path, tempFile: str, searchItems: List[str], callback: UpdateDependencyCallback):
         """
 

@@ -1,4 +1,7 @@
 
+from typing import Dict
+from typing import cast
+
 from logging import Logger
 from logging import getLogger
 
@@ -23,9 +26,14 @@ from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdatePackage
 from versionoverlord.Common import setUpLogging
-from versionoverlord.circleci.HandleCircleCI import HandleCircleCI
-from versionoverlord.requirements.HandleRequirementsTxt import HandleRequirementsTxt
+
 from versionoverlord.setup.HandleSetupPy import HandleSetupPy
+
+from versionoverlord.circleci.HandleCircleCI import HandleCircleCI
+
+from versionoverlord.pyprojecttoml.HandlePyProjectToml import HandlePyProjectToml
+
+from versionoverlord.requirements.HandleRequirementsTxt import HandleRequirementsTxt
 
 
 class UpdateDependencies:
@@ -37,24 +45,41 @@ class UpdateDependencies:
     def update(self):
 
         assert len(self._packages) != 0,  'Developer error; package list not initialized'
-        echo('Update setup.py', color=True)
         hsp: HandleSetupPy = HandleSetupPy(packages=self._packages)
-        hsp.update()
+        if hsp.configurationExists is True:
+            echo('Update setup.py', color=True)
+            hsp.update()
+        else:
+            echo('No setup.py')
 
-        echo('Update config.yml', color=True)
         handleCircleCI: HandleCircleCI = HandleCircleCI(packages=self._packages)
-        handleCircleCI.update()
+        if handleCircleCI.configurationExists is True:
+            echo('Update config.yml', color=True)
+            handleCircleCI.update()
+        else:
+            echo("No config.yml")
 
-        echo('Update requirements.txt', color=True)
         hrt: HandleRequirementsTxt = HandleRequirementsTxt(packages=self._packages)
-        hrt.update()
+        if hrt.configurationExists is True:
+            echo('Update requirements.txt', color=True)
+            hrt.update()
+        else:
+            echo('No requirements.txt')
+
+        tomlHandler: HandlePyProjectToml = HandlePyProjectToml(packages=self._packages)
+        if tomlHandler.configurationExists is True:
+            echo('Update pyproject.toml', color=True)
+            tomlHandler.update()
+        else:
+            echo('No pyproject.toml')
 
     def _buildPackagesToUpdate(self, specification: PyPath) -> Packages:
         with open(specification) as csvfile:
             csvreader = csv.DictReader(csvfile, delimiter=',', quotechar='|')
             packages: Packages = Packages([])
 
-            for row in csvreader:
+            for dictRow in csvreader:
+                row: Dict[str, str] = cast(Dict[str, str], dictRow)
                 self.logger.debug(row['PackageName'], row['OldVersion'], row['NewVersion'])
                 packageName: PackageName = PackageName(row['PackageName'])
                 updatePackage: UpdatePackage = UpdatePackage()

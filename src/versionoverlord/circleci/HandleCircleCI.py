@@ -30,12 +30,20 @@ PIP_COMMAND: str = 'pip install'
 class HandleCircleCI(BaseHandler):
 
     def __init__(self, packages: Packages):
+
         self.logger: Logger = getLogger(__name__)
+
         super().__init__(packages)
+
+        self._circleCIYAML: Path = Path(f'{self._projectsBase}{osSep}{self._projectDirectory}{osSep}{CIRCLE_CI_DIRECTORY}{osSep}{CIRCLE_CI_YAML}')
+
+    @property
+    def configurationExists(self) -> bool:
+        return self._circleCIYAML.exists()
 
     def update(self):
 
-        circleCIYAML: Path = Path(f'{self._projectsBase}{osSep}{self._projectDirectory}{osSep}{CIRCLE_CI_DIRECTORY}{osSep}{CIRCLE_CI_YAML}')
+        circleCIYAML: Path = self._circleCIYAML
 
         if circleCIYAML.exists() is False:
             raise NotACircleCIProjectException()

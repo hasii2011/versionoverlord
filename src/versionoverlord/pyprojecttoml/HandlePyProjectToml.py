@@ -30,6 +30,7 @@ class HandlePyProjectToml(BaseHandler):
 
         self._pyProjectToml: Path = Path(f'{self._projectsBase}{osSep}{self._projectDirectory}{osSep}{PYPROJECT_TOML}')
 
+    @property
     def configurationExists(self) -> bool:
         """
         Returns:  'True' if the project has this type of configuration file, else 'False'
