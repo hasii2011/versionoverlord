@@ -8,10 +8,7 @@ from os import environ as osEnviron
 from versionoverlord.Common import ENV_PROJECT
 from versionoverlord.Common import ENV_PROJECTS_BASE
 
-from versionoverlord.Common import Packages
 from versionoverlord.Common import REQUIREMENTS_TXT
-
-from versionoverlord.exceptions.NoRequirementsTxtsException import NoRequirementsTxtException
 
 from unittest import TestSuite
 from unittest import main as unitTestMain
@@ -45,9 +42,6 @@ class TestHandleRequirementsTxt(TestBase):
         self._destinationRequirementsTxtPath.unlink(missing_ok=True)
         self._tmpNoRequirementsTxtDir.rmdir()
 
-    def testUpdateNoRequirementsTxt(self):
-        self.assertRaises(NoRequirementsTxtException, lambda: self._failsOnNoRequirementsTxt())
-
     def testUpdate(self):
 
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
@@ -64,14 +58,6 @@ class TestHandleRequirementsTxt(TestBase):
                                        )
 
         self.assertEqual(0, status, 'requirements.txt not correctly updated')
-
-    def _failsOnNoRequirementsTxt(self):
-        osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
-        osEnviron[ENV_PROJECT]       = self._tmpNoRequirementsTxtDir.name
-
-        hrt: HandleRequirementsTxt = HandleRequirementsTxt(Packages([]))
-
-        hrt.update()        # empty won't be used
 
 
 def suite() -> TestSuite:

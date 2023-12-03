@@ -18,10 +18,7 @@ from versionoverlord.Common import REQUIREMENTS_TXT
 
 from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
-from versionoverlord.Common import UpdateDependencyCallback
 from versionoverlord.Common import UpdatePackage
-
-from versionoverlord.exceptions.NoRequirementsTxtsException import NoRequirementsTxtException
 
 from versionoverlord.IHandler import IHandler
 
@@ -44,20 +41,19 @@ class HandleRequirementsTxt(IHandler):
 
         requirementsTxtPath: Path = self._requirementsTxtPath
 
-        if requirementsTxtPath.exists() is False:
-            raise NoRequirementsTxtException(fullPath=requirementsTxtPath)
+        with open(requirementsTxtPath, 'rt') as inputFd:
+            content: str = inputFd.read()
 
-        self.logger.info(f'Working on: `{requirementsTxtPath}`')
+        assert inputFd.closed, 'Should be auto closed'
+        self.logger.info(f'{content=}')
 
-        osHandle, tempFile = mkstemp(text=True)
+        updatedContent: str = self._updateDependencies(content)
+        self.logger.info(f'{updatedContent=}')
 
-        searchItems: List[str] = self._buildSearchItems()
-        self._fixDependencies(searchFile=requirementsTxtPath, tempFile=tempFile, searchItems=searchItems,
-                              callback=UpdateDependencyCallback(self._updateRequirementsLine))
+        with open(requirementsTxtPath, 'wt') as outputFd:
+            outputFd.write(updatedContent)
 
-        # Replace with updated contents
-        tempFilePath: Path = Path(tempFile)
-        tempFilePath.rename(requirementsTxtPath)
+        assert inputFd.closed, 'Should be auto closed'
 
     def _updateRequirementsLine(self, contentLine: str) -> str:
         """
