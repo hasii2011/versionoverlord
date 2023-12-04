@@ -1,5 +1,4 @@
 
-from typing import List
 from typing import cast
 
 from logging import Logger
@@ -10,16 +9,12 @@ from abc import abstractmethod
 
 from pathlib import Path
 
-from tempfile import gettempdir
-
 from re import search as regExSearch
 from re import sub as regExSub
 from re import Match
 
 
-from versionoverlord.Common import PackageLookupType
 from versionoverlord.Common import Packages
-from versionoverlord.Common import UpdateDependencyCallback
 from versionoverlord.Common import UpdatePackage
 
 from versionoverlord.EnvironmentBase import EnvironmentBase
@@ -36,8 +31,6 @@ class IHandler(ABC, EnvironmentBase):
 
         super().__init__()
 
-        self._packageDict: PackageLookupType = self._buildPackageLookup()
-
     @abstractmethod
     def update(self):
         """
@@ -53,41 +46,26 @@ class IHandler(ABC, EnvironmentBase):
         """
         return True
 
-    def _fixDependencies(self, searchFile: Path, tempFile: str, searchItems: List[str], callback: UpdateDependencyCallback):
+    def _update(self, configurationFilePath: Path):
+
         """
-
-        Args:
-            searchFile:     The file we will iterate through
-            tempFile:       The temporary file to write the changed file
-            searchItems:    A list of strings to find
-            callback:       The method to call when we find a match;
+        Updates a project configuration file
         """
-        self.baseLogger.debug(f'{searchItems=}')
-        self.baseLogger.debug(f'{tempFile=}')
-        with open(searchFile, 'r') as inputFd:
-            with open(tempFile, 'w') as tempFileFd:
-                self.baseLogger.debug(f'tempDir: {gettempdir()}')
-                while True:
-                    contentLine: str = inputFd.readline()
-                    if not contentLine:
-                        break
+        pyProjectToml = configurationFilePath
 
-                    # Check to see if we need to modify this line
-                    for searchText in searchItems:
-                        if searchText in contentLine:
-                            contentLine = callback(contentLine)
-                            self.baseLogger.debug(f'{contentLine=}')
-                    tempFileFd.write(contentLine)
+        with open(pyProjectToml, 'rt') as inputFd:
+            content: str = inputFd.read()
 
-    def _buildPackageLookup(self) -> PackageLookupType:
+        assert inputFd.closed, 'Should be auto closed'
+        self.baseLogger.info(f'{content=}')
 
-        lookupDict: PackageLookupType = PackageLookupType({})
+        updatedContent: str = self._updateDependencies(content)
+        self.baseLogger.info(f'{updatedContent=}')
 
-        for pkg in self._packages:
-            updatePackage: UpdatePackage = cast(UpdatePackage, pkg)
-            lookupDict[updatePackage.packageName] = updatePackage
+        with open(pyProjectToml, 'wt') as outputFd:
+            outputFd.write(updatedContent)
 
-        return lookupDict
+        assert inputFd.closed, 'Should be auto closed'
 
     def _updateDependencies(self, fileContent: str) -> str:
         """

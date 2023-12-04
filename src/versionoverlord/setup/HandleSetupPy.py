@@ -1,12 +1,8 @@
 
-from typing import cast
-
 from logging import Logger
 from logging import getLogger
 
 from pathlib import Path
-
-from re import sub as regexSubstitute
 
 from os import sep as osSep
 
@@ -36,18 +32,4 @@ class HandleSetupPy(IHandler):
         """
         Updates a project's setup.py file.  Updates the "requires"
         """
-        setupPyPath: Path = self._setupPyPath
-
-        with open(setupPyPath, 'rt') as inputFd:
-            content: str = inputFd.read()
-
-        assert inputFd.closed, 'Should be auto closed'
-        self.logger.info(f'{content=}')
-
-        updatedContent: str = self._updateDependencies(content)
-        self.logger.info(f'{updatedContent=}')
-
-        with open(setupPyPath, 'wt') as outputFd:
-            outputFd.write(updatedContent)
-
-        assert inputFd.closed, 'Should be auto closed'
+        self._update(configurationFilePath=self._setupPyPath)

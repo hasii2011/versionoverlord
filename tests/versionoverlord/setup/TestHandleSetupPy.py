@@ -74,6 +74,7 @@ class TestHandleSetupPy(TestBase):
         pass
 
     def _failsOnProjectsBaseNotSet(self):
+        print('Expect error')
         try:
             del osEnviron[ENV_PROJECTS_BASE]
         except KeyError:
@@ -83,6 +84,7 @@ class TestHandleSetupPy(TestBase):
         hsp: HandleSetupPy = HandleSetupPy(Packages([]))
 
     def _failsOnProjectNotSet(self):
+        print('Expect error')
         osEnviron[ENV_PROJECTS_BASE] = self._tmpProjectsBase.__str__()
         try:
             del osEnviron[ENV_PROJECT]

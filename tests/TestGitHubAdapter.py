@@ -15,15 +15,15 @@ class TestGitHubAdapter(TestBase):
     def setUp(self):
         super().setUp()
 
-    # noinspection SpellCheckingInspection
     """
         I don't care about:
-            ResourceWarning: unclosed <ssl.SSLSocket fd=8, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, 
-            laddr=('192.168.0.24', 51944), raddr=('140.82.112.5', 443)>
+        
+            DeprecationWarning: Argument login_or_token is deprecated, please use auth=github.Auth.Token(...) instead
     """
 
     import warnings
-    warnings.filterwarnings(action="ignore", message="unclosed", category=ResourceWarning)
+
+    warnings.filterwarnings(action="ignore", message="Argument", category=DeprecationWarning)
 
     def tearDown(self):
         pass
@@ -44,8 +44,7 @@ def suite() -> TestSuite:
     import unittest
 
     testSuite: TestSuite = TestSuite()
-    # noinspection PyUnresolvedReferences
-    # testSuite.addTest(unittest.makeSuite(TestTemplate))
+
     testSuite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(testCaseClass=TestGitHubAdapter))
 
     return testSuite

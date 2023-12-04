@@ -28,18 +28,4 @@ class HandleRequirementsTxt(IHandler):
 
     def update(self):
 
-        requirementsTxtPath: Path = self._requirementsTxtPath
-
-        with open(requirementsTxtPath, 'rt') as inputFd:
-            content: str = inputFd.read()
-
-        assert inputFd.closed, 'Should be auto closed'
-        self.logger.info(f'{content=}')
-
-        updatedContent: str = self._updateDependencies(content)
-        self.logger.info(f'{updatedContent=}')
-
-        with open(requirementsTxtPath, 'wt') as outputFd:
-            outputFd.write(updatedContent)
-
-        assert inputFd.closed, 'Should be auto closed'
+        self._update(configurationFilePath=self._requirementsTxtPath)

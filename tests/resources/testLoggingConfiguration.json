@@ -23,7 +23,7 @@
             "propagate": "False"
         },
         "__main__": {
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": "False"
         },
         "versionoverlord": {

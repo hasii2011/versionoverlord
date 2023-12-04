@@ -31,22 +31,7 @@ class HandlePyProjectToml(IHandler):
         return self._pyProjectToml.exists()
 
     def update(self):
-
         """
         Updates a project's pyproject.toml  Updates the "dependencies" section
         """
-        pyProjectToml = self._pyProjectToml
-
-        with open(pyProjectToml, 'rt') as inputFd:
-            content: str = inputFd.read()
-
-        assert inputFd.closed, 'Should be auto closed'
-        self.logger.info(f'{content=}')
-
-        updatedContent: str = self._updateDependencies(content)
-        self.logger.info(f'{updatedContent=}')
-
-        with open(pyProjectToml, 'wt') as outputFd:
-            outputFd.write(updatedContent)
-
-        assert inputFd.closed, 'Should be auto closed'
+        self._update(configurationFilePath=self._pyProjectToml)

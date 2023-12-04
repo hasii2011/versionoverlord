@@ -12,8 +12,6 @@ from versionoverlord.Common import CIRCLE_CI_YAML
 from versionoverlord.IHandler import IHandler
 from versionoverlord.Common import Packages
 
-PIP_COMMAND: str = 'pip install'
-
 
 class HandleCircleCI(IHandler):
 
@@ -31,18 +29,4 @@ class HandleCircleCI(IHandler):
 
     def update(self):
 
-        circleCIYAML: Path = self._circleCIYAML
-
-        with open(circleCIYAML, 'rt') as inputFd:
-            content: str = inputFd.read()
-
-        assert inputFd.closed, 'Should be auto closed'
-        self.logger.info(f'{content=}')
-
-        updatedContent: str = self._updateDependencies(content)
-        self.logger.info(f'{updatedContent=}')
-
-        with open(circleCIYAML, 'wt') as outputFd:
-            outputFd.write(updatedContent)
-
-        assert inputFd.closed, 'Should be auto closed'
+        self._update(configurationFilePath=self._circleCIYAML)
