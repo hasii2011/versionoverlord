@@ -12,7 +12,6 @@ from os import sep as osSep
 
 from versionoverlord.Common import SETUP_PY
 from versionoverlord.Common import Packages
-from versionoverlord.Common import UpdatePackage
 
 
 from versionoverlord.IHandler import IHandler
@@ -52,32 +51,3 @@ class HandleSetupPy(IHandler):
             outputFd.write(updatedContent)
 
         assert inputFd.closed, 'Should be auto closed'
-
-    def _updateRequires(self, contentLine: str) -> str:
-        """
-        Updates the "requires" string
-        Handles "==" and "~=" types
-
-        Args:
-            contentLine: The line to update
-
-        Returns:  The updated string
-        """
-        updatedLine: str = contentLine
-        for pkg in self._packages:
-            package: UpdatePackage = cast(UpdatePackage, pkg)
-
-            equalPrefix:  str = f'{package.packageName}=='
-            almostPrefix: str = f'{package.packageName}~='
-
-            equalPattern:  str = f'{equalPrefix}{str(package.oldVersion)}'
-            almostPattern: str = f'{almostPrefix}{str(package.oldVersion)}'
-            repl:          str = f'{equalPrefix}{str(package.newVersion)}'
-
-            # run both changes in case the requirement is == or ~=
-            updatedLine = regexSubstitute(pattern=equalPattern,  repl=repl, string=updatedLine)
-            updatedLine = regexSubstitute(pattern=almostPattern, repl=repl, string=updatedLine)
-
-        assert len(updatedLine) != 0, 'Developer error, bad regex'
-
-        return updatedLine
