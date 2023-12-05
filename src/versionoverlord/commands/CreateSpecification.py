@@ -1,6 +1,7 @@
 
 from pathlib import Path
 
+from click import ClickException
 from click import command
 from click import option
 from click import secho
@@ -15,6 +16,7 @@ from versionoverlord.Common import setUpLogging
 
 from versionoverlord.FileNameToSlugs import FileNameToSlugs
 from versionoverlord.TemplateHandler import TemplateHandler
+from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 
 
 # noinspection SpellCheckingInspection
@@ -33,23 +35,26 @@ def createSpecification(slugs: CLISlugs, input_file: str):
         PROJECT       -  The name of the project;  It should be a directory name
     """
 
-    if len(slugs) != 0:
-        cliSlugs:        AdvancedSlugs   = extractCLISlugs(slugs=slugs)
-        templateHandler: TemplateHandler = TemplateHandler(cliSlugs)
+    try:
+        if len(slugs) != 0:
+            cliSlugs:        AdvancedSlugs   = extractCLISlugs(slugs=slugs)
+            templateHandler: TemplateHandler = TemplateHandler(cliSlugs)
 
-        templateHandler.createSpecification()
-    elif input_file is not None:
-        fqFileName: Path = Path(input_file)
-        if fqFileName.exists() is False:
-            secho('                          ', fg='red', bg='black', bold=True)
-            secho('Input file does not exist ', fg='red', bg='black', bold=True)
-            secho('                          ', fg='red', bg='black', bold=True)
-        else:
-            fileNameToSlugs: FileNameToSlugs = FileNameToSlugs(path=fqFileName)
-            fileSlugs:       AdvancedSlugs   = fileNameToSlugs.getSlugs()
-            handler:         TemplateHandler = TemplateHandler(advancedSlugs=fileSlugs)
+            templateHandler.createSpecification()
+        elif input_file is not None:
+            fqFileName: Path = Path(input_file)
+            if fqFileName.exists() is False:
+                secho('                          ', fg='red', bg='black', bold=True)
+                secho('Input file does not exist ', fg='red', bg='black', bold=True)
+                secho('                          ', fg='red', bg='black', bold=True)
+            else:
+                fileNameToSlugs: FileNameToSlugs = FileNameToSlugs(path=fqFileName)
+                fileSlugs:       AdvancedSlugs   = fileNameToSlugs.getSlugs()
+                handler:         TemplateHandler = TemplateHandler(advancedSlugs=fileSlugs)
 
-            handler.createSpecification()
+                handler.createSpecification()
+    except NoGitHubAccessTokenException:
+        raise ClickException('No GitHub token specified in `GITHUB_ACCESS_TOKEN`')
 
 
 if __name__ == "__main__":

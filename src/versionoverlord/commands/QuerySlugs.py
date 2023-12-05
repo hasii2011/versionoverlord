@@ -1,6 +1,7 @@
 
 from pathlib import Path
 
+from click import ClickException
 from click import command
 from click import option
 from click import secho
@@ -16,6 +17,7 @@ from versionoverlord.Common import setUpLogging
 
 from versionoverlord.FileNameToSlugs import FileNameToSlugs
 from versionoverlord.SlugHandler import SlugHandler
+from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 
 
 @command()
@@ -36,22 +38,25 @@ def querySlugs(slugs: CLISlugs, input_file):
         GITHUB_ACCESS_TOKEN - A personal GitHub access token necessary to read repository
                               release information
     """
-    if input_file is None:
-        advancedSlugs: AdvancedSlugs = extractCLISlugs(slugs=slugs)
-        slugHandler:   SlugHandler   = SlugHandler(advancedSlugs=advancedSlugs)
+    try:
+        if input_file is None:
+            advancedSlugs: AdvancedSlugs = extractCLISlugs(slugs=slugs)
+            slugHandler:   SlugHandler   = SlugHandler(advancedSlugs=advancedSlugs)
 
-        slugHandler.handleSlugs()
-    else:
-        fqFileName: Path = Path(input_file)
-        if fqFileName.exists() is False:
-            secho('                          ', fg='red', bg='black', bold=True)
-            secho('Input file does not exist ', fg='red', bg='black', bold=True)
-            secho('                          ', fg='red', bg='black', bold=True)
+            slugHandler.handleSlugs()
         else:
-            fileNameToSlugs: FileNameToSlugs = FileNameToSlugs(path=fqFileName)
-            inputSlugs:      AdvancedSlugs   = fileNameToSlugs.getSlugs()
-            handler:         SlugHandler     = SlugHandler(advancedSlugs=inputSlugs)
-            handler.handleSlugs()
+            fqFileName: Path = Path(input_file)
+            if fqFileName.exists() is False:
+                secho('                          ', fg='red', bg='black', bold=True)
+                secho('Input file does not exist ', fg='red', bg='black', bold=True)
+                secho('                          ', fg='red', bg='black', bold=True)
+            else:
+                fileNameToSlugs: FileNameToSlugs = FileNameToSlugs(path=fqFileName)
+                inputSlugs:      AdvancedSlugs   = fileNameToSlugs.getSlugs()
+                handler:         SlugHandler     = SlugHandler(advancedSlugs=inputSlugs)
+                handler.handleSlugs()
+    except NoGitHubAccessTokenException:
+        raise ClickException('No GitHub token specified in `GITHUB_ACCESS_TOKEN`')
 
 
 if __name__ == "__main__":
