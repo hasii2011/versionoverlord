@@ -17,7 +17,7 @@ from json import load as jsonLoad
 from dataclasses import dataclass
 from dataclasses import field
 
-from codeallybasic.SemanticVersion import SemanticVersion
+from semantic_version import Version as SemanticVersion
 
 
 ENV_PROJECTS_BASE:    str = 'PROJECTS_BASE'

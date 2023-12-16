@@ -43,10 +43,12 @@ python -m venv ${PYENV_DIR}
 . "pyenv-${FAKE_PYTHON_VERSION}/bin/activate"
 
 echo "Update the newly created virtual environment"
-pip install --upgrade pip        > /dev/null
-pip install PyGithub==2.1.1      > /dev/null
-pip install click~=8.1.7         > /dev/null
-pip install codeallybasic==0.5.2 > /dev/null
+pip install --upgrade pip             > /dev/null
+pip install PyGithub==2.1.1           > /dev/null
+pip install click~=8.1.7              > /dev/null
+pip install codeallybasic==0.5.2      > /dev/null
+pip install semantic-version==2.10.0  > /dev/null
+
 
 echo "Install a test copy versionoverlord"
 echo "pip install versionoverlord --no-index --find-links /Users/humberto.a.sanchez.ii/PycharmProjects/versionoverlord/dist --no-cache-dir"

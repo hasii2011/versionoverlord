@@ -21,7 +21,7 @@ from click import option
 from click import secho
 from click import version_option
 
-from codeallybasic.SemanticVersion import SemanticVersion
+from semantic_version import Version as SemanticVersion
 
 from versionoverlord import __version__
 

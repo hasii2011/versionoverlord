@@ -49,9 +49,9 @@ Additionally, projects may specify dependencies in different places.  Examples o
 
 VersionOverlord means to handle this problem by providing a set of Python command line scripts to automate updating the first three of the above dependency specification locations
 
-* querySlugs -- queries repositories for their latest release version
-* createSpecification -- creates a dependency specification for a project 
-* updateDependencies -- updates the supported dependency locations using the generated specification
+* querySlugs                    -- queries repositories for their latest release version
+* createSpecification      -- creates a dependency specification for a project 
+* updateDependencies  -- updates the supported dependency locations using the generated specification
 
 
 
@@ -61,8 +61,8 @@ The above commands depend on the following environment variables.
 
 ```bash
 GITHUB_ACCESS_TOKEN - A personal GitHub access token necessary to read repository release information
-PROJECTS_BASE             -  The local directory where the python projects are based
-PROJECT                          -  The name of the project;  It should be a directory name
+PROJECTS_BASE             - The local directory where the python projects are based
+PROJECT                          - The name of the project;  It should be a directory name
 ```
 
 See the [GitHub Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) for instructions on how to create a usable access token.  These scripts assume  that a developer keeps all checked out repositories in a single directory.  An example, of a PROJECTS_BASE is:
@@ -80,15 +80,17 @@ export PROJECT=pyutmodel
 source pyenv-3.10.6/bin/activate
 ```
 
-## Slugs
+## Advanced Slugs
 
-The command line options for querySlug and createSpec are GitHub slugs.  For example, for the following repositories
+The command line options for querySlug and createSpec are advanced GitHub slugs.  For example, for the following repositories
 
 https://github.com/hasii2011/pyutmodel
 
 https://github.com/hasii2011/hasiicommon
 
-The slugs are `hasii2011/pyutmode` and `hasii2011/hasiicommon,` respectively.
+https://github.com/hasii2011/code-ally-basic
+
+The slugs are `hasii2011/pyutmodel` and `hasii2011/hasiicommon` and `hasii2011-code-ally-basic,codeallybasic`, respectively.  Note the advanced part of the third slugs because the package name does not match the repository name;  
 
 
 

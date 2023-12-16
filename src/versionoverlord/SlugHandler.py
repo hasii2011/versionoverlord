@@ -5,7 +5,7 @@ from logging import getLogger
 from click import ClickException
 from click import secho
 
-from codeallybasic.SemanticVersion import SemanticVersion
+from semantic_version import Version as SemanticVersion
 
 from versionoverlord.Common import AdvancedSlugs
 from versionoverlord.Common import SlugVersion

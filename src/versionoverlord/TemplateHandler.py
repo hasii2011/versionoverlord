@@ -8,7 +8,7 @@ from pathlib import Path
 
 from os import linesep as osLineSep
 
-from codeallybasic.SemanticVersion import SemanticVersion
+from semantic_version import Version as SemanticVersion
 
 from versionoverlord.Common import AdvancedSlugs
 from versionoverlord.Common import REQUIREMENTS_TXT

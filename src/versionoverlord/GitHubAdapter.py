@@ -15,7 +15,7 @@ from github.GitRelease import GitRelease
 from github.PaginatedList import PaginatedList
 from github.Repository import Repository
 
-from codeallybasic.SemanticVersion import SemanticVersion
+from semantic_version import Version as SemanticVersion
 
 from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 from versionoverlord.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
@@ -54,7 +54,7 @@ class GitHubAdapter:
             if numPeriods < 2:
                 releaseNumber = f'{releaseNumber}.0'
 
-            releaseVersion: SemanticVersion = SemanticVersion(releaseNumber)
+            releaseVersion: SemanticVersion = SemanticVersion.coerce(releaseNumber)
             self.logger.debug(f'{releaseVersion=}')
             if latestReleaseVersion < releaseVersion:
                 latestReleaseVersion = releaseVersion

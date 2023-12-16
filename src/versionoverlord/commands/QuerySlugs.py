@@ -61,4 +61,5 @@ def querySlugs(slugs: CLISlugs, input_file):
 
 if __name__ == "__main__":
     setUpLogging()
-    querySlugs()
+    # noinspection SpellCheckingInspection
+    querySlugs(['-s', 'hasii2011/pyutmodelv2'])

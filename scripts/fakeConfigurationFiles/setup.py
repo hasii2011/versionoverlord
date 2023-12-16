@@ -27,5 +27,6 @@ setup(
         'ogl==0.1.0',
         'buildlackey~=0.2.0',
         'codeallybasic==0.3.0',
+        'testrepo==0.0.1',
     ],
 )
