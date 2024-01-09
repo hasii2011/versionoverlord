@@ -16,7 +16,6 @@ dependencies = [
   'PyGithub==2.1.1',
   'click~=8.1.7',
   'semantic-version==2.10.0',
-  'codeallybasic==0.5.2',
 ]
 
 [project.urls]
