@@ -32,7 +32,7 @@ flowchart
     %% linkStyle 1 stroke:#ff3,stroke-width:4px,color:red;
 ```
 
-The above diagram illustrates how low level dependencies ripple up the dependency tree.  
+The above diagram illustrates how low-level dependencies ripple up the dependency tree.  
 
 ## Dependency Locations
 
@@ -49,8 +49,8 @@ Additionally, projects may specify dependencies in different places.  Examples o
 
 VersionOverlord means to handle this problem by providing a set of Python command line scripts to automate updating the first three of the above dependency specification locations
 
-* querySlugs                    -- queries repositories for their latest release version
-* createSpecification      -- creates a dependency specification for a project 
+* querySlugs          -- queries repositories for their latest release version
+* createSpecification -- creates a dependency specification for a project 
 * updateDependencies  -- updates the supported dependency locations using the generated specification
 
 
@@ -73,7 +73,9 @@ export PROJECTS_BASE="${HOME}/PycharmProjects"
 
 This should be set in your shell startup script.  For example `.bash_profile`.
 
-The PROJECT environment variable should be set on a project by project basis.  I recommend you use [direnv](https://direnv.net) to manage these.  An example of a .envrc follows:
+The developer sets the PROJECT environment variable on a project by project basis.  
+I recommend you use [direnv](https://direnv.net) to manage these.  
+An example of a .envrc follows:
 
 ```bash
 export PROJECT=pyutmodel
@@ -90,7 +92,8 @@ https://github.com/hasii2011/hasiicommon
 
 https://github.com/hasii2011/code-ally-basic
 
-The slugs are `hasii2011/pyutmodel` and `hasii2011/hasiicommon` and `hasii2011-code-ally-basic,codeallybasic`, respectively.  Note the advanced part of the third slugs because the package name does not match the repository name;  
+The slugs are `hasii2011/pyutmodel` and `hasii2011/hasiicommon` and `hasii2011/code-ally-basic,codeallybasic`, respectively.
+Note the advanced part of the third slugs because the package name does not match the repository name;  
 
 
 
@@ -112,7 +115,7 @@ pyutmodel,1.4.0,1.4.1
 hasiicommon,0.0.7,0.1.0                   
 ```
 
-Again assuming the previously mentioned environment variables are set the following CLI invocation;
+Again assuming, the previously mentioned environment variables are set the following CLI invocation;
 
 ```
 updateDependencies
@@ -136,7 +139,7 @@ Written by <a href="mailto:email@humberto.a.sanchez.ii@gmail.com?subject=Hello H
 
 ## Note
 For all kind of problems, requests, enhancements, bug reports, etc.,
-please drop me an e-mail.
+Drop me an e-mail.
 
 
 ---
@@ -148,11 +151,11 @@ I urge you to read about the
 [Give up GitHub](https://GiveUpGitHub.org) campaign from
 [the Software Freedom Conservancy](https://sfconservancy.org).
 
-While I do not advocate for all the issues listed there I do not like that
+While I do not advocate for all the issues listed there, I do not like that
 a company like Microsoft may profit from open source projects.
 
-I continue to use GitHub because it offers the services I need for free.  But, I continue
-to monitor their terms of service.
+I continue to use GitHub because it offers the services I need for free.  
+I continue to monitor their terms of service.
 
 Any use of this project's code by GitHub Copilot, past or present, is done
 without my permission.  I do not consent to GitHub's use of this project's
