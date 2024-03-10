@@ -30,9 +30,9 @@ def createSpecification(slugs: CLISlugs, input_file: str):
     This command creates .csv specification file
     It uses the following environment variables:
     \b
-        GITHUB_ACCESS_TOKEN - A personal GitHub access token necessary to read repository release information
-        PROJECTS_BASE -  The local directory where the python projects are based
-        PROJECT       -  The name of the project;  It should be a directory name
+        GITHUB_ACCESS_TOKEN – A personal GitHub access token necessary to read repository release information
+        PROJECTS_BASE – The local directory where the python projects are based
+        PROJECT – The name of the project;  It should be a directory name
     """
 
     try:
@@ -60,6 +60,6 @@ def createSpecification(slugs: CLISlugs, input_file: str):
 if __name__ == "__main__":
     setUpLogging()
     # noinspection SpellCheckingInspection
-    createSpecification(['-i', 'tests/resources/testdata/query.slg'])
+    # createSpecification(['-i', 'tests/resources/testdata/query.slg'])
     # createSpecification(['-s', 'hasii2011/code-ally-basic,codeallybasic'])
-    # createSpecification(['-s', 'hasii2011/buildlackey'])
+    createSpecification(['-s', 'hasii2011/ogl'])

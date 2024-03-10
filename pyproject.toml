@@ -13,7 +13,7 @@ maintainers = [{name = 'Humberto A. Sanchez II', email = 'Humbert.A.Sanchez.II@g
 keywords = ['version management', 'dependencies', 'python',]
 
 dependencies = [
-  'PyGithub==2.1.1',
+  'PyGithub==2.2.0',
   'click~=8.1.7',
   'semantic-version==2.10.0',
 ]

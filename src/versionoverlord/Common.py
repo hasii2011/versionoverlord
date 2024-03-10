@@ -39,6 +39,18 @@ RESOURCES_PACKAGE_NAME:       str = 'versionoverlord.resources'
 JSON_LOGGING_CONFIG_FILENAME: str = "loggingConfiguration.json"
 
 
+EQUAL_EQUAL:           str = '=='
+APPROXIMATELY_EQUAL:   str = '~='
+GREATER_THAN_OR_EQUAL: str = '>='
+LESS_THAN_OR_EQUAL:    str = '<='
+GREATER_THAN:          str = '>'
+LESS_THAN:             str = '<'
+
+MATCH_PATTERNS: List[str] = [
+    EQUAL_EQUAL, APPROXIMATELY_EQUAL, GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL, GREATER_THAN, LESS_THAN
+]
+
+
 def versionFactory() -> SemanticVersion:
     return SemanticVersion('0.0.0')
 

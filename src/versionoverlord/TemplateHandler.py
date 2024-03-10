@@ -1,6 +1,4 @@
 
-from typing import List
-
 from logging import Logger
 from logging import getLogger
 
@@ -8,9 +6,13 @@ from pathlib import Path
 
 from os import linesep as osLineSep
 
+from re import search as regExSearch
+from re import Match
+
 from semantic_version import Version as SemanticVersion
 
 from versionoverlord.Common import AdvancedSlugs
+from versionoverlord.Common import MATCH_PATTERNS
 from versionoverlord.Common import REQUIREMENTS_TXT
 from versionoverlord.Common import SPECIFICATION_FILE
 from versionoverlord.Common import SlugVersion
@@ -30,7 +32,7 @@ class TemplateHandler(EnvironmentBase):
         self._advancedSlugs: AdvancedSlugs = advancedSlugs
 
         requirementsPath:      Path      = Path(self._projectsBase) / self._projectDirectory / REQUIREMENTS_TXT
-        self._requirementsTxt: List[str] = requirementsPath.read_text().split(osLineSep)
+        self._requirementsTxt: str = requirementsPath.read_text()
 
     def createSpecification(self):
         print(f'Creating a specification')
@@ -58,9 +60,7 @@ class TemplateHandler(EnvironmentBase):
 
     def _findRequirementVersion(self, packageName: str) -> str:
         """
-        Can handle requirements specifications like:
-        pkgName==versionNumber
-        pkgName~=versionNumber
+        Can handle requirements.txt specifications like that are specified in MATCH_PATTERNS
 
         Args:
             packageName:   The package name to search for
@@ -68,21 +68,24 @@ class TemplateHandler(EnvironmentBase):
         Returns:  A version number from the requirement file that matches the package name
                  If the requirement is not listed returns an empty string
         """
-        lookupRequirement: str = f'{packageName}=='
+        match:            Match | None = None
+        requirementValue: str          = ''
+        for matchPattern in MATCH_PATTERNS:
+            lookupRequirement: str = f'{packageName}{matchPattern}.*{osLineSep}'
 
-        req: List[str] = self._searchRequirements(lookupRequirement)
-        if len(req) == 0:
-            lookupRequirement = f'{packageName}~='      # did not find '=='  how about '~='
-            req = self._searchRequirements(lookupRequirement)
-            if len(req) == 0:
-                splitRequirement: List[str]  = ['', '']
+            match = regExSearch(pattern=lookupRequirement, string=self._requirementsTxt)
+
+            self.logger.info(f'{match}')
+            if match is None:
+                continue
             else:
-                splitRequirement = req[0].split('~=')
+                fullStr: str = (self._requirementsTxt[match.start():match.end()]).strip(osLineSep)
+                splitRequirement = fullStr.split(matchPattern)
+                self.logger.info(f'{splitRequirement}')
+                requirementValue = splitRequirement[1]
+                break
+
+        if match is None:
+            return ''
         else:
-            splitRequirement = req[0].split('==')
-
-        return splitRequirement[1]
-
-    def _searchRequirements(self, reqLine: str) -> List[str]:
-        req = [match for match in self._requirementsTxt if reqLine in match]
-        return req
+            return requirementValue

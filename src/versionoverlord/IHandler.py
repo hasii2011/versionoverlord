@@ -1,4 +1,4 @@
-from typing import List
+
 from typing import cast
 
 from logging import Logger
@@ -13,22 +13,11 @@ from re import search as regExSearch
 from re import sub as regExSub
 from re import Match
 
-
+from versionoverlord.Common import MATCH_PATTERNS
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdatePackage
 
 from versionoverlord.EnvironmentBase import EnvironmentBase
-
-EQUAL_EQUAL:           str = '=='
-APPROXIMATELY_EQUAL:   str = '~='
-GREATER_THAN_OR_EQUAL: str = '>='
-LESS_THAN_OR_EQUAL:    str = '<='
-GREATER_THAN:          str = '>'
-LESS_THAN:             str = '<'
-
-MATCH_PATTERNS: List[str] = [
-    EQUAL_EQUAL, APPROXIMATELY_EQUAL, GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL, GREATER_THAN, LESS_THAN
-]
 
 
 class IHandler(ABC, EnvironmentBase):
@@ -110,22 +99,5 @@ class IHandler(ABC, EnvironmentBase):
                     break
 
             assert match is not None, 'We should only come here with valid package names'
-
-            # oldDependency: str = f'{package.packageName}=={package.oldVersion}'
-            # newDependency: str = f'{package.packageName}=={package.newVersion}'
-            #
-            # match: Match | None = regExSearch(pattern=oldDependency, string=fileContent)
-            # if match is None:
-            #     oldDependency = f'{package.packageName}~={package.oldVersion}'
-            #     newDependency = f'{package.packageName}~={package.newVersion}'
-            #
-            #     match = regExSearch(oldDependency, fileContent)
-            #     assert match, 'Secondary package string must match'
-            #     fileContent = regExSub(pattern=oldDependency, repl=newDependency, string=fileContent)
-            #
-            # else:
-            #     fileContent = regExSub(pattern=oldDependency, repl=newDependency, string=fileContent)
-            #
-            # assert match, 'We should only come here with valid package names'
 
         return fileContent
