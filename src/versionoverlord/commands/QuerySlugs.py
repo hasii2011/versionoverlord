@@ -12,6 +12,7 @@ from versionoverlord import __version__
 
 from versionoverlord.Common import AdvancedSlugs
 from versionoverlord.Common import CLISlugs
+from versionoverlord.Common import ENV_GH_TOKEN
 from versionoverlord.Common import extractCLISlugs
 from versionoverlord.Common import setUpLogging
 
@@ -35,8 +36,8 @@ def querySlugs(slugs: CLISlugs, input_file):
         It uses the following environment variables:
 
         \b
-        GITHUB_ACCESS_TOKEN - A personal GitHub access token necessary to read repository
-                              release information
+        GH_TOKEN – A personal GitHub access token necessary to read repository
+                   release information
     """
     try:
         if input_file is None:
@@ -56,7 +57,7 @@ def querySlugs(slugs: CLISlugs, input_file):
                 handler:         SlugHandler     = SlugHandler(advancedSlugs=inputSlugs)
                 handler.handleSlugs()
     except NoGitHubAccessTokenException:
-        raise ClickException('No GitHub token specified in `GITHUB_ACCESS_TOKEN`')
+        raise ClickException(f'No GitHub token specified in `{ENV_GH_TOKEN}`')
 
 
 if __name__ == "__main__":

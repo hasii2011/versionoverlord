@@ -94,7 +94,7 @@ class IHandler(ABC, EnvironmentBase):
                 oldDependency: str = f'{package.packageName}{matchPattern}{package.oldVersion}'
                 newDependency: str = f'{package.packageName}{matchPattern}{package.newVersion}'
 
-                match: Match = regExSearch(pattern=oldDependency, string=fileContent)
+                match: Match | None = regExSearch(pattern=oldDependency, string=fileContent)
                 if match is None:
                     continue
                 else:

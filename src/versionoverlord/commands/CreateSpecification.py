@@ -10,6 +10,7 @@ from click import version_option
 from versionoverlord import __version__
 from versionoverlord.Common import AdvancedSlugs
 from versionoverlord.Common import CLISlugs
+from versionoverlord.Common import ENV_GH_TOKEN
 from versionoverlord.Common import extractCLISlugs
 
 from versionoverlord.Common import setUpLogging
@@ -30,7 +31,7 @@ def createSpecification(slugs: CLISlugs, input_file: str):
     This command creates .csv specification file
     It uses the following environment variables:
     \b
-        GITHUB_ACCESS_TOKEN – A personal GitHub access token necessary to read repository release information
+        GH_TOKEN      – A personal GitHub access token necessary to read repository release information
         PROJECTS_BASE – The local directory where the python projects are based
         PROJECT – The name of the project;  It should be a directory name
     """
@@ -54,7 +55,7 @@ def createSpecification(slugs: CLISlugs, input_file: str):
 
                 handler.createSpecification()
     except NoGitHubAccessTokenException:
-        raise ClickException('No GitHub token specified in `GITHUB_ACCESS_TOKEN`')
+        raise ClickException(f'No GitHub token specified in `{ENV_GH_TOKEN}`')
 
 
 if __name__ == "__main__":
@@ -62,4 +63,6 @@ if __name__ == "__main__":
     # noinspection SpellCheckingInspection
     # createSpecification(['-i', 'tests/resources/testdata/query.slg'])
     # createSpecification(['-s', 'hasii2011/code-ally-basic,codeallybasic'])
-    createSpecification(['-s', 'hasii2011/ogl'])
+    # -s hasii2011/ -s hasii2011/buildlackey
+
+    createSpecification(['-s', 'hasii2011/code-ally-basic,codeallybasic'])

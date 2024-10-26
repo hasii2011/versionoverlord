@@ -17,6 +17,7 @@ from github.Repository import Repository
 
 from semantic_version import Version as SemanticVersion
 
+from versionoverlord.Common import ENV_GH_TOKEN
 from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 from versionoverlord.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
 
@@ -26,7 +27,7 @@ class GitHubAdapter:
         self.logger: Logger = getLogger(__name__)
 
         try:
-            gitHubToken: str = osEnvironment['GITHUB_ACCESS_TOKEN']
+            gitHubToken: str = osEnvironment[ENV_GH_TOKEN]
         except KeyError:
             raise NoGitHubAccessTokenException
 

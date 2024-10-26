@@ -2,7 +2,7 @@
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
-from codeallybasic.SemanticVersion import SemanticVersion
+from semantic_version import Version as SemanticVersion
 
 from tests.TestBase import TestBase
 
@@ -14,16 +14,14 @@ class TestGitHubAdapter(TestBase):
     """
     def setUp(self):
         super().setUp()
+        """
+            I don't care about:
+            
+                DeprecationWarning: Argument login_or_token is deprecated, please use auth=github.Auth.Token(...) instead
+        """
+        import warnings
 
-    """
-        I don't care about:
-        
-            DeprecationWarning: Argument login_or_token is deprecated, please use auth=github.Auth.Token(...) instead
-    """
-
-    import warnings
-
-    warnings.filterwarnings(action="ignore", message="Argument", category=DeprecationWarning)
+        warnings.filterwarnings(action="ignore", message="Argument", category=DeprecationWarning)
 
     def tearDown(self):
         pass

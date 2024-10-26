@@ -8,6 +8,7 @@ from click import secho
 from semantic_version import Version as SemanticVersion
 
 from versionoverlord.Common import AdvancedSlugs
+from versionoverlord.Common import ENV_GH_TOKEN
 from versionoverlord.Common import SlugVersion
 from versionoverlord.Common import SlugVersions
 
@@ -42,7 +43,7 @@ class SlugHandler:
                 displayVersions: DisplayVersions = DisplayVersions()
                 displayVersions.displaySlugs(slugVersions=slugVersions)
         except NoGitHubAccessTokenException:
-            raise ClickException(f'Your must provide a GitHub access token via the environment variable `GITHUB_ACCESS_TOKEN`')
+            raise ClickException(f'Your must provide a GitHub access token via the environment variable `{ENV_GH_TOKEN}`')
         except UnknownGitHubRepositoryException as e:
             raise ClickException(f'Unknown GitHub Repository: `{e.repositorySlug}`')
         except (ValueError, Exception) as e:

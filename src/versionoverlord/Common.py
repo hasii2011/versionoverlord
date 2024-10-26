@@ -23,6 +23,7 @@ from semantic_version import Version as SemanticVersion
 ENV_PROJECTS_BASE:    str = 'PROJECTS_BASE'
 ENV_PROJECT:          str = 'PROJECT'
 ENV_APPLICATION_NAME: str = 'APPLICATION_NAME'
+ENV_GH_TOKEN:         str = 'GH_TOKEN'
 
 PYPROJECT_TOML:   str = 'pyproject.toml'
 DEPENDENCIES:     str = 'dependencies'
