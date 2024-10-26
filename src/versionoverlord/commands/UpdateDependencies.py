@@ -71,7 +71,7 @@ class UpdateDependencies:
             handler:              IHandler             = handlerSpecification.handler
             name:                 str                  = handlerSpecification.fileName
             if handler.configurationExists is True:
-                echo(f'Update {name}', color=True)
+                # echo(f'Update {name}', color=True)    # This could be misleading if there were no changes
                 handler.update()
             else:
                 echo(f'No {name}')

@@ -63,10 +63,13 @@ class IHandler(ABC, EnvironmentBase):
         updatedContent: str = IHandler.updateDependencies(content, self._packages)
         self.baseLogger.info(f'{updatedContent=}')
 
-        with open(pyProjectToml, 'wt') as outputFd:
-            outputFd.write(updatedContent)
+        if updatedContent == content:
+            self.baseLogger.info(f'No changes in: {pyProjectToml}')
+        else:
+            with open(pyProjectToml, 'wt') as outputFd:
+                outputFd.write(updatedContent)
 
-        assert inputFd.closed, 'Should be auto closed'
+            assert inputFd.closed, 'Should be auto closed'
 
     @classmethod
     def updateDependencies(cls, fileContent: str, packages: Packages) -> str:
@@ -80,24 +83,22 @@ class IHandler(ABC, EnvironmentBase):
             fileContent:  The entire file contents
             packages:     The packages to update in the file content
 
-        Returns:  The updated file content
+        Returns:  The updated file content; May not be updated in the case of some
+        config.yml files
         """
 
         for pkg in packages:
             package: UpdatePackage = cast(UpdatePackage, pkg)
 
-            match: Match | None = None
             for matchPattern in MATCH_PATTERNS:
                 oldDependency: str = f'{package.packageName}{matchPattern}{package.oldVersion}'
                 newDependency: str = f'{package.packageName}{matchPattern}{package.newVersion}'
 
-                match = regExSearch(pattern=oldDependency, string=fileContent)
+                match: Match = regExSearch(pattern=oldDependency, string=fileContent)
                 if match is None:
                     continue
                 else:
                     fileContent = regExSub(pattern=oldDependency, repl=newDependency, string=fileContent)
                     break
-
-            assert match is not None, 'We should only come here with valid package names'
 
         return fileContent
