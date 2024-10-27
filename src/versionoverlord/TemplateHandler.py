@@ -73,6 +73,8 @@ class TemplateHandler(EnvironmentBase):
         for matchPattern in MATCH_PATTERNS:
             lookupRequirement: str = f'{packageName}{matchPattern}.*{osLineSep}'
 
+            # TODO: This regex does not work if the requirement is the last one in the file
+            # and there is no blank line at the end
             match = regExSearch(pattern=lookupRequirement, string=self._requirementsTxt)
 
             self.logger.info(f'{match}')
