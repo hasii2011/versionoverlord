@@ -65,4 +65,4 @@ if __name__ == "__main__":
     # createSpecification(['-s', 'hasii2011/code-ally-basic,codeallybasic'])
     # -s hasii2011/ -s hasii2011/buildlackey
 
-    createSpecification(['-s', 'hasii2011/code-ally-basic,codeallybasic'])
+    createSpecification(['-i', 'docs/query.slg'])

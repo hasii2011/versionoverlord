@@ -30,6 +30,7 @@ DEPENDENCIES:     str = 'dependencies'
 
 SETUP_PY:         str = 'setup.py'
 REQUIREMENTS_TXT: str = 'requirements.txt'
+PYPROJECT_TOML:   str = 'pyproject.toml'
 INSTALL_REQUIRES: str = 'install_requires'
 
 CIRCLE_CI_DIRECTORY: str = '.circleci'
@@ -50,6 +51,8 @@ LESS_THAN:             str = '<'
 MATCH_PATTERNS: List[str] = [
     EQUAL_EQUAL, APPROXIMATELY_EQUAL, GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL, GREATER_THAN, LESS_THAN
 ]
+
+PYPROJECT_TOML_TRAILING_CHARACTERS: str = "\"',"
 
 
 def versionFactory() -> SemanticVersion:
