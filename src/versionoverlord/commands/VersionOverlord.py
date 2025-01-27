@@ -19,3 +19,4 @@ def versionOverlord():
     secho('\tcs - createSpecification')
     secho('\tud - updateDependencies')
     secho('\tdr - draftRelease')
+    secho('\tbv - bumpVersion')

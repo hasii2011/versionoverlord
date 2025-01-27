@@ -1,3 +1,4 @@
+
 from typing import cast
 
 from click import command
@@ -18,7 +19,7 @@ from versionoverlord.commands.TagType import TagType
 
 @command(epilog=EPILOG)
 @version_option(version=f'{__version__}', message='%(prog)s version %(version)s')
-@option('--slug',      '-s', required=True,               help='GitHub slug')
+@option('--slug',      '-s', required=True,                 help='GitHub slug')
 @option('--tag',       '-t', required=True, type=TagType(), help='Tag for release as a semantic version')
 def draftRelease(slug: RepositorySlug, tag: TagType):
     """
