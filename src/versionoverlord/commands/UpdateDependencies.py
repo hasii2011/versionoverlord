@@ -24,6 +24,7 @@ from click import version_option
 from semantic_version import Version as SemanticVersion
 
 from versionoverlord import __version__
+from versionoverlord.Common import EPILOG
 
 from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
@@ -94,7 +95,7 @@ class UpdateDependencies:
         return packages
 
 
-@command()
+@command(epilog=EPILOG)
 @version_option(version=f'{__version__}', message='%(prog)s version %(version)s')
 @option('--specification', '-s', is_flag=False, flag_value='versionSpecification.csv', default='versionSpecification.csv',
         type=Path(exists=True, path_type=PyPath),

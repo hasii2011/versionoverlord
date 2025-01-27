@@ -6,14 +6,16 @@ from click import version_option
 
 
 from versionoverlord import __version__
+from versionoverlord.Common import EPILOG
 
 
-@command()
+@command(epilog=EPILOG)
 @version_option(version=f'{__version__}', message='%(prog)s version %(version)s')
 def versionOverlord():
     clear()
     secho('Commands are:')
-    secho('\tquerySlugs')
-    secho('\tcreateSpecification:')
-    secho('\tupdateDependencies')
-    
+    secho('\tvo - versionOverlord')
+    secho('\tqs - querySlugs')
+    secho('\tcs - createSpecification')
+    secho('\tud - updateDependencies')
+    secho('\tdr - draftRelease')

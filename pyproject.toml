@@ -13,7 +13,7 @@ maintainers = [{name = 'Humberto A. Sanchez II', email = 'Humbert.A.Sanchez.II@g
 keywords = ['version management', 'dependencies', 'python',]
 
 dependencies = [
-  'PyGithub>=2.2.0',
+  'PyGithub>=2.5.0',
   'click~=8.1.7',
   'semantic-version==2.10.0',
 ]
@@ -33,7 +33,13 @@ version = {attr = 'versionoverlord.__version__'}
 
 [project.scripts]
 
-querySlugs = "versionoverlord.commands.QuerySlugs:querySlugs"
+querySlugs          = "versionoverlord.commands.QuerySlugs:querySlugs"
 createSpecification = "versionoverlord.commands.CreateSpecification:createSpecification"
-updateDependencies = "versionoverlord.commands.UpdateDependencies:updateDependencies"
-versionOverlord = "versionoverlord.commands.VersionOverlord:versionOverlord"
+updateDependencies  = "versionoverlord.commands.UpdateDependencies:updateDependencies"
+versionOverlord     = "versionoverlord.commands.VersionOverlord:versionOverlord"
+draftRelease        = 'versionoverlord.commands.DraftRelease:draftRelease'
+qs = "versionoverlord.commands.QuerySlugs:querySlugs"
+cs = "versionoverlord.commands.CreateSpecification:createSpecification"
+ud = "versionoverlord.commands.UpdateDependencies:updateDependencies"
+vo = "versionoverlord.commands.VersionOverlord:versionOverlord"
+dr = 'versionoverlord.commands.DraftRelease:draftRelease'

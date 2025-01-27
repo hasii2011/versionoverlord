@@ -13,6 +13,7 @@ from versionoverlord import __version__
 from versionoverlord.Common import AdvancedSlugs
 from versionoverlord.Common import CLISlugs
 from versionoverlord.Common import ENV_GH_TOKEN
+from versionoverlord.Common import EPILOG
 from versionoverlord.Common import extractCLISlugs
 from versionoverlord.Common import setUpLogging
 
@@ -21,7 +22,7 @@ from versionoverlord.SlugHandler import SlugHandler
 from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 
 
-@command()
+@command(epilog=EPILOG)
 @version_option(version=f'{__version__}')
 @option('--slugs',      '-s', required=False, multiple=True, help='GitHub slugs to query')
 @option('--input-file', '-i', required=False,                help='Use input file for slug list')

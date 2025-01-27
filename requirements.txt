@@ -7,7 +7,7 @@ build==1.2.2.post1
 mypy==1.13.0
 html-testRunner~=1.2.1
 
-PyGithub==2.2.0
+PyGithub==2.5.0
 click==8.1.7
 
 # So Circle CI works

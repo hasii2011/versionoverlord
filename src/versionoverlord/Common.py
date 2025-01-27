@@ -20,12 +20,13 @@ from dataclasses import field
 from semantic_version import Version as SemanticVersion
 
 
+EPILOG:               str = 'Written by Humberto A. Sanchez II (humberto.a.sanchez.ii@gmail.com)'
+
 ENV_PROJECTS_BASE:    str = 'PROJECTS_BASE'
 ENV_PROJECT:          str = 'PROJECT'
 ENV_APPLICATION_NAME: str = 'APPLICATION_NAME'
 ENV_GH_TOKEN:         str = 'GH_TOKEN'
 
-PYPROJECT_TOML:   str = 'pyproject.toml'
 DEPENDENCIES:     str = 'dependencies'
 
 SETUP_PY:         str = 'setup.py'
@@ -76,6 +77,9 @@ Packages                 = NewType('Packages', List[UpdatePackage])
 PackageLookupType        = NewType('PackageLookupType', Dict[PackageName, UpdatePackage])
 UpdateDependencyCallback = NewType('UpdateDependencyCallback', Callable[[str], str])    # type: ignore
 CLISlugs                 = NewType('CLISlugs', Tuple[str])
+
+RepositorySlug = NewType('RepositorySlug', str)
+ReleaseName    = NewType('ReleaseName',    str)
 
 
 @dataclass

@@ -4,9 +4,18 @@ from unittest import main as unitTestMain
 
 from semantic_version import Version as SemanticVersion
 
+from github.GitRelease import GitRelease
+
 from tests.TestBase import TestBase
 
+from versionoverlord.Common import RepositorySlug
+
 from versionoverlord.GitHubAdapter import GitHubAdapter
+from versionoverlord.exceptions.UnknownGitHubRelease import UnknownGitHubRelease
+
+TEST_SLUG:        RepositorySlug  = RepositorySlug('hasii2011/TestRepository')
+BOGUS_RELEASE_ID: int             = 6666
+TEST_TAG:         SemanticVersion = SemanticVersion('10.0.0')
 
 
 class TestGitHubAdapter(TestBase):
@@ -29,10 +38,34 @@ class TestGitHubAdapter(TestBase):
     def testBasic(self):
         gitHubAdapter: GitHubAdapter = GitHubAdapter()
 
-        version: SemanticVersion = gitHubAdapter.getLatestVersionNumber('hasii2011/hasiicommon')
+        version: SemanticVersion = gitHubAdapter.getLatestVersionNumber(TEST_SLUG)
         self.assertNotEqual(None, version, 'Something wrong should not be None')
         self.assertNotEqual('', version,   'Something wrong should not be Empty')
         self.logger.info(f'{version}')
+
+    def testCreateDraftRelease(self):
+
+        gitHubAdapter: GitHubAdapter = GitHubAdapter()
+
+        gitRelease: GitRelease = gitHubAdapter.createDraftRelease(repositorySlug=TEST_SLUG, tag=TEST_TAG)
+
+        self.assertEqual(True, gitRelease.draft, 'Must be a draft release')
+        # cleanup
+        gitRelease.delete_release()
+
+    def testDeleteRelease(self):
+
+        gitHubAdapter: GitHubAdapter = GitHubAdapter()
+
+        gitRelease: GitRelease = gitHubAdapter.createDraftRelease(repositorySlug=TEST_SLUG, tag=TEST_TAG)
+
+        gitHubAdapter.deleteRelease(repositorySlug=TEST_SLUG, releaseId=gitRelease.id)
+
+
+    def testDeleteReleaseFail(self):
+
+        gitHubAdapter: GitHubAdapter = GitHubAdapter()
+        self.assertRaises(UnknownGitHubRelease, lambda: gitHubAdapter.deleteRelease(repositorySlug=TEST_SLUG, releaseId=BOGUS_RELEASE_ID))
 
 
 def suite() -> TestSuite:
