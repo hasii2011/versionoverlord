@@ -14,6 +14,7 @@ from click import version_option
 from click import option
 from click import secho
 from click import prompt
+from click import ClickException
 
 from versionoverlord import __version__
 
@@ -40,7 +41,14 @@ class BumpVersion(EnvironmentBase):
         self._packageName: Optional['str'] = packageName
 
         directory:             Path = Path(self._projectDirectory)
-        self._versionFilePath: Path = Path(self._projectsBase) / directory / STANDARD_SOURCE_DIRECTORY / directory / STANDARD_VERSION_FILENAME
+        if packageName is None:
+            packagePath: Path = directory
+        else:
+            packagePath = Path(packageName)
+        self._versionFilePath: Path = Path(self._projectsBase) / directory / STANDARD_SOURCE_DIRECTORY / packagePath / STANDARD_VERSION_FILENAME
+
+        if self._versionFilePath.exists() is False:
+            raise ClickException(f'No such file: {self._versionFilePath}.  Perhaps specify package name.')
 
     def bumpIt(self):
 
