@@ -12,12 +12,27 @@ from importlib.abc import Traversable
 
 from importlib.resources import files
 
+from platform import platform as osPlatform
+
+from subprocess import CompletedProcess
+from subprocess import run as subProcessRun
+
 from json import load as jsonLoad
 
 from dataclasses import dataclass
 from dataclasses import field
 
 from semantic_version import Version as SemanticVersion
+
+THE_GREAT_MAC_PLATFORM: str = 'macOS'
+
+CURL_CMD:         str = 'curl'
+JQ_CMD:           str = 'jq'
+
+MAC_OS_CURL_PATH: str = f'/usr/bin/{CURL_CMD} --help'
+MAC_OS_JQ_PATH:   str = f'/opt/homebrew/bin/{JQ_CMD} --version'
+
+LINUX_OS_JQ_PATH: str = f'/usr/bin/{JQ_CMD} --version'
 
 
 EPILOG:               str = 'Written by Humberto A. Sanchez II (humberto.a.sanchez.ii@gmail.com)'
@@ -140,3 +155,39 @@ def extractCLISlugs(slugs: CLISlugs) -> AdvancedSlugs:
         cliSlugs.append(advancedSlug)
 
     return cliSlugs
+
+
+def checkJQInstalled() -> bool:
+    """
+    Returns: `True` if the JSON processor is installed else `False`
+    """
+    platform: str = osPlatform(terse=True)
+    if platform.startswith(THE_GREAT_MAC_PLATFORM) is True:
+        return checkInstallation(MAC_OS_JQ_PATH)
+    else:
+        return checkInstallation(LINUX_OS_JQ_PATH)
+
+
+def checkCurlInstalled() -> bool:
+    return checkInstallation(MAC_OS_CURL_PATH)
+
+
+def checkInstallation(commandToCheck) -> bool:
+    ans:    bool = False
+    status: int  = runCommand(commandToCheck)
+    if status == 0:
+        ans = True
+
+    return ans
+
+
+def runCommand(programToRun: str) -> int:
+    """
+
+    Args:
+        programToRun:  What must be executed
+
+    Returns:  The status return of the executed program
+    """
+    completedProcess: CompletedProcess = subProcessRun([programToRun], shell=True, capture_output=True, text=True, check=False)
+    return completedProcess.returncode

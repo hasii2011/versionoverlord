@@ -39,9 +39,12 @@ updateDependencies  = "versionoverlord.commands.UpdateDependencies:updateDepende
 versionOverlord     = "versionoverlord.commands.VersionOverlord:versionOverlord"
 draftRelease        = 'versionoverlord.commands.DraftRelease:draftRelease'
 bumpVersion         = 'versionoverlord.commands.BumpVersion:bumpVersion'
+pickDependencies    = 'versionoverlord.commands.PickDependencies:pickDependencies'
 qs = "versionoverlord.commands.QuerySlugs:querySlugs"
 cs = "versionoverlord.commands.CreateSpecification:createSpecification"
 ud = "versionoverlord.commands.UpdateDependencies:updateDependencies"
 vo = "versionoverlord.commands.VersionOverlord:versionOverlord"
 dr = 'versionoverlord.commands.DraftRelease:draftRelease'
 bv = 'versionoverlord.commands.BumpVersion:bumpVersion'
+pd = 'versionoverlord.commands.PickDependencies:pickDependencies'
+

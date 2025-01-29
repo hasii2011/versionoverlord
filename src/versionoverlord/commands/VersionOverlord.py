@@ -20,3 +20,4 @@ def versionOverlord():
     secho('\tud - updateDependencies')
     secho('\tdr - draftRelease')
     secho('\tbv - bumpVersion')
+    secho('\tpd - pickDependencies')
