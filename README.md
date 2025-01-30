@@ -49,13 +49,12 @@ Additionally, projects may specify dependencies in different places.  Examples o
 
 VersionOverlord means to handle this problem by providing a set of Python command line scripts to automate updating the first three of the above dependency specification locations
 
-* versionoverlord           -- lists all the commands and their short names
-* querySlugs                    -- queries repositories for their latest release version
-* createSpecification      -- creates a dependency specification for a project 
+* versionoverlord     -- lists all the commands and their short names
+* querySlugs          -- queries repositories for their latest release version
+* createSpecification -- creates a dependency specification for a project 
 * updateDependencies  -- updates the supported dependency locations using the generated specification
-* draftRelease                  -- This command creates draft release in the appropriate repository.  You must provide a repository slug
-* bumpVersion                -- Bump version looks for file in `src/<moduleName>/_version.py`.  It echoes it to stdout and asks the developer to provide an updated value.
-
+* draftRelease        -- This command creates draft release in the appropriate repository.  You must provide a repository slug
+* bumpVersion         -- Bump version looks for file in `src/<moduleName>/_version.py`.  It echoes it to stdout and asks the developer to provide an updated value.
 * pickDependencies 
     * Reads pyproject.toml and picks the dependencies from the `dependencies` section.  
     * It displays them in an editor.
@@ -72,9 +71,9 @@ VersionOverlord means to handle this problem by providing a set of Python comman
 The above commands depend on the following environment variables.
 
 ```bash
-GH_TOKEN             - A personal GitHub access token necessary to read repository release information
+GH_TOKEN       - A personal GitHub access token necessary to read repository release information
 PROJECTS_BASE  - The local directory where the python projects are based
-PROJECT               - The name of the project;  It should be a directory name
+PROJECT        - The name of the project;  It should be a directory name
 ```
 
 See the [GitHub Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) for instructions on how to create a usable access token.  These scripts assume  that a developer keeps all checked out repositories in a single directory.  An example, of a PROJECTS_BASE is:
