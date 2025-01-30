@@ -24,8 +24,8 @@ from versionoverlord.commands.TagType import TagType
 def draftRelease(slug: RepositorySlug, tag: TagType):
     """
     \b
-    This command creates draft release in the appropriate repository
-    Your must provide a repository slug
+    This command creates draft release in the appropriate repository.
+    You must provide a repository slug.
     The tag is a string that complies with the Semantic Version specification
 
     It uses the following environment variables:

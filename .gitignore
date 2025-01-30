@@ -6,7 +6,6 @@ __pycache__/
 build/
 dist/
 src/versionoverlord.egg-info
-pyenv-3.11.5/
-pyenv-3.12.4/
+pyenv-3.12.8/
 .envrc
 .python-version

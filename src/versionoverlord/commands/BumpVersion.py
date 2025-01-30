@@ -71,6 +71,8 @@ class BumpVersion(EnvironmentBase):
 def bumpVersion(package_name: str):
     """
     \b
+    Bump version looks for file in src/<moduleName>/_version.py.  It echoes it to stdout
+    and asks the developer to provide an updated value.
 
     It uses the following environment variables:
 
@@ -79,7 +81,6 @@ def bumpVersion(package_name: str):
         PROJECTS_BASE – The local directory where the python projects are based
         PROJECT       – The name of the project;  It should be a directory name
     """
-    secho(f'{package_name=}')
     bv: BumpVersion = BumpVersion(packageName=package_name)
     bv.bumpIt()
 

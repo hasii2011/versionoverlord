@@ -80,7 +80,7 @@ class PickDependencies(EnvironmentBase):
 
         secho('Remove any dependencies in the editor that you do not wish to update.')
         if clickConfirm('Do you want to continue?', abort=True):
-            picked: str = clickEdit(dependenciesStr, require_save=False)
+            picked: str | None = clickEdit(dependenciesStr, require_save=False)
             if picked is None:
                 secho('No selections.  bye bye')
             else:
@@ -189,10 +189,12 @@ class PickDependencies(EnvironmentBase):
 def pickDependencies(ctx):
     """
     \b
-    Reads pyproject.toml and picks the dependencies from the `dependencies` section.
-    Displays them in an editor.  The developer removes dependencies he/she does
-    not want to update.  This command updates the dependencies in the same manner
-    that the createSpecification & updateDependencies command pair does.
+    * Reads pyproject.toml and picks the dependencies from the `dependencies` section.
+    * It displays them in an editor.
+    * The developer removes dependencies he/she does not want to update.
+    * This command creates the dependency csv file in the same format as the `createSpecification` command.
+    * It then invokes the `updateDependencies` command to update the files.  Unlike `createSpecification`, pickDependencies queries pypi to get the module versions
+
 
     It uses the following environment variables:
 
