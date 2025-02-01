@@ -24,12 +24,12 @@ from semantic_version import Version as SemanticVersion
 from versionoverlord.Common import ENV_GH_TOKEN
 
 from versionoverlord.Common import RepositorySlug
-from versionoverlord.GitHubAdapterTypes import AdapterMilestone
+from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterMilestone
 
-from versionoverlord.GitHubAdapterTypes import AdapterRelease
-from versionoverlord.GitHubAdapterTypes import ReleaseId
-from versionoverlord.GitHubAdapterTypes import ReleaseName
-from versionoverlord.GitHubAdapterTypes import ReleaseNumber
+from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterRelease
+from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseId
+from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseName
+from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseNumber
 
 from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
 from versionoverlord.githubadapter.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
