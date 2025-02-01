@@ -1,4 +1,3 @@
-
 from typing import cast
 
 from logging import Logger
@@ -8,22 +7,38 @@ from collections import Counter
 
 from os import environ as osEnvironment
 
+from datetime import date
+from datetime import timedelta
+
 from github import Github
 from github import UnknownObjectException
+from github import GithubException
+
 from github.GitRelease import GitRelease
 from github.PaginatedList import PaginatedList
 from github.Repository import Repository
+from github.Milestone import Milestone
 
 from semantic_version import Version as SemanticVersion
 
 from versionoverlord.Common import ENV_GH_TOKEN
-from versionoverlord.Common import ReleaseName
+
 from versionoverlord.Common import RepositorySlug
+from versionoverlord.GitHubAdapterTypes import AdapterMilestone
+
+from versionoverlord.GitHubAdapterTypes import AdapterRelease
+from versionoverlord.GitHubAdapterTypes import ReleaseId
+from versionoverlord.GitHubAdapterTypes import ReleaseName
+from versionoverlord.GitHubAdapterTypes import ReleaseNumber
+
+from versionoverlord.exceptions.GitHubAdapterError import GitHubAdapterError
 from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 from versionoverlord.exceptions.UnknownGitHubRelease import UnknownGitHubRelease
 from versionoverlord.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
 
-DEFAULT_RELEASE_STUB_MESSAGE: str = 'See issues associated with associated [milestone](url)'
+DEFAULT_RELEASE_STUB_MESSAGE:     str = 'See issues associated with this [milestone](url)'
+DEFAULT_MILESTONE_DUE_DATE_DELTA: int = 7
+DEFAULT_MILESTONE_STATE:          str = 'open'
 
 
 class GitHubAdapter:
@@ -70,27 +85,74 @@ class GitHubAdapter:
 
         return latestReleaseVersion
 
-    def createDraftRelease(self, repositorySlug: RepositorySlug, tag: SemanticVersion) -> GitRelease:
+    def createDraftRelease(self, repositorySlug: RepositorySlug, tag: SemanticVersion) -> AdapterRelease:
         """
-        TODO:  Maybe synthesize a git release object
+
         Args:
             repositorySlug:   A GitHub repository slug
             tag:              The tag number
 
-        Returns:  The git release object (leakage here)
+        Returns:  The GitHub AdapterRelease Id
 
         """
         try:
             repo: Repository = self._github.get_repo(repositorySlug)
             self.logger.debug(f'{repo.full_name=}')
-            releaseName: ReleaseName = ReleaseName(f'Release {tag}')
+            releaseName: ReleaseName = ReleaseName(f'AdapterRelease {tag}')
 
             gitRelease: GitRelease = repo.create_git_release(tag=str(tag), name=releaseName, message=DEFAULT_RELEASE_STUB_MESSAGE, draft=True, prerelease=False, generate_release_notes=False)
 
         except UnknownObjectException:
             raise UnknownGitHubRepositoryException(repositorySlug=repositorySlug)
 
-        return gitRelease
+        release: AdapterRelease = AdapterRelease(
+            id=ReleaseId(gitRelease.id),
+            draft=gitRelease.draft,
+            title=gitRelease.title,
+            body=gitRelease.body,
+            tag=SemanticVersion(gitRelease.tag_name)
+        )
+        return release
+
+    def createMilestone(self, repositorySlug: RepositorySlug, title: str) -> AdapterMilestone:
+        try:
+            repo: Repository = self._github.get_repo(repositorySlug)
+            self.logger.debug(f'{repo.full_name=}')
+
+            today: date = date.today() + timedelta(days=DEFAULT_MILESTONE_DUE_DATE_DELTA)
+
+            milestone: Milestone = repo.create_milestone(title=title,
+                                                         state=DEFAULT_MILESTONE_STATE,
+                                                         description='',
+                                                         due_on=today)
+            adapterMilestone: AdapterMilestone = AdapterMilestone(
+                releaseNumber=ReleaseNumber(milestone.number),
+                title=milestone.title,
+                state=milestone.state,
+                description=milestone.description,
+                dueDate=milestone.due_on
+            )
+            return adapterMilestone
+
+        except GithubException as ge:
+            raise GitHubAdapterError(message=ge.__str__())
+
+    def deleteMilestone(self, repositorySlug: RepositorySlug, releaseNumber: ReleaseNumber):
+        """
+
+        Args:
+            repositorySlug: A GitHub repository slug
+            releaseNumber:  An adapter ReleaseNumber
+        """
+        try:
+            repo: Repository = self._github.get_repo(repositorySlug)
+            self.logger.debug(f'{repo.full_name=}')
+
+            milestone: Milestone = repo.get_milestone(number=releaseNumber)
+            milestone.delete()
+
+        except GithubException as ge:
+            raise GitHubAdapterError(message=ge.__str__())
 
     def deleteRelease(self, repositorySlug: RepositorySlug, releaseId: int):
         """
@@ -108,8 +170,8 @@ class GitHubAdapter:
             gitRelease.delete_release()
 
         except UnknownObjectException as e:
-            self.logger.error(f'{e=}')
-            raise UnknownGitHubRelease(message='Release ID not found')
+            # self.logger.error(f'{releaseId=} {e=}')
+            raise UnknownGitHubRelease(message=f'AdapterRelease ID not found. {e=}')
 
     def _countPeriods(self, releaseNumber: str) -> int:
 

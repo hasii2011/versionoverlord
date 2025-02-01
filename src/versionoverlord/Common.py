@@ -94,7 +94,6 @@ UpdateDependencyCallback = NewType('UpdateDependencyCallback', Callable[[str], s
 CLISlugs                 = NewType('CLISlugs', Tuple[str])
 
 RepositorySlug = NewType('RepositorySlug', str)
-ReleaseName    = NewType('ReleaseName',    str)
 
 
 @dataclass
