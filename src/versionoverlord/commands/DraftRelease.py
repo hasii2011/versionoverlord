@@ -13,7 +13,7 @@ from versionoverlord.Common import EPILOG
 from versionoverlord.Common import RepositorySlug
 
 from versionoverlord.Common import setUpLogging
-from versionoverlord.GitHubAdapter import GitHubAdapter
+from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 from versionoverlord.commands.TagType import TagType
 
 

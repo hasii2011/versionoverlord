@@ -23,7 +23,7 @@ from versionoverlord.Common import SlugVersion
 from versionoverlord.Common import SlugVersions
 
 from versionoverlord.EnvironmentBase import EnvironmentBase
-from versionoverlord.GitHubAdapter import GitHubAdapter
+from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 
 
 class TemplateHandler(EnvironmentBase):

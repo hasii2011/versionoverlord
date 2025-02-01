@@ -14,7 +14,7 @@ from versionoverlord.Common import SlugVersions
 
 from versionoverlord.DisplayVersions import DisplayVersions
 
-from versionoverlord.GitHubAdapter import GitHubAdapter
+from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 
 from versionoverlord.githubadapter.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 from versionoverlord.githubadapter.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException

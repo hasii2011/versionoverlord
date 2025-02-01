@@ -8,7 +8,7 @@ from tests.TestBase import TestBase
 
 from versionoverlord.Common import RepositorySlug
 
-from versionoverlord.GitHubAdapter import GitHubAdapter
+from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterMilestone
 from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterRelease
 from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
