@@ -31,10 +31,10 @@ from versionoverlord.GitHubAdapterTypes import ReleaseId
 from versionoverlord.GitHubAdapterTypes import ReleaseName
 from versionoverlord.GitHubAdapterTypes import ReleaseNumber
 
-from versionoverlord.exceptions.GitHubAdapterError import GitHubAdapterError
-from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
-from versionoverlord.exceptions.UnknownGitHubRelease import UnknownGitHubRelease
-from versionoverlord.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
+from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
+from versionoverlord.githubadapter.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
+from versionoverlord.githubadapter.exceptions.UnknownGitHubRelease import UnknownGitHubRelease
+from versionoverlord.githubadapter.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
 
 DEFAULT_RELEASE_STUB_MESSAGE:     str = 'See issues associated with this [milestone](url)'
 DEFAULT_MILESTONE_DUE_DATE_DELTA: int = 7

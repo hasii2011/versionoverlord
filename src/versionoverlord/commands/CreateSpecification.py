@@ -20,7 +20,7 @@ from versionoverlord.Common import setUpLogging
 from versionoverlord.FileNameToSlugs import FileNameToSlugs
 from versionoverlord.TemplateHandler import TemplateHandler
 
-from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
+from versionoverlord.githubadapter.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 
 
 # noinspection SpellCheckingInspection

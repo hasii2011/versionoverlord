@@ -16,8 +16,8 @@ from versionoverlord.DisplayVersions import DisplayVersions
 
 from versionoverlord.GitHubAdapter import GitHubAdapter
 
-from versionoverlord.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
-from versionoverlord.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
+from versionoverlord.githubadapter.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
+from versionoverlord.githubadapter.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
 
 
 class SlugHandler:
