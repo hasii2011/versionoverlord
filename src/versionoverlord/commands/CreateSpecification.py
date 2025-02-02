@@ -11,7 +11,6 @@ from versionoverlord import __version__
 
 from versionoverlord.Common import AdvancedSlugs
 from versionoverlord.Common import CLISlugs
-from versionoverlord.Common import ENV_GH_TOKEN
 from versionoverlord.Common import EPILOG
 from versionoverlord.Common import extractCLISlugs
 
@@ -20,7 +19,7 @@ from versionoverlord.Common import setUpLogging
 from versionoverlord.FileNameToSlugs import FileNameToSlugs
 from versionoverlord.TemplateHandler import TemplateHandler
 
-from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
+from versionoverlord.githubadapter.GitHubAdapterError import GitHubAdapterError
 
 
 # noinspection SpellCheckingInspection

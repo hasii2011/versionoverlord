@@ -15,7 +15,7 @@ from versionoverlord.DisplayVersions import DisplayVersions
 
 from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 
-from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
+from versionoverlord.githubadapter.GitHubAdapterError import GitHubAdapterError
 
 
 class SlugHandler:

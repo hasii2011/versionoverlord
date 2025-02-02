@@ -14,7 +14,7 @@ from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterMilestone
 from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterRelease
 
-from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
+from versionoverlord.githubadapter.GitHubAdapterError import GitHubAdapterError
 
 TEST_SLUG:        RepositorySlug  = RepositorySlug('hasii2011/TestRepository')
 BOGUS_RELEASE_ID: int             = 6666

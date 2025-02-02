@@ -16,7 +16,7 @@ from versionoverlord.Common import setUpLogging
 from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 from versionoverlord.commands.TagType import TagType
 from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterMilestone
-from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
+from versionoverlord.githubadapter.GitHubAdapterError import GitHubAdapterError
 
 RELEASE_STUB_MESSAGE_TEMPLATE: str = 'See issues associated with this [milestone]({})'
 

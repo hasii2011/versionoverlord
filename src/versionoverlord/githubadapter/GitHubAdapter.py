@@ -29,14 +29,14 @@ from codeallybasic.Common import fixURL
 from versionoverlord.Common import ENV_GH_TOKEN
 
 from versionoverlord.Common import RepositorySlug
-from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterMilestone
 
+from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterMilestone
 from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterRelease
 from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseId
 from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseTitle
 from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseNumber
 
-from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
+from versionoverlord.githubadapter.GitHubAdapterError import GitHubAdapterError
 
 DEFAULT_MILESTONE_DUE_DATE_DELTA: int = 7
 DEFAULT_MILESTONE_STATE:          str = 'open'

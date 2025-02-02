@@ -12,7 +12,7 @@ from versionoverlord.Common import setUpLogging
 
 from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseTitle
-from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
+from versionoverlord.githubadapter.GitHubAdapterError import GitHubAdapterError
 
 
 @command(epilog=EPILOG)

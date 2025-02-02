@@ -18,7 +18,7 @@ from versionoverlord.Common import setUpLogging
 
 from versionoverlord.FileNameToSlugs import FileNameToSlugs
 from versionoverlord.SlugHandler import SlugHandler
-from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
+from versionoverlord.githubadapter.GitHubAdapterError import GitHubAdapterError
 
 
 @command(epilog=EPILOG)
