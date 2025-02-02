@@ -4,12 +4,12 @@ from typing import cast
 from click import command
 from click import version_option
 from click import option
-from click import secho
 from click import ClickException
 
 from semantic_version import Version as SemanticVersion
 
 from versionoverlord import __version__
+from versionoverlord.Common import ENV_GH_TOKEN
 from versionoverlord.Common import EPILOG
 from versionoverlord.Common import RepositorySlug
 
@@ -18,6 +18,7 @@ from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 from versionoverlord.commands.TagType import TagType
 from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterMilestone
 from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
+from versionoverlord.githubadapter.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 
 RELEASE_STUB_MESSAGE_TEMPLATE: str = 'See issues associated with this [milestone]({})'
 
@@ -42,10 +43,8 @@ def draftRelease(slug: RepositorySlug, tag: TagType, milestone: bool):
         PROJECTS_BASE – The local directory where the python projects are based
         PROJECT       – The name of the project;  It should be a directory name
     """
-    secho(f'{slug=} {tag=} {milestone=}')
-
-    gitHubAdapter: GitHubAdapter = GitHubAdapter()
     try:
+        gitHubAdapter: GitHubAdapter = GitHubAdapter()
         milestoneUrl: str = ''
         if milestone is True:
             milestoneTitle: str = f'Release {tag}'
@@ -56,6 +55,8 @@ def draftRelease(slug: RepositorySlug, tag: TagType, milestone: bool):
         gitHubAdapter.createDraftRelease(repositorySlug=slug, tag=cast(SemanticVersion, tag), message=message)
     except GitHubAdapterError as e:
         raise ClickException(message=e.message)
+    except NoGitHubAccessTokenException:
+        raise ClickException(f'No GitHub token specified in `{ENV_GH_TOKEN}`')
 
 
 if __name__ == "__main__":

@@ -21,3 +21,4 @@ def versionOverlord():
     secho('\tdr - draftRelease')
     secho('\tbv - bumpVersion')
     secho('\tpd - pickDependencies')
+    secho('\tpr - publishRelease')

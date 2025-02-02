@@ -11,6 +11,7 @@ from versionoverlord.Common import RepositorySlug
 from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterMilestone
 from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterRelease
+
 from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
 from versionoverlord.githubadapter.exceptions.UnknownGitHubRelease import UnknownGitHubRelease
 
@@ -50,7 +51,7 @@ class TestGitHubAdapter(TestBase):
 
         gitHubAdapter: GitHubAdapter = GitHubAdapter()
 
-        release: AdapterRelease = gitHubAdapter.createDraftRelease(repositorySlug=TEST_SLUG, tag=TEST_TAG)
+        release: AdapterRelease = gitHubAdapter.createDraftRelease(repositorySlug=TEST_SLUG, tag=TEST_TAG, message='')
 
         self.assertEqual(True, release.draft, 'Must be a draft release')
         # cleanup
@@ -71,7 +72,7 @@ class TestGitHubAdapter(TestBase):
     def testDeleteRelease(self):
 
         gitHubAdapter: GitHubAdapter = GitHubAdapter()
-        release:       AdapterRelease       = gitHubAdapter.createDraftRelease(repositorySlug=TEST_SLUG, tag=TEST_TAG)
+        release:       AdapterRelease       = gitHubAdapter.createDraftRelease(repositorySlug=TEST_SLUG, tag=TEST_TAG, message='')
 
         gitHubAdapter.deleteRelease(repositorySlug=TEST_SLUG, releaseId=release.id)
 
@@ -79,6 +80,17 @@ class TestGitHubAdapter(TestBase):
 
         gitHubAdapter: GitHubAdapter = GitHubAdapter()
         self.assertRaises(UnknownGitHubRelease, lambda: gitHubAdapter.deleteRelease(repositorySlug=TEST_SLUG, releaseId=BOGUS_RELEASE_ID))
+
+    def testPublishRelease(self):
+
+        gitHubAdapter: GitHubAdapter = GitHubAdapter()
+
+        release: AdapterRelease = gitHubAdapter.createDraftRelease(repositorySlug=TEST_SLUG, tag=TEST_TAG, message='')
+
+        gitHubAdapter.publishRelease(repositorySlug=TEST_SLUG, releaseTitle=release.title)
+
+        # cleanup
+        gitHubAdapter.deleteRelease(repositorySlug=TEST_SLUG, releaseId=release.id)
 
 
 def suite() -> TestSuite:

@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from semantic_version import Version as SemanticVersion
 
-ReleaseName    = NewType('ReleaseName', str)
+ReleaseTitle   = NewType('ReleaseTitle', str)
 ReleaseId      = NewType('ReleaseId',   int)
 ReleaseNumber  = NewType('ReleaseNumber', int)
 
@@ -31,9 +31,9 @@ class AdapterRelease:
     """
     Synthetic class for GitRelease
     """
-    title: str = ''
     body:  str = ''
     draft: bool = True
 
+    title: ReleaseTitle    = ReleaseTitle('')
     tag:   SemanticVersion = SemanticVersion('0.0.0')
     id:    ReleaseId       = ReleaseId(0)

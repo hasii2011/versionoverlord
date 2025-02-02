@@ -33,7 +33,7 @@ from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterMilestone
 
 from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterRelease
 from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseId
-from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseName
+from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseTitle
 from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseNumber
 
 from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
@@ -104,7 +104,7 @@ class GitHubAdapter:
         try:
             repo: Repository = self._github.get_repo(repositorySlug)
             self.logger.debug(f'{repo.full_name=}')
-            releaseName: ReleaseName = ReleaseName(f'AdapterRelease {tag}')
+            releaseName: ReleaseTitle = ReleaseTitle(f'Release {tag}')
 
             gitRelease: GitRelease = repo.create_git_release(tag=str(tag),
                                                              name=releaseName,
@@ -119,7 +119,7 @@ class GitHubAdapter:
         release: AdapterRelease = AdapterRelease(
             id=ReleaseId(gitRelease.id),
             draft=gitRelease.draft,
-            title=gitRelease.title,
+            title=ReleaseTitle(gitRelease.title),
             body=gitRelease.body,
             tag=SemanticVersion(gitRelease.tag_name)
         )
@@ -189,6 +189,24 @@ class GitHubAdapter:
         except UnknownObjectException as e:
             # self.logger.error(f'{releaseId=} {e=}')
             raise UnknownGitHubRelease(message=f'AdapterRelease ID not found. {e=}')
+
+    def publishRelease(self, repositorySlug: RepositorySlug, releaseTitle: ReleaseTitle):
+
+        try:
+            repo: Repository = self._github.get_repo(repositorySlug)
+
+            releases: PaginatedList = repo.get_releases()
+            # list comprehension;  Aren't I cute . . . . . .
+            matchedReleases = [r for r in releases if r.title == releaseTitle]
+
+            if len(matchedReleases) != 1:
+                raise GitHubAdapterError(f'Cannot find that release: {releaseTitle}')
+
+            matchedRelease: GitRelease = matchedReleases[0]
+            matchedRelease.update_release(name=matchedRelease.title, message=matchedRelease.body, draft=False)
+
+        except GithubException as ge:
+            raise GitHubAdapterError(message=ge.__str__())
 
     def _countPeriods(self, releaseNumber: str) -> int:
 
