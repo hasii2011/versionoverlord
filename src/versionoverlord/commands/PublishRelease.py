@@ -5,7 +5,7 @@ from click import version_option
 from click import ClickException
 
 from versionoverlord import __version__
-from versionoverlord.Common import ENV_GH_TOKEN
+
 from versionoverlord.Common import EPILOG
 from versionoverlord.Common import RepositorySlug
 from versionoverlord.Common import setUpLogging
@@ -13,7 +13,6 @@ from versionoverlord.Common import setUpLogging
 from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseTitle
 from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
-from versionoverlord.githubadapter.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
 
 
 @command(epilog=EPILOG)
@@ -37,8 +36,6 @@ def publishRelease(slug: RepositorySlug, release_title: ReleaseTitle):
 
     except GitHubAdapterError as e:
         raise ClickException(message=e.message)
-    except NoGitHubAccessTokenException:
-        raise ClickException(f'No GitHub token specified in `{ENV_GH_TOKEN}`')
 
 
 if __name__ == "__main__":

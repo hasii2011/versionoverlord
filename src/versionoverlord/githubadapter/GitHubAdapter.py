@@ -37,9 +37,6 @@ from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseTitle
 from versionoverlord.githubadapter.GitHubAdapterTypes import ReleaseNumber
 
 from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
-from versionoverlord.githubadapter.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
-from versionoverlord.githubadapter.exceptions.UnknownGitHubRelease import UnknownGitHubRelease
-from versionoverlord.githubadapter.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
 
 DEFAULT_MILESTONE_DUE_DATE_DELTA: int = 7
 DEFAULT_MILESTONE_STATE:          str = 'open'
@@ -57,7 +54,7 @@ class GitHubAdapter:
         try:
             gitHubToken: str = osEnvironment[ENV_GH_TOKEN]
         except KeyError:
-            raise NoGitHubAccessTokenException
+            raise GitHubAdapterError(message=f'No GitHub token specified in `{ENV_GH_TOKEN}`')
 
         self._github: Github = Github(gitHubToken)
 
@@ -67,7 +64,7 @@ class GitHubAdapter:
             repo: Repository = self._github.get_repo(repositorySlug)
             self.logger.debug(f'{repo.full_name=}')
         except UnknownObjectException:
-            raise UnknownGitHubRepositoryException(repositorySlug=repositorySlug)
+            raise GitHubAdapterError(message=f'Unknown {repositorySlug}')
 
         releases: PaginatedList = repo.get_releases()
 
@@ -114,7 +111,7 @@ class GitHubAdapter:
                                                              generate_release_notes=False)
 
         except UnknownObjectException:
-            raise UnknownGitHubRepositoryException(repositorySlug=repositorySlug)
+            raise GitHubAdapterError(message=f'Unknown {repositorySlug}')
 
         release: AdapterRelease = AdapterRelease(
             id=ReleaseId(gitRelease.id),
@@ -188,7 +185,7 @@ class GitHubAdapter:
 
         except UnknownObjectException as e:
             # self.logger.error(f'{releaseId=} {e=}')
-            raise UnknownGitHubRelease(message=f'AdapterRelease ID not found. {e=}')
+            raise GitHubAdapterError(message=f'Release ID not found. {e=}')
 
     def publishRelease(self, repositorySlug: RepositorySlug, releaseTitle: ReleaseTitle):
 

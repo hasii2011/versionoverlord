@@ -8,7 +8,6 @@ from click import secho
 from semantic_version import Version as SemanticVersion
 
 from versionoverlord.Common import AdvancedSlugs
-from versionoverlord.Common import ENV_GH_TOKEN
 from versionoverlord.Common import SlugVersion
 from versionoverlord.Common import SlugVersions
 
@@ -16,8 +15,7 @@ from versionoverlord.DisplayVersions import DisplayVersions
 
 from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 
-from versionoverlord.githubadapter.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
-from versionoverlord.githubadapter.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
+from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
 
 
 class SlugHandler:
@@ -42,9 +40,8 @@ class SlugHandler:
             else:
                 displayVersions: DisplayVersions = DisplayVersions()
                 displayVersions.displaySlugs(slugVersions=slugVersions)
-        except NoGitHubAccessTokenException:
-            raise ClickException(f'Your must provide a GitHub access token via the environment variable `{ENV_GH_TOKEN}`')
-        except UnknownGitHubRepositoryException as e:
-            raise ClickException(f'Unknown GitHub Repository: `{e.repositorySlug}`')
+        except GitHubAdapterError as e:
+            raise ClickException(message=e.message)
+
         except (ValueError, Exception) as e:
             print(f'{e}')

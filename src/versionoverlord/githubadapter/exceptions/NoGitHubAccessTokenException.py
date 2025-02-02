@@ -1,3 +1,0 @@
-
-class NoGitHubAccessTokenException(Exception):
-    pass

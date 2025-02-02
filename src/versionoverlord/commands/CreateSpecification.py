@@ -20,7 +20,7 @@ from versionoverlord.Common import setUpLogging
 from versionoverlord.FileNameToSlugs import FileNameToSlugs
 from versionoverlord.TemplateHandler import TemplateHandler
 
-from versionoverlord.githubadapter.exceptions.NoGitHubAccessTokenException import NoGitHubAccessTokenException
+from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
 
 
 # noinspection SpellCheckingInspection
@@ -57,8 +57,8 @@ def createSpecification(slugs: CLISlugs, input_file: str):
                 handler:         TemplateHandler = TemplateHandler(advancedSlugs=fileSlugs)
 
                 handler.createSpecification()
-    except NoGitHubAccessTokenException:
-        raise ClickException(f'No GitHub token specified in `{ENV_GH_TOKEN}`')
+    except GitHubAdapterError as e:
+        raise ClickException(message=e.message)
 
 
 if __name__ == "__main__":

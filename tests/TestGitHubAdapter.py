@@ -2,6 +2,8 @@
 from unittest import TestSuite
 from unittest import main as unitTestMain
 
+from time import sleep as takeANap
+
 from semantic_version import Version as SemanticVersion
 
 from tests.TestBase import TestBase
@@ -13,7 +15,6 @@ from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterMilestone
 from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterRelease
 
 from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
-from versionoverlord.githubadapter.exceptions.UnknownGitHubRelease import UnknownGitHubRelease
 
 TEST_SLUG:        RepositorySlug  = RepositorySlug('hasii2011/TestRepository')
 BOGUS_RELEASE_ID: int             = 6666
@@ -79,16 +80,20 @@ class TestGitHubAdapter(TestBase):
     def testDeleteReleaseFail(self):
 
         gitHubAdapter: GitHubAdapter = GitHubAdapter()
-        self.assertRaises(UnknownGitHubRelease, lambda: gitHubAdapter.deleteRelease(repositorySlug=TEST_SLUG, releaseId=BOGUS_RELEASE_ID))
+        self.assertRaises(GitHubAdapterError, lambda: gitHubAdapter.deleteRelease(repositorySlug=TEST_SLUG, releaseId=BOGUS_RELEASE_ID))
 
     def testPublishRelease(self):
+        """
+        Put small delays because these sometime fail
+        """
 
         gitHubAdapter: GitHubAdapter = GitHubAdapter()
 
         release: AdapterRelease = gitHubAdapter.createDraftRelease(repositorySlug=TEST_SLUG, tag=TEST_TAG, message='')
 
+        takeANap(1)
         gitHubAdapter.publishRelease(repositorySlug=TEST_SLUG, releaseTitle=release.title)
-
+        takeANap(1)
         # cleanup
         gitHubAdapter.deleteRelease(repositorySlug=TEST_SLUG, releaseId=release.id)
 
