@@ -21,9 +21,10 @@ classifiers = [
 ]
 
 dependencies = [
+  'codeallybasic>=1.10.0',
   'PyGithub>=2.5.0',
-  'click~=8.1.7',
-  'semantic-version==2.10.0',
+  'click>=8.1.7',
+  'semantic-version>=2.10.0',
 ]
 
 [project.optional-dependencies]
@@ -32,7 +33,6 @@ test = [
     'mypy-extensions==1.0.0',
     'types-Deprecated==1.2.9.20240311',
     'html-testRunner~=1.2.1',
-    'codeallybasic == 1.8.0',
 ]
 
 deploy = [

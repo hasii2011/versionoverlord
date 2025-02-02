@@ -1,3 +1,4 @@
+
 from typing import cast
 
 from logging import Logger
@@ -6,6 +7,8 @@ from logging import getLogger
 from collections import Counter
 
 from os import environ as osEnvironment
+
+from re import sub as regExSub
 
 from datetime import date
 from datetime import timedelta
@@ -20,6 +23,8 @@ from github.Repository import Repository
 from github.Milestone import Milestone
 
 from semantic_version import Version as SemanticVersion
+
+from codeallybasic.Common import fixURL
 
 from versionoverlord.Common import ENV_GH_TOKEN
 
@@ -36,9 +41,9 @@ from versionoverlord.githubadapter.exceptions.NoGitHubAccessTokenException impor
 from versionoverlord.githubadapter.exceptions.UnknownGitHubRelease import UnknownGitHubRelease
 from versionoverlord.githubadapter.exceptions.UnknownGitHubRepositoryException import UnknownGitHubRepositoryException
 
-DEFAULT_RELEASE_STUB_MESSAGE:     str = 'See issues associated with this [milestone](url)'
 DEFAULT_MILESTONE_DUE_DATE_DELTA: int = 7
 DEFAULT_MILESTONE_STATE:          str = 'open'
+DEFAULT_MILESTONE_DESCRIPTION:    str = 'See the associated issues'
 
 
 class GitHubAdapter:
@@ -85,12 +90,13 @@ class GitHubAdapter:
 
         return latestReleaseVersion
 
-    def createDraftRelease(self, repositorySlug: RepositorySlug, tag: SemanticVersion) -> AdapterRelease:
+    def createDraftRelease(self, repositorySlug: RepositorySlug, tag: SemanticVersion, message: str) -> AdapterRelease:
         """
 
         Args:
             repositorySlug:   A GitHub repository slug
             tag:              The tag number
+            message:          Text to put into release
 
         Returns:  The GitHub AdapterRelease Id
 
@@ -100,7 +106,12 @@ class GitHubAdapter:
             self.logger.debug(f'{repo.full_name=}')
             releaseName: ReleaseName = ReleaseName(f'AdapterRelease {tag}')
 
-            gitRelease: GitRelease = repo.create_git_release(tag=str(tag), name=releaseName, message=DEFAULT_RELEASE_STUB_MESSAGE, draft=True, prerelease=False, generate_release_notes=False)
+            gitRelease: GitRelease = repo.create_git_release(tag=str(tag),
+                                                             name=releaseName,
+                                                             message=message,
+                                                             draft=True,
+                                                             prerelease=False,
+                                                             generate_release_notes=False)
 
         except UnknownObjectException:
             raise UnknownGitHubRepositoryException(repositorySlug=repositorySlug)
@@ -123,14 +134,20 @@ class GitHubAdapter:
 
             milestone: Milestone = repo.create_milestone(title=title,
                                                          state=DEFAULT_MILESTONE_STATE,
-                                                         description='',
+                                                         description=DEFAULT_MILESTONE_DESCRIPTION,
                                                          due_on=today)
+            #
+            # Milestone does not provide the HTML URL;  I have to coerce one
+            #
+            fixedURL:   str = fixURL(milestone.url)
+            coercedURL: str = regExSub(pattern=r'milestones', repl='milestone', string=fixedURL)
             adapterMilestone: AdapterMilestone = AdapterMilestone(
                 releaseNumber=ReleaseNumber(milestone.number),
                 title=milestone.title,
                 state=milestone.state,
                 description=milestone.description,
-                dueDate=milestone.due_on
+                dueDate=milestone.due_on,
+                milestoneUrl=coercedURL,
             )
             return adapterMilestone
 

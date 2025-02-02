@@ -23,6 +23,7 @@ class AdapterMilestone:
     dueDate:     date | None = date.today()
 
     releaseNumber: ReleaseNumber = ReleaseNumber(0)
+    milestoneUrl:  str           = ''
 
 
 @dataclass

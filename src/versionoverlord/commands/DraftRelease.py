@@ -5,6 +5,7 @@ from click import command
 from click import version_option
 from click import option
 from click import secho
+from click import ClickException
 
 from semantic_version import Version as SemanticVersion
 
@@ -15,18 +16,24 @@ from versionoverlord.Common import RepositorySlug
 from versionoverlord.Common import setUpLogging
 from versionoverlord.githubadapter.GitHubAdapter import GitHubAdapter
 from versionoverlord.commands.TagType import TagType
+from versionoverlord.githubadapter.GitHubAdapterTypes import AdapterMilestone
+from versionoverlord.githubadapter.exceptions.GitHubAdapterError import GitHubAdapterError
+
+RELEASE_STUB_MESSAGE_TEMPLATE: str = 'See issues associated with this [milestone]({})'
 
 
 @command(epilog=EPILOG)
 @version_option(version=f'{__version__}', message='%(prog)s version %(version)s')
 @option('--slug',      '-s', required=True,                 help='GitHub slug')
 @option('--tag',       '-t', required=True, type=TagType(), help='Tag for release as a semantic version')
-def draftRelease(slug: RepositorySlug, tag: TagType):
+@option('--milestone', '-m', is_flag=True,                  help='Create associated milestone')
+def draftRelease(slug: RepositorySlug, tag: TagType, milestone: bool):
     """
     \b
     This command creates draft release in the appropriate repository.
     You must provide a repository slug.
     The tag is a string that complies with the Semantic Version specification
+    Specify the milestone if you want to created an associated milestone
 
     It uses the following environment variables:
 
@@ -35,11 +42,20 @@ def draftRelease(slug: RepositorySlug, tag: TagType):
         PROJECTS_BASE – The local directory where the python projects are based
         PROJECT       – The name of the project;  It should be a directory name
     """
-    secho(f'{slug=} {tag}')
+    secho(f'{slug=} {tag=} {milestone=}')
 
     gitHubAdapter: GitHubAdapter = GitHubAdapter()
+    try:
+        milestoneUrl: str = ''
+        if milestone is True:
+            milestoneTitle: str = f'Release {tag}'
+            adapterMilestone: AdapterMilestone = gitHubAdapter.createMilestone(repositorySlug=slug, title=milestoneTitle)
+            milestoneUrl = adapterMilestone.milestoneUrl
 
-    gitHubAdapter.createDraftRelease(repositorySlug=slug, tag=cast(SemanticVersion, tag))
+        message: str = RELEASE_STUB_MESSAGE_TEMPLATE.format(milestoneUrl)
+        gitHubAdapter.createDraftRelease(repositorySlug=slug, tag=cast(SemanticVersion, tag), message=message)
+    except GitHubAdapterError as e:
+        raise ClickException(message=e.message)
 
 
 if __name__ == "__main__":
@@ -51,4 +67,4 @@ if __name__ == "__main__":
 
     # draftRelease(['--version'])
     # draftRelease(['--help'])
-    draftRelease(['--slug', 'hasii2011/TestRepository', '--tag', '10.0.0'])
+    draftRelease(['--slug', 'hasii2011/TestRepository', '--tag', '10.0.0', '--milestone'])
