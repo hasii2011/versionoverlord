@@ -88,9 +88,18 @@ class UpdateDependencies:
                 packageName: PackageName = PackageName(row['PackageName'])
                 updatePackage: UpdatePackage = UpdatePackage()
                 updatePackage.packageName = packageName
-                updatePackage.oldVersion = SemanticVersion(row['OldVersion'])
-                updatePackage.newVersion = SemanticVersion(row['NewVersion'])
-                packages.append(updatePackage)
+                try:
+                    updatePackage.oldVersion = SemanticVersion(row['OldVersion'])
+                    updatePackage.newVersion = SemanticVersion(row['NewVersion'])
+                    packages.append(updatePackage)
+                except ValueError as ve:
+                    eMsg: str = (
+                        f'Package: `{packageName}` '
+                        'has invalid semantic version: '
+                        '{row["OldVersion"]} or {row["NewVersion"]} ignored '
+                        'not updated'
+                    )
+                    secho(eMsg, reverse=True)
 
         return packages
 

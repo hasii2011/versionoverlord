@@ -17,8 +17,10 @@ from pathlib import Path
 from tomllib import load as tomlLoad
 
 from click import command
+from click import option
 from click import version_option
 from click import secho
+from click import prompt
 from click import pass_context
 from click import ClickException
 
@@ -47,8 +49,13 @@ StringDict     = NewType('StringDict', Dict[str, str])
 TomlDict       = Dict[str, Any]
 ProjectDict    = NewType('ProjectDict',    Dict[str, Any])
 DependencyList = NewType('DependencyList', StringList)
+OptionalDict   = NewType('OptionalDict',   Dict[str, DependencyList])
 
 OldPackageDict = NewType('OldPackageDict', Dict[str, str])
+
+PYPROJECT_TOML_PROJECT_KEY:             str = 'project'
+PYPROJECT_TOML_DEPENDENCY_KEY:          str = 'dependencies'
+PYPROJECT_TOML_OPTIONAL_DEPENDENCY_KEY: str = 'optional-dependencies'
 
 
 class PickDependencies(EnvironmentBase):
@@ -67,61 +74,30 @@ class PickDependencies(EnvironmentBase):
         if self._pyProjectTomlFilePath.exists() is False:
             raise ClickException(f'No such file: {self._pyProjectTomlFilePath}.')
 
-    def pickThem(self):
+    def pickThem(self, optional_dependencies: bool):
+
         with open(self._pyProjectTomlFilePath, "rb") as f:
 
             data:         TomlDict       = tomlLoad(f)
-            project:      ProjectDict    = data['project']
-            dependencies: DependencyList = project['dependencies']
+            project:      ProjectDict    = data[PYPROJECT_TOML_PROJECT_KEY]
+
+            if optional_dependencies is False:
+                dependencies: DependencyList = project[PYPROJECT_TOML_DEPENDENCY_KEY]
+            else:
+                optionalDict: OptionalDict = project[PYPROJECT_TOML_OPTIONAL_DEPENDENCY_KEY]
+                projectKeys    = optionalDict.keys()
+
+                secho('Found the following optional dependencies', reverse=True, overline=True)
+                for projectKey in projectKeys:
+                    secho(f'{projectKey}')
+
+                depToUpdate: str = prompt('Enter one of the above dependencies that you wish to update', type=str)
+                if depToUpdate not in projectKeys:
+                    raise ClickException(f'That dependency is not valid.')
+                dependencies = optionalDict[depToUpdate]
 
         self.logger.debug(f'{dependencies}')
-
-        dependenciesStr: str = self._makeEditString(dependencies=dependencies)
-
-        secho('Remove any dependencies in the editor that you do not wish to update.')
-        if clickConfirm('Do you want to continue?', abort=True):
-            picked: str | None = clickEdit(dependenciesStr, require_save=False)
-            if picked is None:
-                secho('No selections.  bye bye')
-            else:
-                oldPkgDict: OldPackageDict = self._makeOldPackageDictionary(dependencies=dependencies)
-
-                self._writeTheSpecificationFile(pickedPackages=picked, oldPkgDict=oldPkgDict)
-
-    def _makeOldPackageDictionary(self, dependencies: DependencyList) -> OldPackageDict:
-        """
-
-        Args:
-            dependencies:  The dependency list from pyproject.toml
-
-        Returns:  A dictionary that maps a package name to its old versio
-        """
-
-        pkgDict: OldPackageDict = OldPackageDict({})
-        for dep in dependencies:
-            delimiter: str       = self._getDelimiter(dep)
-            splitDep:  List[str] = dep.split(delimiter)
-            pkgDict[splitDep[0]] = splitDep[1]
-
-        return pkgDict
-
-    def _makeEditString(self, dependencies: DependencyList) -> str:
-        """
-        Turn the pyproject.toml list into string with EOL characters that
-        the developer can edit in order to pick the dependencies to update
-
-        Args:
-            dependencies: The dependency list from pyproject.toml
-
-        Returns:  A multi-line string that can be displayed in an editor
-        """
-        dependenciesStr: str = ''
-        for dep in dependencies:
-            delimiter: str       = self._getDelimiter(dep)
-            splitDep:  List[str] = dep.split(delimiter)
-            dependenciesStr = f'{dependenciesStr}{splitDep[0]}{osLineSep}'
-
-        return dependenciesStr
+        self._pickDependencies(dependencies=dependencies)
 
     def _getDelimiter(self, dependency: str) -> str:
 
@@ -182,14 +158,70 @@ class PickDependencies(EnvironmentBase):
                     specificationLine: str = f'{package},{oldPkgDict[package]},{newVersion}{osLineSep}'
                     fd.write(specificationLine)
 
+    def _pickDependencies(self, dependencies: DependencyList):
+        """
+
+        Args:
+            dependencies:  A dependency list
+
+        """
+        dependenciesStr: str = self._makeEditString(dependencies=dependencies)
+
+        secho('Remove any dependencies in the editor that you do not wish to update.')
+        if clickConfirm('Do you want to continue?', abort=True):
+            picked: str | None = clickEdit(dependenciesStr, require_save=False)
+            if picked is None:
+                secho('No selections.  bye bye')
+            else:
+                oldPkgDict: OldPackageDict = self._makeOldPackageDictionary(dependencies=dependencies)
+
+                self._writeTheSpecificationFile(pickedPackages=picked, oldPkgDict=oldPkgDict)
+
+    def _makeEditString(self, dependencies: DependencyList) -> str:
+        """
+        Turn the pyproject.toml list into string with EOL characters that
+        the developer can edit in order to pick the dependencies to update
+
+        Args:
+            dependencies: The dependency list from pyproject.toml
+
+        Returns:  A multi-line string that can be displayed in an editor
+        """
+        dependenciesStr: str = ''
+        for dep in dependencies:
+            delimiter: str       = self._getDelimiter(dep)
+            splitDep:  List[str] = dep.split(delimiter)
+            dependenciesStr = f'{dependenciesStr}{splitDep[0]}{osLineSep}'
+
+        return dependenciesStr
+
+    def _makeOldPackageDictionary(self, dependencies: DependencyList) -> OldPackageDict:
+        """
+
+        Args:
+            dependencies:  The dependency list from pyproject.toml
+
+        Returns:  A dictionary that maps a package name to its old versio
+        """
+
+        pkgDict: OldPackageDict = OldPackageDict({})
+        for dep in dependencies:
+            delimiter: str       = self._getDelimiter(dep)
+            splitDep:  List[str] = dep.split(delimiter)
+            pkgDict[splitDep[0]] = splitDep[1]
+
+        return pkgDict
+
 
 @command(epilog=EPILOG)
 @version_option(version=f'{__version__}', message='%(prog)s version %(version)s')
+@option('--optional-dependencies', '-o', is_flag=True,  help='Update optional dependencies')
 @pass_context
-def pickDependencies(ctx):
+def pickDependencies(ctx, optional_dependencies: bool):
     """
     \b
-    * Reads pyproject.toml and picks the dependencies from the `dependencies` section.
+    * Reads pyproject.toml and picks the dependencies from the `dependencies` section or optionally
+    one of the optional dependencies
     * It displays them in an editor.
     * The developer removes dependencies he/she does not want to update.
     * This command creates the dependency csv file in the same format as the `createSpecification` command.
@@ -209,9 +241,8 @@ def pickDependencies(ctx):
         raise ClickException(f'{CURL_CMD} not installed')
 
     pd: PickDependencies = PickDependencies()
-    pd.pickThem()
+    pd.pickThem(optional_dependencies=optional_dependencies)
 
-    ctx.forward(updateDependencies)
     ctx.invoke(updateDependencies)
 
 
@@ -221,4 +252,4 @@ if __name__ == "__main__":
 
     # pickDependencies(['--version'])
     # pickDependencies(['--help'])
-    pickDependencies([])
+    pickDependencies(['--optional-dependencies'])
