@@ -13,8 +13,6 @@ import csv
 from pathlib import Path as PyPath
 
 from click import Path
-from click import argument
-from click import clear
 from click import command
 from click import echo
 from click import option
@@ -29,6 +27,7 @@ from versionoverlord.Common import EPILOG
 from versionoverlord.Common import PackageName
 from versionoverlord.Common import Packages
 from versionoverlord.Common import UpdatePackage
+from versionoverlord.Common import runCommand
 from versionoverlord.Common import setUpLogging
 from versionoverlord.IHandler import IHandler
 
@@ -52,9 +51,14 @@ HandlerSpecifications = NewType('HandlerSpecifications', List[HandlerSpecificati
 
 class UpdateDependencies:
     def __init__(self, specification: PyPath):
+        """
+
+        Args:
+            specification:  Path to the CSV file
+        """
         self.logger: Logger = getLogger(__name__)
 
-        self._packages: Packages = self._buildPackagesToUpdate(specification=specification)
+        self._packages: Packages = self._buildAPackageList(specification=specification)
 
         self._handlers: HandlerSpecifications = HandlerSpecifications([
             HandlerSpecification('setup.py',         HandleSetupPy(packages=self._packages)),
@@ -62,6 +66,10 @@ class UpdateDependencies:
             HandlerSpecification('requirements.txt', HandleRequirementsTxt(packages=self._packages)),
             HandlerSpecification('pyproject.toml',   HandlePyProjectToml(packages=self._packages))
         ])
+
+    @property
+    def packages(self) -> Packages:
+        return self._packages
 
     def update(self):
 
@@ -77,7 +85,15 @@ class UpdateDependencies:
             else:
                 echo(f'No {name}')
 
-    def _buildPackagesToUpdate(self, specification: PyPath) -> Packages:
+    def _buildAPackageList(self, specification: PyPath) -> Packages:
+        """
+        Transforms the CSV file to a list of Package objects
+
+        Args:
+            specification:  The path to the csv file
+
+        Returns:  A list of packages
+        """
         with open(specification) as csvfile:
             csvreader = csv.DictReader(csvfile, delimiter=',', quotechar='|')
             packages: Packages = Packages([])
@@ -110,28 +126,37 @@ class UpdateDependencies:
         type=Path(exists=True, path_type=PyPath),
         required=False,
         help='Update the project using a specification file')
-@argument('projectsBase', envvar='PROJECTS_BASE')
-@argument('project', envvar='PROJECT')
-def updateDependencies(projectsbase: str, project: str, specification: PyPath):
+@option('--update-packages', '-u', is_flag=True,  help='Run pip install on the packages')
+def updateDependencies(specification: PyPath, update_packages: bool):
     """
     \b
-    This command uses the .csv file created by createSpec
+    This command uses the .csv file created by createSpec.  It updates existing
+    files that have dependencies in them.  It can optionally run
+    `pip install --upgrade ` for each package
+
+    \b
+        - setup.py
+        - config.yml
+        - requirements.txt
+        - pyproject.toml
 
     It uses the following environment variables:
 
     \b
-        GH_TOKEN         - A personal GitHub access token necessary to read repository release information
+        GH_TOKEN       - A personal GitHub access token necessary to read repository release information
         PROJECTS_BASE -  The local directory where the python projects are based
         PROJECT       -  The name of the project;  It should be a directory name
     """
-    clear()
-    secho(f'The project`s base directory {projectsbase}', color=True, reverse=True)
-    secho(f'Project to update: {project}', color=True, reverse=True)
-    secho('')
     setUpLogging()
     vUpdate: UpdateDependencies = UpdateDependencies(specification=specification)
     vUpdate.update()
+    if update_packages is True:
+        packages: Packages = vUpdate.packages
+        for p in packages:
+            package: UpdatePackage = cast(UpdatePackage, p)
+            secho(f'Updating: {package.packageName} to {package.newVersion}', reverse=True)
+            runCommand(f'pip install --upgrade {package.packageName}')
 
 
 if __name__ == "__main__":
-    updateDependencies()
+    updateDependencies(['--help'])

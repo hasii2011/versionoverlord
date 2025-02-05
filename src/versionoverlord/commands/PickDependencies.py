@@ -137,27 +137,6 @@ class PickDependencies(EnvironmentBase):
 
         return versionDescription
 
-    def _writeTheSpecificationFile(self, pickedPackages: str, oldPkgDict: OldPackageDict):
-        """
-
-        Args:
-            pickedPackages:   The list of packages picked by developer
-            oldPkgDict:       A dictionary that has the old versions
-        """
-
-        packageList:                List[str] = pickedPackages.split(osLineSep)
-        versionUpdateSpecification: Path      = Path(SPECIFICATION_FILE)
-
-        with versionUpdateSpecification.open(mode='w') as fd:
-            fd.write(f'PackageName,OldVersion,NewVersion{osLineSep}')
-
-            for package in packageList:
-                if len(package) > 0:
-                    newVersion: str = self._getLatestVersion(packageName=package)
-
-                    specificationLine: str = f'{package},{oldPkgDict[package]},{newVersion}{osLineSep}'
-                    fd.write(specificationLine)
-
     def _pickDependencies(self, dependencies: DependencyList):
         """
 
@@ -211,6 +190,27 @@ class PickDependencies(EnvironmentBase):
             pkgDict[splitDep[0]] = splitDep[1]
 
         return pkgDict
+
+    def _writeTheSpecificationFile(self, pickedPackages: str, oldPkgDict: OldPackageDict):
+        """
+
+        Args:
+            pickedPackages:   The list of packages picked by developer
+            oldPkgDict:       A dictionary that has the old versions
+        """
+
+        packageList:                List[str] = pickedPackages.split(osLineSep)
+        versionUpdateSpecification: Path      = Path(SPECIFICATION_FILE)
+
+        with versionUpdateSpecification.open(mode='w') as fd:
+            fd.write(f'PackageName,OldVersion,NewVersion{osLineSep}')
+
+            for package in packageList:
+                if len(package) > 0:
+                    newVersion: str = self._getLatestVersion(packageName=package)
+
+                    specificationLine: str = f'{package},{oldPkgDict[package]},{newVersion}{osLineSep}'
+                    fd.write(specificationLine)
 
 
 @command(epilog=EPILOG)
