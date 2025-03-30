@@ -62,7 +62,7 @@ VersionOverlord means to handle this problem by providing a set of Python comman
     * This command updates the dependency csv file in the same format as the `createSpecification` command.
     * It then invokes the `updateDependencies` command to update the files.  Unlike `createSpecification`, pickDependencies queries pypi to get the module versions
     
-
+* publishRelease -- Publishes a previously created draft release
 
 
 

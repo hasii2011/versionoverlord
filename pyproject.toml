@@ -72,5 +72,5 @@ vo = "versionoverlord.commands.VersionOverlord:versionOverlord"
 dr = 'versionoverlord.commands.DraftRelease:draftRelease'
 bv = 'versionoverlord.commands.BumpVersion:bumpVersion'
 pd = 'versionoverlord.commands.PickDependencies:pickDependencies'
-pr = 'versionoverlord.commands.PublishRelease:publishRelease'
+pub = 'versionoverlord.commands.PublishRelease:publishRelease'
 

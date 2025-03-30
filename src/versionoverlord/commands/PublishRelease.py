@@ -22,6 +22,10 @@ from versionoverlord.githubadapter.GitHubAdapterError import GitHubAdapterError
 def publishRelease(slug: RepositorySlug, release_title: ReleaseTitle):
     """
     \b
+    The short name is 'pub' instead of 'pr' so as not to conflict with the *nix command
+    for print files
+
+    \b
     It uses the following environment variables:
 
     \b
