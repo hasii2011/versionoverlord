@@ -8,8 +8,7 @@ from typing import Tuple
 import logging
 import logging.config
 
-from importlib.abc import Traversable
-
+from importlib.resources.abc import Traversable
 from importlib.resources import files
 
 from platform import platform as osPlatform
