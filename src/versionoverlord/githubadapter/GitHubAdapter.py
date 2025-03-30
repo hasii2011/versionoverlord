@@ -21,6 +21,7 @@ from github.GitRelease import GitRelease
 from github.PaginatedList import PaginatedList
 from github.Repository import Repository
 from github.Milestone import Milestone
+from github.Auth import Token
 
 from semantic_version import Version as SemanticVersion
 
@@ -56,7 +57,7 @@ class GitHubAdapter:
         except KeyError:
             raise GitHubAdapterError(message=f'No GitHub token specified in `{ENV_GH_TOKEN}`')
 
-        self._github: Github = Github(gitHubToken)
+        self._github: Github = Github(auth=Token(gitHubToken))
 
     def getLatestVersionNumber(self, repositorySlug: str) -> SemanticVersion:
 
