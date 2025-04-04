@@ -38,6 +38,7 @@ The above diagram illustrates how low-level dependencies ripple up the dependenc
 
 Additionally, projects may specify dependencies in different places.  Examples of the dependency locations are
 
+* pyproject.toml
 * setup.py
 * requirements.txt
 * .circleci/config.yml
@@ -141,6 +142,10 @@ correctly updates the following
 
 ```
 pip install versionoverlord
+
+or
+
+pipx install versionoverlord
 ```
 ___
 

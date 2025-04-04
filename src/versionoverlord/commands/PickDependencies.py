@@ -216,8 +216,9 @@ class PickDependencies(EnvironmentBase):
 @command(epilog=EPILOG)
 @version_option(version=f'{__version__}', message='%(prog)s version %(version)s')
 @option('--optional-dependencies', '-o', is_flag=True,  help='Update optional dependencies')
+@option('--update-packages',       '-u', is_flag=True,  help='Run pip install on the packages')
 @pass_context
-def pickDependencies(ctx, optional_dependencies: bool):
+def pickDependencies(ctx, optional_dependencies: bool, update_packages: bool):
     """
     \b
     * Reads pyproject.toml and picks the dependencies from the `dependencies` section or optionally
@@ -243,7 +244,10 @@ def pickDependencies(ctx, optional_dependencies: bool):
     pd: PickDependencies = PickDependencies()
     pd.pickThem(optional_dependencies=optional_dependencies)
 
-    ctx.invoke(updateDependencies)
+    if update_packages is True:
+        ctx.invoke(updateDependencies(['--update-packages']))
+    else:
+        ctx.invoke(updateDependencies())
 
 
 if __name__ == "__main__":
