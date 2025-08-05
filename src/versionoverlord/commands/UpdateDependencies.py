@@ -38,6 +38,7 @@ from versionoverlord.circleci.HandleCircleCI import HandleCircleCI
 from versionoverlord.pyprojecttoml.HandlePyProjectToml import HandlePyProjectToml
 
 from versionoverlord.requirements.HandleRequirementsTxt import HandleRequirementsTxt
+from versionoverlord.travisci.HandleTravisCI import HandleTravisCI
 
 
 @dataclass
@@ -64,7 +65,8 @@ class UpdateDependencies:
             HandlerSpecification('setup.py',         HandleSetupPy(packages=self._packages)),
             HandlerSpecification('config.yml',       HandleCircleCI(packages=self._packages)),
             HandlerSpecification('requirements.txt', HandleRequirementsTxt(packages=self._packages)),
-            HandlerSpecification('pyproject.toml',   HandlePyProjectToml(packages=self._packages))
+            HandlerSpecification('pyproject.toml',   HandlePyProjectToml(packages=self._packages)),
+            HandlerSpecification('.travis.yml',      HandleTravisCI(packages=self._packages))
         ])
 
     @property
@@ -79,6 +81,7 @@ class UpdateDependencies:
             handlerSpecification: HandlerSpecification = cast(HandlerSpecification, spec)
             handler:              IHandler             = handlerSpecification.handler
             name:                 str                  = handlerSpecification.fileName
+            # noinspection PySimplifyBooleanCheck
             if handler.configurationExists is True:
                 # echo(f'Update {name}', color=True)    # This could be misleading if there were no changes
                 handler.update()
@@ -108,7 +111,7 @@ class UpdateDependencies:
                     updatePackage.oldVersion = SemanticVersion(row['OldVersion'])
                     updatePackage.newVersion = SemanticVersion(row['NewVersion'])
                     packages.append(updatePackage)
-                except ValueError as ve:
+                except ValueError:
                     eMsg: str = (
                         f'Package: `{packageName}` '
                         'has invalid semantic version: '
@@ -150,6 +153,8 @@ def updateDependencies(specification: PyPath, update_packages: bool):
     setUpLogging()
     vUpdate: UpdateDependencies = UpdateDependencies(specification=specification)
     vUpdate.update()
+
+    # noinspection PySimplifyBooleanCheck
     if update_packages is True:
         packages: Packages = vUpdate.packages
         for p in packages:

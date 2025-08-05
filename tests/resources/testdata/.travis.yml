@@ -1,0 +1,28 @@
+
+notifications:
+  email:
+    recipients:
+      - humberto.a.sanchez.ii@gmail.com
+    on_success: change # default: change
+    on_failure: always # default: always
+
+language: python
+
+dist: jammy
+
+cache: pip
+
+python:
+  - "3.12"
+
+# command to install dependencies
+install:
+  - pip install ogl==0.70.20
+  - pip install untangle==1.2.1
+  - pip install .
+  - pip install .[test]
+
+# command to run tests
+script:
+  - pip install buildlackey
+  - unittests

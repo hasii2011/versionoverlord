@@ -48,10 +48,10 @@ class TestHandleCircleCI(TestBase):
         self._destinationYamFilePath: Path = self._circleCIPath / Path(CIRCLE_CI_YAML)
 
     def tearDown(self):
+        super().tearDown()
+        # noinspection PySimplifyBooleanCheck
         if TestHandleCircleCI.keep is False:
-            self._circleCIPath.rmdir()
-            self._tmpProjectDir.rmdir()
-            self._tmpProjectsBase.rmdir()
+            TestBase.deleteDirectory(self._tmpProjectsBase)
 
     def testUpdate(self):
 
@@ -71,6 +71,7 @@ class TestHandleCircleCI(TestBase):
         self.assertEqual(0, status, 'config.yml not correctly updated')
 
         # cleanup
+        # noinspection PySimplifyBooleanCheck
         if TestHandleCircleCI.keep is False:
             self._destinationYamFilePath.unlink()
 

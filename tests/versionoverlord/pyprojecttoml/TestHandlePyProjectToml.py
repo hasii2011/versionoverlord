@@ -5,10 +5,10 @@ from pathlib import Path
 
 from shutil import copy as shellCopy
 
+from semantic_version import Version as SemanticVersion
+
 from unittest import TestSuite
 from unittest import main as unitTestMain
-
-from codeallybasic.SemanticVersion import SemanticVersion
 
 from tests.TestBase import TestBase
 from versionoverlord.Common import ENV_PROJECT

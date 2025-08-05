@@ -5,7 +5,8 @@ from pathlib import Path
 
 from tempfile import gettempdir
 
-from codeallybasic.SemanticVersion import SemanticVersion
+from semantic_version import Version as SemanticVersion
+
 from codeallybasic.UnitTestBase import UnitTestBase
 
 from versionoverlord.Common import PackageName
@@ -73,3 +74,13 @@ class TestBase(UnitTestBase):
         status: int = osSystem(f'{TestBase.EXTERNAL_DIFF} {goldenFileName} {generatedFileName.__str__()}')
 
         return status
+
+    @classmethod
+    def deleteDirectory(cls, path: Path):
+
+        for item in path.iterdir():
+            if item.is_dir():
+                cls.deleteDirectory(item)
+            else:
+                item.unlink()
+        path.rmdir()  # Remove the directory itself

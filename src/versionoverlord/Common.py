@@ -51,6 +51,8 @@ INSTALL_REQUIRES: str = 'install_requires'
 CIRCLE_CI_DIRECTORY: str = '.circleci'
 CIRCLE_CI_YAML:      str = 'config.yml'
 
+TRAVIS_CI_YAML:      str = '.travis.yml'
+
 SPECIFICATION_FILE:           str = 'versionSpecification.csv'
 RESOURCES_PACKAGE_NAME:       str = 'versionoverlord.resources'
 JSON_LOGGING_CONFIG_FILENAME: str = "loggingConfiguration.json"

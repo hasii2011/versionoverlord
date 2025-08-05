@@ -46,6 +46,7 @@ def createSpecification(slugs: CLISlugs, input_file: str):
             templateHandler.createSpecification()
         elif input_file is not None:
             fqFileName: Path = Path(input_file)
+            # noinspection PySimplifyBooleanCheck
             if fqFileName.exists() is False:
                 secho('                          ', fg='red', bg='black', bold=True)
                 secho('Input file does not exist ', fg='red', bg='black', bold=True)

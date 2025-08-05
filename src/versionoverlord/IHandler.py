@@ -52,9 +52,7 @@ class IHandler(ABC, EnvironmentBase):
         """
         Updates a project configuration file
         """
-        pyProjectToml = configurationFilePath
-
-        with open(pyProjectToml, 'rt') as inputFd:
+        with open(configurationFilePath, 'rt') as inputFd:
             content: str = inputFd.read()
 
         assert inputFd.closed, 'Should be auto closed'
@@ -64,9 +62,9 @@ class IHandler(ABC, EnvironmentBase):
         self.baseLogger.info(f'{updatedContent=}')
 
         if updatedContent == content:
-            self.baseLogger.info(f'No changes in: {pyProjectToml}')
+            self.baseLogger.info(f'No changes in: {configurationFilePath}')
         else:
-            with open(pyProjectToml, 'wt') as outputFd:
+            with open(configurationFilePath, 'wt') as outputFd:
                 outputFd.write(updatedContent)
 
             assert inputFd.closed, 'Should be auto closed'
