@@ -2,65 +2,33 @@
 from logging import Logger
 from logging import getLogger
 
-
-from curses import initscr
-from curses import noecho
-from curses import cbreak
-from curses import endwin
-from curses import nocbreak
-from curses import echo
-
-from _curses import A_UNDERLINE
+from click import secho
 
 from versionoverlord.Common import SlugVersions
 
 PACKAGE_VERSION_GAP: int = 2
-TITLE_LINE_GAP:      int = 2
 
 
 class DisplayVersions:
     def __init__(self):
         self.logger: Logger = getLogger(__name__)
 
-        self._stdScreen = initscr()
-
     def displaySlugs(self, slugVersions: SlugVersions):
 
-        self._initializeCurses()
+        longestSlug:    int = self._getLongestSlug(slugVersions) + PACKAGE_VERSION_GAP
+        slug:           str = 'Slug'
+        titleStr:       str = f'{slug:<{longestSlug}}Version'
+        titleSeparator: str = '_' * (longestSlug + len('Version'))
 
-        longest:      int = self._getLongest(slugVersions)
-        lineNumber:   int = 0
-        columnNumber: int = 0
-        packageColumnNumber: int = longest + PACKAGE_VERSION_GAP
-
-        self._stdScreen.addstr(lineNumber, columnNumber,        'Slug',    A_UNDERLINE)
-        self._stdScreen.addstr(lineNumber, packageColumnNumber, 'Version', A_UNDERLINE)
-
-        lineNumber += TITLE_LINE_GAP
+        secho(f'{titleStr}')
+        secho(f'{titleSeparator}')
         for slugVersion in slugVersions:
 
-            self._stdScreen.addstr(lineNumber, columnNumber,        f'{slugVersion.slug}:')
-            self._stdScreen.addstr(lineNumber, packageColumnNumber, f'{slugVersion.version}')
-            lineNumber += 1
+            secho(f'{slugVersion.slug:<{longestSlug}}{slugVersion.version}')
 
-        self._stdScreen.addstr(lineNumber + 1, columnNumber, 'Press any key to continue...')
-        # noinspection PyUnusedLocal
-        s = self._stdScreen.getch()
+        secho('')
 
-        self._done()
-
-    def _initializeCurses(self):
-        noecho()
-        cbreak()
-        self._stdScreen.keypad(True)
-
-    def _done(self):
-        nocbreak()
-        self._stdScreen.keypad(False)
-        echo()
-        endwin()
-
-    def _getLongest(self, slugVersions: SlugVersions) -> int:
+    def _getLongestSlug(self, slugVersions: SlugVersions) -> int:
         longest: int = 0
         for slugVersion in slugVersions:
             if len(slugVersion.slug) > longest:

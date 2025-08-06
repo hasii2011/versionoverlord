@@ -39,28 +39,27 @@ def querySlugs(slugs: CLISlugs, input_file):
         GH_TOKEN – A personal GitHub access token necessary to read repository
                    release information
     """
-    try:
-        if input_file is None:
-            advancedSlugs: AdvancedSlugs = extractCLISlugs(slugs=slugs)
-            slugHandler:   SlugHandler   = SlugHandler(advancedSlugs=advancedSlugs)
 
-            slugHandler.handleSlugs()
+    if input_file is None:
+        advancedSlugs: AdvancedSlugs = extractCLISlugs(slugs=slugs)
+        slugHandler:   SlugHandler   = SlugHandler(advancedSlugs=advancedSlugs)
+
+        slugHandler.handleSlugs()
+    else:
+        fqFileName: Path = Path(input_file)
+        # noinspection PySimplifyBooleanCheck
+        if fqFileName.exists() is False:
+            secho('                          ', fg='red', bg='black', bold=True)
+            secho('Input file does not exist ', fg='red', bg='black', bold=True)
+            secho('                          ', fg='red', bg='black', bold=True)
         else:
-            fqFileName: Path = Path(input_file)
-            if fqFileName.exists() is False:
-                secho('                          ', fg='red', bg='black', bold=True)
-                secho('Input file does not exist ', fg='red', bg='black', bold=True)
-                secho('                          ', fg='red', bg='black', bold=True)
-            else:
-                fileNameToSlugs: FileNameToSlugs = FileNameToSlugs(path=fqFileName)
-                inputSlugs:      AdvancedSlugs   = fileNameToSlugs.getSlugs()
-                handler:         SlugHandler     = SlugHandler(advancedSlugs=inputSlugs)
-                handler.handleSlugs()
-    except GitHubAdapterError as e:
-        raise ClickException(message=e.message)
+            fileNameToSlugs: FileNameToSlugs = FileNameToSlugs(path=fqFileName)
+            inputSlugs:      AdvancedSlugs   = fileNameToSlugs.getSlugs()
+            handler:         SlugHandler     = SlugHandler(advancedSlugs=inputSlugs)
+            handler.handleSlugs()
 
 
 if __name__ == "__main__":
     setUpLogging()
     # noinspection SpellCheckingInspection
-    querySlugs(['-s', 'hasii2011/pyutmodelv2'])
+    querySlugs(['-s', 'hasii2011/pyutmodelv2', '-s', 'hasii2011/umlshapes'])

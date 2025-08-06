@@ -2,6 +2,8 @@
 from logging import Logger
 from logging import getLogger
 
+from requests.exceptions import ConnectionError
+
 from click import ClickException
 from click import secho
 
@@ -42,6 +44,5 @@ class SlugHandler:
                 displayVersions.displaySlugs(slugVersions=slugVersions)
         except GitHubAdapterError as e:
             raise ClickException(message=e.message)
-
-        except (ValueError, Exception) as e:
-            print(f'{e}')
+        except ConnectionError:
+            raise ClickException('You are not connected to the internet')
