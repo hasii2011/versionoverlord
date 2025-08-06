@@ -12,6 +12,7 @@ from semantic_version import Version as SemanticVersion
 from versionoverlord.Common import AdvancedSlugs
 from versionoverlord.Common import SlugVersion
 from versionoverlord.Common import SlugVersions
+from versionoverlord.Common import NO_INTERNET_CONNECTION_MSG
 
 from versionoverlord.DisplayVersions import DisplayVersions
 
@@ -45,4 +46,4 @@ class SlugHandler:
         except GitHubAdapterError as e:
             raise ClickException(message=e.message)
         except ConnectionError:
-            raise ClickException('You are not connected to the internet')
+            raise ClickException(NO_INTERNET_CONNECTION_MSG)

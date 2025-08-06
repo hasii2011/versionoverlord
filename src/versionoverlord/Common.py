@@ -36,6 +36,8 @@ LINUX_OS_JQ_PATH: str = f'/usr/bin/{JQ_CMD} --version'
 
 EPILOG:               str = 'Written by Humberto A. Sanchez II (humberto.a.sanchez.ii@gmail.com)'
 
+NO_INTERNET_CONNECTION_MSG: str = 'You are not connected to the internet'
+
 ENV_PROJECTS_BASE:    str = 'PROJECTS_BASE'
 ENV_PROJECT:          str = 'PROJECT'
 ENV_APPLICATION_NAME: str = 'APPLICATION_NAME'
