@@ -37,11 +37,13 @@ LINUX_OS_JQ_PATH: str = f'/usr/bin/{JQ_CMD} --version'
 EPILOG:               str = 'Written by Humberto A. Sanchez II (humberto.a.sanchez.ii@gmail.com)'
 
 NO_INTERNET_CONNECTION_MSG: str = 'You are not connected to the internet'
+NO_REPO_SLUG_MSG:           str = 'Provide a repository slug either as an option or in the environment variable (REPO_SLUG)'
 
 ENV_PROJECTS_BASE:    str = 'PROJECTS_BASE'
 ENV_PROJECT:          str = 'PROJECT'
 ENV_APPLICATION_NAME: str = 'APPLICATION_NAME'
 ENV_GH_TOKEN:         str = 'GH_TOKEN'
+ENV_REPO_SLUG:        str = 'REPO_SLUG'
 
 DEPENDENCIES:     str = 'dependencies'
 

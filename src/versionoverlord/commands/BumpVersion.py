@@ -47,6 +47,7 @@ class BumpVersion(EnvironmentBase):
             packagePath = Path(packageName)
         self._versionFilePath: Path = Path(self._projectsBase) / directory / STANDARD_SOURCE_DIRECTORY / packagePath / STANDARD_VERSION_FILENAME
 
+        # noinspection PySimplifyBooleanCheck
         if self._versionFilePath.exists() is False:
             raise ClickException(f'No such file: {self._versionFilePath}.  Perhaps specify package name.')
 
