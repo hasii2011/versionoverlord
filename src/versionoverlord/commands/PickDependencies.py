@@ -71,6 +71,7 @@ class PickDependencies(EnvironmentBase):
 
         self._pyProjectTomlFilePath: Path = Path(self._projectsBase) / directory / Path(PYPROJECT_TOML)
 
+        # noinspection PySimplifyBooleanCheck
         if self._pyProjectTomlFilePath.exists() is False:
             raise ClickException(f'No such file: {self._pyProjectTomlFilePath}.')
 
@@ -81,6 +82,7 @@ class PickDependencies(EnvironmentBase):
             data:         TomlDict       = tomlLoad(f)
             project:      ProjectDict    = data[PYPROJECT_TOML_PROJECT_KEY]
 
+            # noinspection PySimplifyBooleanCheck
             if optional_dependencies is False:
                 dependencies: DependencyList = project[PYPROJECT_TOML_DEPENDENCY_KEY]
             else:
@@ -236,14 +238,18 @@ def pickDependencies(ctx, optional_dependencies: bool, update_packages: bool):
         PROJECTS_BASE – The local directory where the python projects are based
         PROJECT       – The name of the project;  It should be a directory name
     """
+    # noinspection PySimplifyBooleanCheck
     if checkJQInstalled() is False:
         raise ClickException(f'{JQ_CMD} is not installed')
+
+    # noinspection PySimplifyBooleanCheck
     if checkCurlInstalled() is False:
         raise ClickException(f'{CURL_CMD} not installed')
 
     pd: PickDependencies = PickDependencies()
     pd.pickThem(optional_dependencies=optional_dependencies)
 
+    # noinspection PySimplifyBooleanCheck
     if update_packages is True:
         ctx.invoke(updateDependencies(['--update-packages']))
     else:

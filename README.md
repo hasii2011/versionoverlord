@@ -1,6 +1,10 @@
+![](https://github.com/hasii2011/code-ally-basic/blob/master/developer/agpl-license-web-badge-version-2-256x48.png "AGPL")
+
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/hasii2011/versionoverlord/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/hasii2011/versionoverlord/tree/master)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![PyPI version](https://badge.fury.io/py/versionoverlord.svg)](https://badge.fury.io/py/versionoverlord)
+
+[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
 ## Rationale
 
@@ -86,8 +90,7 @@ export PROJECTS_BASE="${HOME}/PycharmProjects"
 This should be set in your shell startup script.  For example `.bash_profile`.
 
 The developer sets the PROJECT environment variable on a project by project basis.  
-I recommend you use [direnv](https://direnv.net) to manage these.  
-An example of a .envrc follows:
+I recommend you use [direnv](https://direnv.net) to manage these.  An example of a .envrc follows:
 
 ```bash
 export PROJECT=pyutmodel
@@ -137,6 +140,8 @@ correctly updates the following
 * setup.py
 * requirements.txt
 * .circleci/config.yml
+* .travis.yml
+* pyproject.toml
 
 ## Installation
 

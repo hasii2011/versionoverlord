@@ -139,14 +139,15 @@ def updateDependencies(specification: PyPath, update_packages: bool):
 
     \b
         - setup.py
-        - config.yml
+        - .circleci/config.yml
         - requirements.txt
         - pyproject.toml
+        - .travis.yml
 
     It uses the following environment variables:
 
     \b
-        GH_TOKEN       - A personal GitHub access token necessary to read repository release information
+        GH_TOKEN      - A personal GitHub access token necessary to read repository release information
         PROJECTS_BASE -  The local directory where the python projects are based
         PROJECT       -  The name of the project;  It should be a directory name
     """
